@@ -1,10 +1,10 @@
 {
 	"block.corners.stone_pillar": "Stone Pillar",
-	"itemGroup.corners.items": "Stone Pillar",
+	"itemGroup.corners.items": "The Corners",
 	// Credits
-	"credits.the_garden.ludocrypt.youtube": "LudoCrypt's Youtube (Secondary Composer)",
-	"credits.the_garden.ludocrypt.bandcamp": "LudoCrypt's Bandcamp (Secondary Composer)",
-	"credits.the_garden.angel_craig.youtube": "Angel Craig's Youtube (Main Composer)",
-	"credits.the_garden.angel_craig.bandcamp": "Angel Craig's Soundcloud (Main Composer)",
-	"credits.the_garden.slice.instagram": "Slice's Instagram (Main Artist & Designer)"
+	"credits.the_garden.ludocrypt.youtube": "LudoCrypt's Youtube",
+	"credits.the_garden.ludocrypt.bandcamp": "LudoCrypt's Bandcamp",
+	"credits.the_garden.angel_craig.youtube": "Angel Craig's Youtube",
+	"credits.the_garden.angel_craig.bandcamp": "Angel Craig's Bandcamp",
+	"credits.the_garden.slice.instagram": "Slice's Instagram"
 }
