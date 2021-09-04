@@ -1,0 +1,33 @@
+{
+	"misc.portal.painting.travel": {
+		"sounds": [
+			{
+				"name": "corners:portal/painting/travel_1"
+			},
+			{
+				"name": "corners:portal/painting/travel_2"
+			},
+			{
+				"name": "corners:portal/painting/travel_3"
+			}
+		]
+	},
+	"music.yearning_canal": {
+		"sounds": [
+			{
+				"name": "corners:music/yearning_canal/elivbit",
+				"weight": 3,
+				"stream": true
+			},
+			{
+				"name": "corners:music/yearning_canal/halls",
+				"weight": 2,
+				"stream": true
+			},
+			{
+				"name": "corners:music/yearning_canal/yearn",
+				"stream": true
+			}
+		]
+	}
+}

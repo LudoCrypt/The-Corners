@@ -1,0 +1,7 @@
+{
+	"parent": "corners:block/pillar_block_z",
+	"textures": {
+		"side": "corners:block/stone_pillar_side",
+		"top": "corners:block/stone_pillar_top"
+	}
+}

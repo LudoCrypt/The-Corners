@@ -1,0 +1,51 @@
+{
+	"schemaVersion": 1,
+	"id": "corners",
+	"version": "${version}",
+	"name": "The Corners",
+	"description": "Explore the corners of the universe, where no man was meant to.",
+	"authors": [
+		"LudoCrypt",
+		"Angel Craig",
+		"Slice"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-corners",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"credits.the_garden.ludocrypt.youtube": "https://www.youtube.com/c/LudoCrypt/",
+				"credits.the_garden.ludocrypt.bandcamp": "https://ludocrypt.bandcamp.com/",
+				"credits.the_garden.angel_craig.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
+				"credits.the_garden.angel_craig.bandcamp": "https://angelcraig.bandcamp.com/",
+				"credits.the_garden.slice.instagram": "https://www.instagram.com/_.slice_/"
+			}
+		}
+	},
+	"license": "LGPLv3",
+	"icon": "assets/corners/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.ludocrypt.corners.TheCorners"
+		],
+		"client": [
+			"net.ludocrypt.corners.client.TheCornersClient",
+			"net.ludocrypt.dynamicsf.DynamicSoundFilters"
+		]
+	},
+	"accessWidener": "corners.accesswidener",
+	"mixins": [
+		"corners.mixins.json",
+		"corners.dynamicsf.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.11.3",
+		"fabric": "*",
+		"minecraft": "1.17.x",
+		"satin": "1.6.x",
+		"java": ">=16"
+	}
+}
