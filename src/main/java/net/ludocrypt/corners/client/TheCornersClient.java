@@ -6,6 +6,7 @@ import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
+import net.ludocrypt.corners.mixin.MinecraftClientAccessor;
 import net.ludocrypt.corners.packet.CornersPacketManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,11 @@ public class TheCornersClient implements ClientModInitializer {
 				});
 			}
 		});
+	}
+
+	public static float getTickDelta() {
+		MinecraftClient client = MinecraftClient.getInstance();
+		return client.isPaused() ? ((MinecraftClientAccessor) client).getPausedTickDelta() : client.getTickDelta();
 	}
 
 }

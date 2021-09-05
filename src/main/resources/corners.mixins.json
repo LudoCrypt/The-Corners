@@ -11,10 +11,11 @@
 		"ServerPlayerEntityMixin"
 	],
 	"client": [
-		"ClientWorldPropertiesMixin",
 		"MinecraftClientMixin",
 		"SkyPropertiesMixin",
-		"WorldRendererMixin"
+		"WorldRendererMixin",
+		"MinecraftClientAccessor",
+		"BackgroundRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
