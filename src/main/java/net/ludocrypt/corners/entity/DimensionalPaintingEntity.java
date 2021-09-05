@@ -3,6 +3,7 @@ package net.ludocrypt.corners.entity;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerEntities;
+import net.ludocrypt.corners.mixin.AbstractDecorationEntityAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingMotive;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
@@ -40,6 +41,22 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 		}
 		TheCorners.LOGGER.warn("PaintingMotive {} is not DimensionalPaintingMotive, has nowhere to go!", motive);
 		throw new UnsupportedOperationException();
+	}
+
+	public static PaintingEntity createRegular(World world, BlockPos pos, Direction direction, PaintingMotive motive) {
+		PaintingEntity entity = new PaintingEntity(CornerEntities.DIMENSIONAL_PAINTING_ENTITY, world);
+		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
+		entity.motive = motive;
+		((AbstractDecorationEntityAccessor) entity).callSetFacing(direction);
+		return entity;
+	}
+
+	public static PaintingEntity createFromMotive(World world, BlockPos pos, Direction direction, PaintingMotive motive) {
+		if (motive instanceof DimensionalPaintingMotive) {
+			return create(world, pos, direction, motive);
+		} else {
+			return createRegular(world, pos, direction, motive);
+		}
 	}
 
 	@Override

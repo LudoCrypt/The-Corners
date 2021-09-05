@@ -40,6 +40,10 @@ import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
 public class RegistryHelper {
 
+	public static <T extends Block> T get(Identifier id, T block) {
+		return Registry.register(Registry.BLOCK, id, block);
+	}
+
 	public static <T extends Block> T get(String id, T block) {
 		return Registry.register(Registry.BLOCK, TheCorners.id(id), block);
 	}

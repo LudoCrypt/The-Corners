@@ -65,7 +65,7 @@ public class WorldRendererMixin {
 	@Inject(method = "renderSky", at = @At("HEAD"))
 	private void corners$renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable, CallbackInfo ci) {
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
-			this.renderCubemap(matrices, YEARNING_CANAL_SKY, 50);
+//			this.renderCubemap(matrices, YEARNING_CANAL_SKY, 50);
 		}
 	}
 

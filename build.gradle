@@ -15,7 +15,7 @@ loom {
 }
 
 repositories {
-		maven {
+	maven {
 		name = 'Ladysnake Mods'
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 		content {
@@ -23,6 +23,8 @@ repositories {
 			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
         }
     }
+	jcenter()
+	mavenCentral()
 }
 
 dependencies {
@@ -31,6 +33,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	includeMod "io.github.ladysnake:satin:${satin_version}"
+	includeMod "com.lettuce.fudge:artifice:${project.artifice_version}"
 }
 
 def includeMod(String dep) {

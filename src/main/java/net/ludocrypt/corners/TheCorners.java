@@ -10,9 +10,9 @@ import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.init.CornerFeatures;
 import net.ludocrypt.corners.init.CornerItems;
 import net.ludocrypt.corners.init.CornerPaintings;
+import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.init.CornerWorld;
-import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.ludocrypt.corners.packet.CornersPacketManager;
 import net.minecraft.util.Identifier;
 
@@ -22,6 +22,7 @@ public class TheCorners implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerItems.init();
 		CornerFeatures.init();
@@ -29,7 +30,6 @@ public class TheCorners implements ModInitializer {
 		CornerWorld.init();
 		CornerBiomes.init();
 		CornerEntities.init();
-		CornerPaintings.init();
 		CornerSoundEvents.init();
 		CornersPacketManager.manageServerTopClientPackets();
 	}

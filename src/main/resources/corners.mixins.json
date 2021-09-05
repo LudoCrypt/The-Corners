@@ -4,7 +4,7 @@
 	"package": "net.ludocrypt.corners.mixin",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
-		"ChunkStatusAccessor",
+		"AbstractDecorationEntityAccessor",
 		"ChunkStatusMixin",
 		"DimensionTypeMixin",
 		"EntityMixin",
@@ -14,8 +14,7 @@
 		"ClientWorldPropertiesMixin",
 		"MinecraftClientMixin",
 		"SkyPropertiesMixin",
-		"WorldRendererMixin",
-		"GameRendererAccessor"
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

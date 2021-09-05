@@ -13,6 +13,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.block.DebugPaintingSpawnerBlock;
+import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
+import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.util.NbtPlacerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -105,7 +108,7 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 							getOffsets(chunk.getPos().getStartPos().getComponentAlongAxis(dir.getAxis()), hallwayNbt.sizeX, -offsetPos.getComponentAlongAxis(dir.getAxis())).forEach((zint) -> {
 								if ((dir.equals(Direction.NORTH) && zint <= -16) || (dir.equals(Direction.EAST) && zint >= 16) || (dir.equals(Direction.SOUTH) && zint >= 16) || (dir.equals(Direction.WEST) && zint <= -16)) {
 									Random rand = new Random(region.getSeed() ^ y ^ zint ^ dir.getHorizontal());
-									generateNbt(region, chunk, "yearning_canal_hallway_" + (rand.nextBoolean() ? (rand.nextInt(12) + 1) : 1), dir.getAxis().equals(Direction.Axis.X) ? zint : offsetPos.getX(), dir.getAxis().equals(Direction.Axis.Z) ? zint : offsetPos.getZ(), offsetPos.getY() + 4, rotation, true);
+									generateNbt(region, chunk, "yearning_canal_hallway_" + (rand.nextInt(3) == 0 ? (rand.nextInt(12) + 1) : 1), dir.getAxis().equals(Direction.Axis.X) ? zint : offsetPos.getX(), dir.getAxis().equals(Direction.Axis.Z) ? zint : offsetPos.getZ(), offsetPos.getY() + 4, rotation, true);
 								}
 							});
 						}
@@ -148,13 +151,17 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 					if (region.getRandom().nextDouble() < 0.45D) {
 						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
 						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
-							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed());
+							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() ^ pos.getX() ^ pos.getZ() ^ pos.getY());
 						}
 					}
-				} else if (state.isOf(Blocks.JIGSAW)) {
+				} else if (state.isOf(CornerBlocks.DEBUG_AIR_BLOCK)) {
 					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
 				} else {
-					region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+					if (state.getBlock()instanceof DebugPaintingSpawnerBlock paintingSpawner) {
+						chunk.addEntity(DimensionalPaintingEntity.createFromMotive(region.toServerWorld(), pos, state.get(DebugPaintingSpawnerBlock.FACING), paintingSpawner.motive));
+					} else {
+						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+					}
 				}
 			}
 		}, rotation);
