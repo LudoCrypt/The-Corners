@@ -5,6 +5,7 @@ import static net.ludocrypt.corners.util.RegistryHelper.get;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.ludocrypt.corners.block.DebugPaintingSpawnerBlock;
+import net.ludocrypt.corners.block.RadioBlock;
 import net.ludocrypt.corners.block.ThinPillarBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -15,6 +16,9 @@ import net.minecraft.util.registry.Registry;
 public class CornerBlocks {
 
 	public static final Block STONE_PILLAR = get("stone_pillar", new ThinPillarBlock(FabricBlockSettings.copyOf(Blocks.STONE_BRICKS).breakByTool(FabricToolTags.PICKAXES)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block WOODEN_RADIO = get("wooden_radio", new RadioBlock(FabricBlockSettings.copyOf(Blocks.STONE_BRICKS).breakByTool(FabricToolTags.PICKAXES)), ItemGroup.REDSTONE);
+
+	// Debug
 	public static final Block DEBUG_AIR_BLOCK = get("debug_air_block", new Block(FabricBlockSettings.copyOf(Blocks.STONE)));
 
 	public static void init() {

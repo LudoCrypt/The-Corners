@@ -2,13 +2,16 @@
 	"misc.portal.painting.travel": {
 		"sounds": [
 			{
-				"name": "corners:portal/painting/travel_1"
+				"name": "corners:portal/painting/travel_1",
+				"stream": true
 			},
 			{
-				"name": "corners:portal/painting/travel_2"
+				"name": "corners:portal/painting/travel_2",
+				"stream": true
 			},
 			{
-				"name": "corners:portal/painting/travel_3"
+				"name": "corners:portal/painting/travel_3",
+				"stream": true
 			}
 		]
 	},
@@ -26,6 +29,45 @@
 			},
 			{
 				"name": "corners:music/yearning_canal/yearn",
+				"stream": true
+			}
+		]
+	},
+	"radio.default.static": {
+		"sounds": [
+		]
+	},
+	"radio.underlying.static": {
+		"sounds": [
+			{
+				"name": "corners:radio/underlying_static",
+				"stream": true
+			}
+		]
+	},
+	"radio.yearning_canal": {
+		"sounds": [
+			{
+				"name": "corners:radio/static_1",
+				"stream": true,
+				"weight": 5
+			},
+			{
+				"name": "corners:radio/static_2",
+				"stream": true,
+				"weight": 5
+			},
+			{
+				"name": "corners:radio/static_3",
+				"stream": true,
+				"weight": 5
+			},
+			{
+				"name": "corners:radio/music/reception",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/tsuki",
 				"stream": true
 			}
 		]

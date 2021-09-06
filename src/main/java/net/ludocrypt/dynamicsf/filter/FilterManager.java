@@ -65,6 +65,7 @@ public class FilterManager {
 			if (error == AL11.AL_NO_ERROR) {
 				break;
 			} else {
+				ReverbFilter.reinit();
 				System.err.println("OpenAl error " + error);
 			}
 		}

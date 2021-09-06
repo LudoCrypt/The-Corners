@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:block/orientable_with_bottom",
+	"textures": {
+		"top": "corners:block/wooden_radio_top",
+		"bottom": "corners:block/wooden_radio_bottom",
+		"front": "corners:block/wooden_radio_front_on",
+		"side": "corners:block/wooden_radio_side"
+	}
+}

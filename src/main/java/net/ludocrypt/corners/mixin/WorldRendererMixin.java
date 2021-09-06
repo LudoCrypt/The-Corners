@@ -65,12 +65,12 @@ public class WorldRendererMixin {
 	@Inject(method = "renderSky", at = @At("HEAD"))
 	private void corners$renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable, CallbackInfo ci) {
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
-//			this.renderCubemap(matrices, YEARNING_CANAL_SKY, 50);
+			this.renderCubemap(matrices, YEARNING_CANAL_SKY, 255, 255, 255, 255);
 		}
 	}
 
 	@Unique
-	private void renderSingleTexture(MatrixStack matrices, Identifier identifier, int alpha) {
+	private void renderSingleTexture(MatrixStack matrices, Identifier identifier, int alpha, int r, int g, int b, int scaleOutwards) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.depthMask(false);
@@ -103,10 +103,10 @@ public class WorldRendererMixin {
 
 			Matrix4f matrix4f = matrices.peek().getModel();
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(255, 255, 255, alpha).next();
+			bufferBuilder.vertex(matrix4f, -scaleOutwards, -scaleOutwards, -scaleOutwards).texture(0.0F, 0.0F).color(255, 255, 255, alpha).next();
+			bufferBuilder.vertex(matrix4f, -scaleOutwards, -scaleOutwards, scaleOutwards).texture(0.0F, 1.0F).color(255, 255, 255, alpha).next();
+			bufferBuilder.vertex(matrix4f, scaleOutwards, -scaleOutwards, scaleOutwards).texture(1.0F, 1.0F).color(255, 255, 255, alpha).next();
+			bufferBuilder.vertex(matrix4f, scaleOutwards, -scaleOutwards, -scaleOutwards).texture(1.0F, 0.0F).color(255, 255, 255, alpha).next();
 			tessellator.draw();
 			matrices.pop();
 		}
@@ -117,7 +117,7 @@ public class WorldRendererMixin {
 	}
 
 	@Unique
-	private void renderCubemap(MatrixStack matrices, Identifier identifier, int alpha) {
+	private void renderCubemap(MatrixStack matrices, Identifier identifier, int alpha, int r, int g, int b) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.depthMask(false);
@@ -154,10 +154,10 @@ public class WorldRendererMixin {
 			RenderSystem.setShaderTexture(0, new Identifier(identifier.toString() + "_" + i + ".png"));
 			Matrix4f matrix4f = matrices.peek().getModel();
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(255, 255, 255, alpha).next();
+			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(r, g, b, alpha).next();
+			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(r, g, b, alpha).next();
+			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(r, g, b, alpha).next();
+			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(r, g, b, alpha).next();
 			tessellator.draw();
 			matrices.pop();
 		}

@@ -1,6 +1,7 @@
 package net.ludocrypt.corners.init;
 
 import static net.ludocrypt.corners.util.RegistryHelper.get;
+import static net.ludocrypt.corners.util.RegistryHelper.getRadio;
 
 import java.util.OptionalLong;
 
@@ -10,6 +11,7 @@ import net.ludocrypt.corners.util.RegistryHelper;
 import net.ludocrypt.corners.world.chunk.SingleBlockChunkGenerator;
 import net.ludocrypt.corners.world.chunk.YearningCanalChunkGenerator;
 import net.ludocrypt.dynamicsf.config.ReverbSettings;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -28,6 +30,7 @@ public class CornerWorld {
 	public static final RegistryKey<World> YEARNING_CANAL_WORLD_REGISTRY_KEY = RegistryKey.of(Registry.WORLD_KEY, YEARNING_CANAL_ID);
 	public static final ReverbSettings YEARNING_CANAL_REVERB = get(YEARNING_CANAL, new ReverbSettings());
 	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = get(YEARNING_CANAL, YEARNING_CANAL);
+	public static final SoundEvent YEARNING_CANAL_RADIO = getRadio(YEARNING_CANAL, CornerSoundEvents.RADIO_YEARNING_CANAL);
 
 	public static void init() {
 		RegistryHelper.get("single_block_chunk_generator", SingleBlockChunkGenerator.CODEC);

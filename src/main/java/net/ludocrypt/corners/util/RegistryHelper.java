@@ -8,6 +8,7 @@ import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.ludocrypt.dynamicsf.config.ReverbSettings;
 import net.ludocrypt.dynamicsf.init.WorldReverbRegistry;
@@ -93,6 +94,10 @@ public class RegistryHelper {
 
 	public static ManagedShaderEffect get(String id, String shaderId) {
 		return Registry.register(CornerShaderRegistry.SHADER_REGISTRY, TheCorners.id(id), ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/" + shaderId + ".json")));
+	}
+
+	public static <T extends SoundEvent> T getRadio(String id, T radio) {
+		return Registry.register(CornerRadioRegistry.RADIO_REGISTRY, TheCorners.id(id), radio);
 	}
 
 	public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T item) {

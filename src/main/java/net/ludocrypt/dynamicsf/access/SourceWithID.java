@@ -20,5 +20,7 @@
 package net.ludocrypt.dynamicsf.access;
 
 public interface SourceWithID {
+
 	public int getID();
+
 }

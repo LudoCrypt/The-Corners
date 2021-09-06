@@ -28,6 +28,7 @@ import net.minecraft.client.sound.Source;
 
 @Mixin(Source.class)
 public class SourceMixin implements SourceWithID {
+
 	@Shadow
 	@Final
 	private int pointer;
@@ -36,4 +37,5 @@ public class SourceMixin implements SourceWithID {
 	public int getID() {
 		return pointer;
 	}
+
 }

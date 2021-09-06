@@ -11,11 +11,15 @@
 		"ServerPlayerEntityMixin"
 	],
 	"client": [
+		"BackgroundRendererMixin",
+		"MinecraftClientAccessor",
 		"MinecraftClientMixin",
 		"SkyPropertiesMixin",
+		"SoundManagerAccessor",
+		"SoundSystemMixin",
+		"SourceMixin",
 		"WorldRendererMixin",
-		"MinecraftClientAccessor",
-		"BackgroundRendererMixin"
+		"SoundSystemAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
