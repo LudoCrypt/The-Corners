@@ -2,6 +2,8 @@ package net.ludocrypt.corners.init;
 
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.ludocrypt.corners.TheCorners;
@@ -12,6 +14,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.World;
 
+@Environment(EnvType.CLIENT)
 public class CornerShaderRegistry {
 
 	public static final SimpleRegistry<ManagedShaderEffect> SHADER_REGISTRY = FabricRegistryBuilder.createDefaulted(ManagedShaderEffect.class, TheCorners.id("shader_registry"), TheCorners.id("default_shader")).attribute(RegistryAttribute.SYNCED).buildAndRegister();

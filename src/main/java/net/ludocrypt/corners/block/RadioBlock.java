@@ -3,7 +3,7 @@ package net.ludocrypt.corners.block;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.ludocrypt.corners.packet.CornersPacketManager;
+import net.ludocrypt.corners.packet.ClientToServerPackets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -88,7 +88,7 @@ public class RadioBlock extends HorizontalFacingBlock {
 			buf.writeBoolean(powered);
 
 			for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
-				ServerPlayNetworking.send(serverPlayer, CornersPacketManager.PLAY_RADIO, buf);
+				ServerPlayNetworking.send(serverPlayer, ClientToServerPackets.PLAY_RADIO, buf);
 			}
 		}
 	}

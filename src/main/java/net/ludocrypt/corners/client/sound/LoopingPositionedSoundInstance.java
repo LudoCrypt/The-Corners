@@ -38,6 +38,11 @@ public class LoopingPositionedSoundInstance extends PositionedSoundInstance impl
 			this.setStoppingUnnaturally();
 			source.stop();
 		}
+		if (MinecraftClient.getInstance().isPaused()) {
+			source.pause();
+		} else {
+			source.resume();
+		}
 	}
 
 	@Override
