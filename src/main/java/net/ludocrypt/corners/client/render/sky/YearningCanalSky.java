@@ -23,7 +23,7 @@ public class YearningCanalSky extends SkyProperties {
 
 	@Nullable
 	public float[] getFogColorOverride(float skyAngle, float tickDelta) {
-		return new float[] { 1.0F, 1.0F, 1.0F, 1.0F };
+		return null;
 	}
 
 }

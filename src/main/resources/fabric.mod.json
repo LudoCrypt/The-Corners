@@ -3,11 +3,14 @@
 	"id": "corners",
 	"version": "${version}",
 	"name": "The Corners",
-	"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nAngel Craig, for creating the amazingly chilling OST!\nSlice, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life into her own OST!",
+	"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nAngel Craig, for creating the amazingly chilling OST!\nSlice, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life into her own OST!\nBig thank you to Basement Spider for helping with the Wooden Radio textures!",
 	"authors": [
 		"LudoCrypt",
 		"Angel Craig",
 		"Slice"
+	],
+	"contributors": [
+		"Basement Spider"
 	],
 	"contact": {
 		"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-corners",

@@ -23,15 +23,19 @@ public abstract class EntityMixin {
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	private void corners$interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> ci) {
-		if (((Entity) (Object) this)instanceof PaintingEntity painting) {
-			if (Registry.PAINTING_MOTIVE.getId(painting.motive).getNamespace().equals("corners")) {
-				if (player.getStackInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
-					DimensionalPaintingEntity dimensional = DimensionalPaintingEntity.create(painting.world, painting.getBlockPos().add(0, (painting.getHeightPixels() / 16) % 2 == 0 ? -Math.floorDiv(painting.getHeightPixels() / 16, 2) : -Math.floorDiv(painting.getHeightPixels() / 16, 2) + 1, 0), painting.getHorizontalFacing(), painting.motive);
-					painting.world.spawnEntity(dimensional);
-					painting.world.playSound(null, painting.getBlockPos(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-					player.getStackInHand(hand).damage(1, player, (playerConsumer) -> playerConsumer.sendEquipmentBreakStatus(hand.equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
-					discard();
-					ci.setReturnValue(ActionResult.SUCCESS);
+		if (!player.world.isClient) {
+			if (((Entity) (Object) this)instanceof PaintingEntity painting) {
+				if (!(((Entity) (Object) this) instanceof DimensionalPaintingEntity)) {
+					if (Registry.PAINTING_MOTIVE.getId(painting.motive).getNamespace().equals("corners")) {
+						if (player.getStackInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
+							DimensionalPaintingEntity dimensional = DimensionalPaintingEntity.create(painting.world, painting.getBlockPos().add(0, (painting.getHeightPixels() / 16) % 2 == 0 ? -Math.floorDiv(painting.getHeightPixels() / 16, 2) : -Math.floorDiv(painting.getHeightPixels() / 16, 2) + 1, 0), painting.getHorizontalFacing(), painting.motive);
+							painting.world.spawnEntity(dimensional);
+							painting.world.playSound(null, painting.getBlockPos(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							player.getStackInHand(hand).damage(1, player, (playerConsumer) -> playerConsumer.sendEquipmentBreakStatus(hand.equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
+							discard();
+							ci.setReturnValue(ActionResult.SUCCESS);
+						}
+					}
 				}
 			}
 		}
