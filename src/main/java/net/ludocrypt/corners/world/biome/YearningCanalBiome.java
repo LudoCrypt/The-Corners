@@ -1,6 +1,5 @@
 package net.ludocrypt.corners.world.biome;
 
-import net.ludocrypt.corners.util.Color;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
@@ -18,11 +17,11 @@ public class YearningCanalBiome {
 		generationSettings.surfaceBuilder(ConfiguredSurfaceBuilders.NOPE);
 
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
-		biomeEffects.skyColor(Color.of(255, 255, 255));
-		biomeEffects.waterColor(Color.of(255, 255, 255));
-		biomeEffects.waterFogColor(Color.of(255, 255, 255));
-		biomeEffects.fogColor(Color.of(255, 255, 255));
-		biomeEffects.grassColor(Color.of(226, 202, 132));
+		biomeEffects.skyColor(16777215);
+		biomeEffects.waterColor(16777215);
+		biomeEffects.waterFogColor(16777215);
+		biomeEffects.fogColor(16777215);
+		biomeEffects.grassColor(13818488);
 		BiomeEffects effects = biomeEffects.build();
 
 		biome.spawnSettings(spawnSettings.build());
