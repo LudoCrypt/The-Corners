@@ -62,13 +62,15 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	@Override
 	public void onPlayerCollision(PlayerEntity player) {
 		super.onPlayerCollision(player);
-		Box box = this.getBoundingBox().expand(0.3D);
-		if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
-			if (this.world instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
-				ServerWorld world = player.getServer().getWorld(this.getMotive().dimension.apply(spe, this));
-				TeleportTarget teleportTarget = this.getMotive().teleportTarget.apply(spe, this);
-				DimensionalPaintingEntity.isPaingintTeleport = true;
-				FabricDimensions.teleport(spe, world, teleportTarget);
+		if (this.motive instanceof DimensionalPaintingMotive) {
+			Box box = this.getBoundingBox().expand(0.3D);
+			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
+				if (this.world instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
+					ServerWorld world = player.getServer().getWorld(this.getMotive().dimension.apply(spe, this));
+					TeleportTarget teleportTarget = this.getMotive().teleportTarget.apply(spe, this);
+					DimensionalPaintingEntity.isPaingintTeleport = true;
+					FabricDimensions.teleport(spe, world, teleportTarget);
+				}
 			}
 		}
 	}
