@@ -50,9 +50,6 @@ public class WorldRendererMixin {
 	@Shadow
 	private ClientWorld world;
 
-	@Unique
-	private static final Identifier YEARNING_CANAL_SKY = TheCorners.id("textures/sky/yearning_canal");
-
 	@Inject(method = "processWorldEvent", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void corners$processWorldEvent(PlayerEntity source, int eventId, BlockPos pos, int data, CallbackInfo ci, Random random) {
 		switch (eventId) {
@@ -65,56 +62,10 @@ public class WorldRendererMixin {
 	@Inject(method = "renderSky", at = @At("HEAD"))
 	private void corners$renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable, CallbackInfo ci) {
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
-			
-//			this.renderCubemap(matrices, YEARNING_CANAL_SKY, 50, 255, 255, 255);
+			MinecraftClient client = MinecraftClient.getInstance();
+			client.world.method_23777(client.gameRenderer.getCamera().getPos(), f);
+			this.renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"), 50, 255, 255, 255);
 		}
-	}
-
-	@Unique
-	private void renderSingleTexture(MatrixStack matrices, Identifier identifier, int alpha, int r, int g, int b, int scaleOutwards) {
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.depthMask(false);
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		RenderSystem.setShaderTexture(0, new Identifier(identifier.toString() + ".png"));
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBuffer();
-
-		for (int i = 0; i < 6; ++i) {
-			matrices.push();
-			if (i == 1) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
-			}
-
-			if (i == 2) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90.0F));
-			}
-
-			if (i == 3) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(180.0F));
-			}
-
-			if (i == 4) {
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F));
-			}
-
-			if (i == 5) {
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F));
-			}
-
-			Matrix4f matrix4f = matrices.peek().getModel();
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(matrix4f, -scaleOutwards, -scaleOutwards, -scaleOutwards).texture(0.0F, 0.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, -scaleOutwards, -scaleOutwards, scaleOutwards).texture(0.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, scaleOutwards, -scaleOutwards, scaleOutwards).texture(1.0F, 1.0F).color(255, 255, 255, alpha).next();
-			bufferBuilder.vertex(matrix4f, scaleOutwards, -scaleOutwards, -scaleOutwards).texture(1.0F, 0.0F).color(255, 255, 255, alpha).next();
-			tessellator.draw();
-			matrices.pop();
-		}
-
-		RenderSystem.depthMask(true);
-		RenderSystem.enableTexture();
-		RenderSystem.disableBlend();
 	}
 
 	@Unique
@@ -152,8 +103,9 @@ public class WorldRendererMixin {
 				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F));
 			}
 
-			RenderSystem.setShaderTexture(0, new Identifier(identifier.toString() + "_" + i + ".png"));
 			Matrix4f matrix4f = matrices.peek().getModel();
+
+			RenderSystem.setShaderTexture(0, new Identifier(identifier.toString() + "_" + i + ".png"));
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(r, g, b, alpha).next();
 			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(r, g, b, alpha).next();
