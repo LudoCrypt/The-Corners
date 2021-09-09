@@ -44,7 +44,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	}
 
 	public static PaintingEntity createRegular(World world, BlockPos pos, Direction direction, PaintingMotive motive) {
-		PaintingEntity entity = new PaintingEntity(CornerEntities.DIMENSIONAL_PAINTING_ENTITY, world);
+		PaintingEntity entity = new PaintingEntity(EntityType.PAINTING, world);
 		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 		entity.motive = motive;
 		((AbstractDecorationEntityAccessor) entity).callSetFacing(direction);
