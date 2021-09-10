@@ -64,8 +64,8 @@ public abstract class SoundSystemMixin implements SoundSystemAccess {
 		sourceManager.run(source -> ReverbFilter.update(soundInstance, ((SourceAccessor) source).getPointer()));
 	}
 
-	@Inject(method = "start", at = @At("TAIL"))
-	public void corners$start(CallbackInfo ci) {
+	@Inject(method = "reloadSounds", at = @At("TAIL"))
+	public void corners$reloadSounds(CallbackInfo ci) {
 		ReverbFilter.update();
 	}
 

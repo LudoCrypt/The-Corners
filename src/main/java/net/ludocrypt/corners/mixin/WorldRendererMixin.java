@@ -63,22 +63,23 @@ public class WorldRendererMixin {
 	@Inject(method = "renderSky", at = @At("HEAD"))
 	private void corners$renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable, CallbackInfo ci) {
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
-			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"), 50, 255, 255, 255, f);
+			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"), f);
 		}
 	}
 
 	@Unique
-	private void corners$renderCubemap(MatrixStack matrices, Identifier identifier, int alpha, int r, int g, int b, float tickDelta) {
+	private void corners$renderCubemap(MatrixStack matrices, Identifier identifier, float tickDelta) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.depthMask(false);
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		Vec3d color = client.world.method_23777(client.gameRenderer.getCamera().getPos(), tickDelta).multiply(255);
-		int skyR = (int) Math.floor(color.x);
-		int skyG = (int) Math.floor(color.y);
-		int skyB = (int) Math.floor(color.z);
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		int r = (int) Math.floor(color.x);
+		int g = (int) Math.floor(color.y);
+		int b = (int) Math.floor(color.z);
+		int a = 255;
+		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
@@ -110,53 +111,12 @@ public class WorldRendererMixin {
 
 			Matrix4f matrix4f = matrices.peek().getModel();
 
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-			bufferBuilder.vertex(matrix4f, -105.0F, -105.0F, -105.0F).color(skyR, skyG, skyB, 255).next();
-			bufferBuilder.vertex(matrix4f, -105.0F, -105.0F, 105.0F).color(skyR, skyG, skyB, 255).next();
-			bufferBuilder.vertex(matrix4f, 105.0F, -105.0F, 105.0F).color(skyR, skyG, skyB, 255).next();
-			bufferBuilder.vertex(matrix4f, 105.0F, -105.0F, -105.0F).color(skyR, skyG, skyB, 255).next();
-			tessellator.draw();
-			matrices.pop();
-		}
-
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		tessellator = Tessellator.getInstance();
-		bufferBuilder = tessellator.getBuffer();
-
-		for (int i = 0; i < 6; ++i) {
-			matrices.push();
-			if (i == 0) {
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-				matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
-			}
-
-			if (i == 1) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
-			}
-
-			if (i == 2) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F));
-			}
-
-			if (i == 3) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F));
-			}
-
-			if (i == 4) {
-				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
-				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F));
-			}
-
-			Matrix4f matrix4f = matrices.peek().getModel();
-
 			RenderSystem.setShaderTexture(0, new Identifier(identifier.toString() + "_" + i + ".png"));
 			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(r, g, b, alpha).next();
-			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(r, g, b, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(r, g, b, alpha).next();
-			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(r, g, b, alpha).next();
+			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, -100.0F).texture(0.0F, 0.0F).color(r, g, b, a).next();
+			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(r, g, b, a).next();
+			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(r, g, b, a).next();
+			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(r, g, b, a).next();
 			tessellator.draw();
 			matrices.pop();
 		}

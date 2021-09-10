@@ -11,8 +11,8 @@ import net.minecraft.util.math.MathHelper;
 
 public class ReverbFilter {
 
-	public static int id = EXTEfx.alGenEffects();
-	public static int slot = EXTEfx.alGenAuxiliaryEffectSlots();
+	public static int id = -1;
+	public static int slot = -1;
 
 	public static void update() {
 		id = EXTEfx.alGenEffects();
