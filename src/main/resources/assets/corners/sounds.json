@@ -46,17 +46,17 @@
 			{
 				"name": "corners:radio/voice_static_1",
 				"stream": true,
-				"weight": 5
+				"weight": 2
 			},
 			{
 				"name": "corners:radio/voice_static_2",
 				"stream": true,
-				"weight": 5
+				"weight": 2
 			},
 			{
 				"name": "corners:radio/voice_static_3",
 				"stream": true,
-				"weight": 5
+				"weight": 2
 			},
 			{
 				"name": "corners:radio/music/reception",
