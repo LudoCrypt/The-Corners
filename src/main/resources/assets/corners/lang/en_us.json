@@ -3,6 +3,7 @@
 	"block.corners.wooden_radio": "Wooden Radio",
 	"itemGroup.corners.items": "The Corners",
 	// Config
+	"text.autoconfig.the_corners.title": "The Corners",
 	"text.autoconfig.the_corners.option.bigDimensions": "Big Dimensions",
 	"text.autoconfig.the_corners.option.bigDimensions.@Tooltip": "Expands dimensions to be 2032 tall",
 	// Credits
