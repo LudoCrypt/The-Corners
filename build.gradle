@@ -23,6 +23,12 @@ repositories {
 			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
         }
     }
+	maven {
+		url = 'https://maven.shedaniel.me/'
+	}
+	maven {
+		url = 'https://maven.terraformersmc.com/'
+	}
 	jcenter()
 	mavenCentral()
 }
@@ -34,6 +40,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	includeMod "io.github.ladysnake:satin:${satin_version}"
 	includeMod "com.lettuce.fudge:artifice:${project.artifice_version}"
+	includeMod "me.shedaniel.cloth:cloth-config-fabric:${project.config_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 def includeMod(String dep) {
@@ -62,7 +70,6 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
-	from("APACHE_LISCENCE_2.0")
 }
 
 publishing {

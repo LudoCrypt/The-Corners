@@ -36,14 +36,15 @@
 			"net.ludocrypt.corners.TheCorners"
 		],
 		"client": [
-			"net.ludocrypt.corners.client.TheCornersClient",
-			"net.ludocrypt.dynamicsf.DynamicSoundFilters"
+			"net.ludocrypt.corners.client.TheCornersClient"
+		],
+		"modmenu": [
+			"net.ludocrypt.corners.config.CornerModmenu"
 		]
 	},
 	"accessWidener": "corners.accesswidener",
 	"mixins": [
-		"corners.mixins.json",
-		"corners.dynamicsf.mixins.json"
+		"corners.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.11.3",

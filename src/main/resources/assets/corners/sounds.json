@@ -35,12 +35,8 @@
 	},
 	"radio.default.static": {
 		"sounds": [
-		]
-	},
-	"radio.underlying.static": {
-		"sounds": [
 			{
-				"name": "corners:radio/underlying_static",
+				"name": "corners:radio/default_static",
 				"stream": true
 			}
 		]
@@ -48,17 +44,17 @@
 	"radio.yearning_canal": {
 		"sounds": [
 			{
-				"name": "corners:radio/static_1",
+				"name": "corners:radio/voice_static_1",
 				"stream": true,
 				"weight": 5
 			},
 			{
-				"name": "corners:radio/static_2",
+				"name": "corners:radio/voice_static_2",
 				"stream": true,
 				"weight": 5
 			},
 			{
-				"name": "corners:radio/static_3",
+				"name": "corners:radio/voice_static_3",
 				"stream": true,
 				"weight": 5
 			},

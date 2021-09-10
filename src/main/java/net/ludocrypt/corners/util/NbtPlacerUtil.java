@@ -1,7 +1,6 @@
 package net.ludocrypt.corners.util;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
@@ -83,15 +83,17 @@ public class NbtPlacerUtil {
 
 	public static Optional<NbtCompound> loadNbtFromFile(ResourceManager manager, Identifier id) {
 		try {
-			return Optional.ofNullable(readStructure(manager.getResource(id).getInputStream()));
+			return Optional.ofNullable(readStructure(manager.getResource(id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
 
-	public static NbtCompound readStructure(InputStream structureInputStream) throws IOException {
-		return NbtIo.readCompressed(structureInputStream);
+	public static NbtCompound readStructure(Resource resource) throws IOException {
+		NbtCompound nbt = NbtIo.readCompressed(resource.getInputStream());
+		resource.close();
+		return nbt;
 	}
 
 	public static void generateNbt(ChunkRegion region, Chunk chunk, Identifier id, BlockPos offset, BiConsumer<BlockPos, BlockState> consumer, BlockRotation rotation) {

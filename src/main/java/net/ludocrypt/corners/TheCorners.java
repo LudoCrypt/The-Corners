@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
+import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBiomes;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
@@ -21,6 +22,7 @@ public class TheCorners implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		CornerConfig.init();
 		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerItems.init();

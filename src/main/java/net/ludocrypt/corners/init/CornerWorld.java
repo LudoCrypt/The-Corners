@@ -1,15 +1,14 @@
 package net.ludocrypt.corners.init;
 
-import static net.ludocrypt.corners.util.RegistryHelper.get;
 import static net.ludocrypt.corners.util.RegistryHelper.getRadio;
 
 import java.util.OptionalLong;
 
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.util.RegistryHelper;
 import net.ludocrypt.corners.world.chunk.SingleBlockChunkGenerator;
 import net.ludocrypt.corners.world.chunk.YearningCanalChunkGenerator;
-import net.ludocrypt.dynamicsf.config.ReverbSettings;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -23,11 +22,10 @@ public class CornerWorld {
 
 	public static final String YEARNING_CANAL = "yearning_canal";
 	public static final Identifier YEARNING_CANAL_ID = TheCorners.id(YEARNING_CANAL);
-	public static final DimensionType YEARNING_CANAL_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(1200), true, false, false, false, 1.0, false, false, true, false, false, 0, 2032, 2032, DirectBiomeAccessType.INSTANCE, YEARNING_CANAL_ID, YEARNING_CANAL_ID, 1.0F);
+	public static final DimensionType YEARNING_CANAL_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(1200), true, false, false, false, 1.0, false, false, true, false, false, 0, CornerConfig.getInstance().bigDimensions ? 2032 : 432, CornerConfig.getInstance().bigDimensions ? 2032 : 432, DirectBiomeAccessType.INSTANCE, YEARNING_CANAL_ID, YEARNING_CANAL_ID, 1.0F);
 	public static final RegistryKey<DimensionType> YEARNING_CANAL_DIMENSION_TYPE_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_TYPE_KEY, YEARNING_CANAL_ID);
 	public static final RegistryKey<DimensionOptions> YEARNING_CANAL_DIMENSION_OPTOINS_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_KEY, YEARNING_CANAL_ID);
 	public static final RegistryKey<World> YEARNING_CANAL_WORLD_REGISTRY_KEY = RegistryKey.of(Registry.WORLD_KEY, YEARNING_CANAL_ID);
-	public static final ReverbSettings YEARNING_CANAL_REVERB = get(YEARNING_CANAL, new ReverbSettings());
 	public static final SoundEvent YEARNING_CANAL_RADIO = getRadio(YEARNING_CANAL, CornerSoundEvents.RADIO_YEARNING_CANAL);
 
 	public static void init() {

@@ -77,7 +77,6 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 	@Override
 	public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkGenerator chunkGenerator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> list) {
 		return CompletableFuture.supplyAsync(() -> {
-
 			ChunkRegion region = new ChunkRegion(world, list, targetStatus, 0);
 			ResourceManager resourceManager = world.getServer().getResourceManager();
 			Optional<NbtPlacerUtil> optional = NbtPlacerUtil.load(resourceManager, TheCorners.id("nbt/yearning_canal/yearning_canal_bottom.nbt"));

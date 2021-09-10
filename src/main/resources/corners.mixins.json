@@ -17,9 +17,9 @@
 		"SkyPropertiesMixin",
 		"SoundManagerAccessor",
 		"SoundSystemMixin",
-		"SourceMixin",
 		"WorldRendererMixin",
-		"SoundSystemAccessor"
+		"SoundSystemAccessor",
+		"SourceAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
