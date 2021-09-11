@@ -11,7 +11,7 @@ public class CornerConfig implements ConfigData {
 
 	@ConfigEntry.Gui.Tooltip()
 	@ConfigEntry.Gui.RequiresRestart
-	public boolean bigDimensions = false;
+	public boolean condensedDimensions = false;
 
 	public static void init() {
 		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);

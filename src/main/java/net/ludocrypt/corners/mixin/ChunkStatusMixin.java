@@ -18,6 +18,7 @@ import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
+import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
@@ -40,7 +41,8 @@ public class ChunkStatusMixin {
 
 	private static void corners$method_33732$giveChunkGeneratorExtraInfo(ChunkStatus status, Executor executor, ServerWorld world, ChunkGenerator chunkGenerator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> function, List<Chunk> list, Chunk chunk, CallbackInfoReturnable<CompletableFuture<?>> ci) {
 		if (chunkGenerator instanceof ChunkGeneratorExtraInfo cgei) {
-			ci.setReturnValue(cgei.populateNoise(executor, world.getStructureAccessor(), chunk, status, world, chunkGenerator, structureManager, lightingProvider, function, list).thenApply((chunkx) -> {
+			ChunkRegion chunkRegion = new ChunkRegion(world, list, status, cgei.getPlacementRadius());
+			ci.setReturnValue(cgei.populateNoise(executor, world.getStructureAccessor().forRegion(chunkRegion), chunk, status, world, chunkRegion, chunkGenerator, structureManager, lightingProvider, function, list).thenApply((chunkx) -> {
 				if (chunkx instanceof ProtoChunk proto) {
 					proto.setStatus(status);
 				}

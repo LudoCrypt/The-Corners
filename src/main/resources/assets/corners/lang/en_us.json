@@ -4,8 +4,8 @@
 	"itemGroup.corners.items": "The Corners",
 	// Config
 	"text.autoconfig.the_corners.title": "The Corners",
-	"text.autoconfig.the_corners.option.bigDimensions": "Big Dimensions",
-	"text.autoconfig.the_corners.option.bigDimensions.@Tooltip": "Expands dimensions to be 2032 tall",
+	"text.autoconfig.the_corners.option.condensedDimensions": "Condensed Dimensions",
+	"text.autoconfig.the_corners.option.condensedDimensions.@Tooltip": "Caps dimension height for lag reduction in extreme cases",
 	// Credits
 	"credits.the_garden.ludocrypt.youtube": "LudoCrypt's Youtube",
 	"credits.the_garden.ludocrypt.bandcamp": "LudoCrypt's Bandcamp",
