@@ -19,7 +19,9 @@
 		"SoundSystemMixin",
 		"WorldRendererMixin",
 		"SoundSystemAccessor",
-		"SourceAccessor"
+		"SourceAccessor",
+		"GameRendererMixin",
+		"ModelLoaderMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

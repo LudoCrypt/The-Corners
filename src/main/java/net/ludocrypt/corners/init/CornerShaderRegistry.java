@@ -2,8 +2,6 @@ package net.ludocrypt.corners.init;
 
 import static net.ludocrypt.corners.util.RegistryHelper.get;
 
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -19,24 +17,24 @@ import net.minecraft.world.World;
 @Environment(EnvType.CLIENT)
 public class CornerShaderRegistry {
 
-	public static final SimpleRegistry<ManagedShaderEffect> SHADER_REGISTRY = FabricRegistryBuilder.createDefaulted(ManagedShaderEffect.class, TheCorners.id("shader_registry"), TheCorners.id("default_shader")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
-	public static final ManagedShaderEffect DEFAULT = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/empty_shader.json"));
+	public static final SimpleRegistry<Identifier> SHADER_REGISTRY = FabricRegistryBuilder.createDefaulted(Identifier.class, TheCorners.id("shader_registry"), TheCorners.id("default_shader")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+	public static final Identifier DEFAULT = new Identifier("shaders/post/empty_shader.json");
 
-	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = get(CornerWorld.YEARNING_CANAL, CornerWorld.YEARNING_CANAL);
+	public static final Identifier YEARNING_CANAL_SHADER = get(CornerWorld.YEARNING_CANAL, CornerWorld.YEARNING_CANAL);
 
 	public static void init() {
 		Registry.register(SHADER_REGISTRY, TheCorners.id("default_shader"), DEFAULT);
 	}
 
-	public static ManagedShaderEffect register(RegistryKey<World> world, ManagedShaderEffect shader) {
+	public static Identifier register(RegistryKey<World> world, Identifier shader) {
 		return Registry.register(SHADER_REGISTRY, world.getValue(), shader);
 	}
 
-	public static ManagedShaderEffect getCurrent(MinecraftClient client) {
+	public static Identifier getCurrent(MinecraftClient client) {
 		return getCurrent(client.world.getRegistryKey());
 	}
 
-	public static ManagedShaderEffect getCurrent(RegistryKey<World> key) {
+	public static Identifier getCurrent(RegistryKey<World> key) {
 		return SHADER_REGISTRY.getOrEmpty(key.getValue()).orElse(DEFAULT);
 	}
 

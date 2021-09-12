@@ -5,7 +5,7 @@
 		"dstrgb": "zero"
 	},
 	"vertex": "blit",
-	"fragment": "yearning_canal",
+	"fragment": "grayscale",
 	"attributes": [
 		"Position"
 	],
