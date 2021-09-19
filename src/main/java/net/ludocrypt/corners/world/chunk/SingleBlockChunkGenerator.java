@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
@@ -56,15 +57,17 @@ public class SingleBlockChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk) {
-		for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
-			for (int z = chunk.getPos().getStartZ(); z < chunk.getPos().getStartZ() + 16; z++) {
-				for (int y = chunk.getBottomY(); y < chunk.getTopY(); y++) {
-					chunk.setBlockState(new BlockPos(x, y, z), state, false);
+		return CompletableFuture.supplyAsync(() -> {
+			for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
+				for (int z = chunk.getPos().getStartZ(); z < chunk.getPos().getStartZ() + 16; z++) {
+					for (int y = chunk.getBottomY(); y < chunk.getTopY(); y++) {
+						chunk.setBlockState(new BlockPos(x, y, z), state, false);
+					}
 				}
 			}
-		}
 
-		return CompletableFuture.completedFuture(chunk);
+			return chunk;
+		}, Util.getMainWorkerExecutor());
 	}
 
 	@Override
