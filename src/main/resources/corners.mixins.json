@@ -12,16 +12,17 @@
 	],
 	"client": [
 		"BackgroundRendererMixin",
+		"GameRendererMixin",
 		"MinecraftClientAccessor",
 		"MinecraftClientMixin",
+		"ModelLoaderMixin",
+		"RenderLayerAccessor",
 		"SkyPropertiesMixin",
 		"SoundManagerAccessor",
-		"SoundSystemMixin",
-		"WorldRendererMixin",
 		"SoundSystemAccessor",
+		"SoundSystemMixin",
 		"SourceAccessor",
-		"GameRendererMixin",
-		"ModelLoaderMixin"
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

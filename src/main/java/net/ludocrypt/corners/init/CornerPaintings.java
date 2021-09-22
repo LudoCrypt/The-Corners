@@ -13,6 +13,7 @@ public class CornerPaintings {
 	public static final PaintingMotive OVERWORLD_THIN = get("overworld_thin", DimensionalPaintingMotive.create(16, 32, World.OVERWORLD, DimensionalPaintingMotive.overworldPaintingTarget));
 	public static final PaintingMotive OVERWORLD_WIDE = get("overworld_wide", DimensionalPaintingMotive.create(64, 32, World.OVERWORLD, DimensionalPaintingMotive.overworldPaintingTarget));
 	public static final PaintingMotive YEARNING_CANAL = get("yearning_canal", DimensionalPaintingMotive.create(48, 48, CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY, new Vec3d(5.5D, 1.0D, 5.5D)));
+	public static final PaintingMotive COMMUNAL_CORRIDORS = get("communal_corridors", DimensionalPaintingMotive.create(32, 32, CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY, (player, painting) -> player.getPos().multiply(8).add(1.5, -player.getPos().getY(), 1.5).add(0, 1, 0)));
 
 	public static void init() {
 

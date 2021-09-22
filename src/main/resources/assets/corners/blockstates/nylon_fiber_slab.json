@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"type=bottom": {
+			"model": "corners:block/nylon_fiber_slab"
+		},
+		"type=double": {
+			"model": "corners:block/nylon_fiber_block"
+		},
+		"type=top": {
+			"model": "corners:block/nylon_fiber_slab_top"
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"parent": "minecraft:block/slab",
+	"textures": {
+		"bottom": "corners:block/nylon_fiber_block",
+		"top": "corners:block/nylon_fiber_block",
+		"side": "corners:block/nylon_fiber_block"
+	}
+}

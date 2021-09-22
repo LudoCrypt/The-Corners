@@ -21,6 +21,7 @@ public class WorldReverbRegistry {
 	public static final ReverbSettings DEFAULT = new ReverbSettings(false);
 
 	public static final ReverbSettings YEARNING_CANAL_REVERB = get(CornerWorld.YEARNING_CANAL, new ReverbSettings().setDecayTime(20));
+	public static final ReverbSettings COMMUNAL_CORRIDORS_REVERB = get(CornerWorld.COMMUNAL_CORRIDORS, new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F));
 
 	public static void init() {
 		Registry.register(REVERB_REGISTRY, TheCorners.id("default_reverb"), DEFAULT);

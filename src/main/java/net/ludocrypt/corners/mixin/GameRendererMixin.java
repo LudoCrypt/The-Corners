@@ -2,6 +2,8 @@ package net.ludocrypt.corners.mixin;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
 
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
@@ -12,15 +14,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.client.render.block.SkyboxBlockEntityRenderer;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Program;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Shader;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
@@ -58,6 +66,20 @@ public class GameRendererMixin {
 	private void corners$reload(ResourceManager manager, CallbackInfo ci) {
 		shaderEffects.forEach((id, shaderEffect) -> shaderEffect.close());
 		shaderEffects.clear();
+	}
+
+	@Inject(method = "loadShaders", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 53, shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void corners$loadShaders(ResourceManager manager, CallbackInfo ci, List<Program> list, List<Pair<Shader, Consumer<Shader>>> list2) {
+		try {
+			list2.add(Pair.of(new Shader(manager, "rendertype_corners_skybox", VertexFormats.POSITION), (shader) -> {
+				SkyboxBlockEntityRenderer.skyboxShader = shader;
+			}));
+		} catch (IOException e) {
+			list2.forEach((pair) -> {
+				pair.getFirst().close();
+			});
+			throw new RuntimeException("could not reload shaders", e);
+		}
 	}
 
 	@Unique

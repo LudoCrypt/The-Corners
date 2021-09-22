@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.client.sound.ReverbSettings;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
@@ -44,6 +45,9 @@ public class RegistryHelper {
 	}
 
 	public static <T extends Block> T get(String id, T block) {
+		if (id.startsWith("debug_") && FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			get(id, new BlockItem(block, new FabricItemSettings().group(ItemGroup.TOOLS)));
+		}
 		return Registry.register(Registry.BLOCK, TheCorners.id(id), block);
 	}
 

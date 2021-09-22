@@ -67,5 +67,24 @@
 				"stream": true
 			}
 		]
+	},
+	"radio.communal_corridors": {
+		"sounds": [
+			{
+				"name": "corners:radio/podcast_static_1",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_2",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_3",
+				"stream": true,
+				"weight": 2
+			}
+		]
 	}
 }

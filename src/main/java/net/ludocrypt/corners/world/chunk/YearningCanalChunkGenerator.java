@@ -111,11 +111,11 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
-		Random random = new Random(region.getSeed() ^ Math.floorDiv(chunk.getPos().getStartX(), 19) ^ Math.floorDiv(chunk.getPos().getStartZ(), 19));
+		Random random = new Random(region.getSeed() * Math.floorDiv(chunk.getPos().getStartX(), 19) * Math.floorDiv(chunk.getPos().getStartZ(), 19));
 		for (int yi = 0; yi < max; yi++) {
 			BlockPos pos = chunkPos.getStartPos().add(0, yi * 54, 0);
 
-			Random yRandom = new Random(region.getSeed() ^ yi);
+			Random yRandom = new Random(region.getSeed() * yi ^ 2);
 			boolean hallwaySpawnsAtHeight = (yRandom.nextDouble() < 0.875D && yRandom.nextBoolean()) && (yi != 0 && yi != max - 1);
 			Direction dir = Direction.fromHorizontal(yRandom.nextInt(4));
 			BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
@@ -191,7 +191,7 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 
 	@Override
 	public int getPlacementRadius() {
-		return 2;
+		return 1;
 	}
 
 }

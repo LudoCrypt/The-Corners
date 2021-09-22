@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.ludocrypt.corners.client.render.sky.CommunalCorridorsSky;
 import net.ludocrypt.corners.client.render.sky.YearningCanalSky;
 import net.ludocrypt.corners.init.CornerWorld;
 import net.minecraft.client.render.SkyProperties;
@@ -22,6 +23,7 @@ public class SkyPropertiesMixin {
 
 	static {
 		BY_IDENTIFIER.put(CornerWorld.YEARNING_CANAL_ID, new YearningCanalSky());
+		BY_IDENTIFIER.put(CornerWorld.COMMUNAL_CORRIDORS_ID, new CommunalCorridorsSky());
 	}
 
 }
