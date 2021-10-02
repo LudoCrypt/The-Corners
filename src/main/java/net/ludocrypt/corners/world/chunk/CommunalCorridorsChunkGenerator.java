@@ -7,6 +7,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.util.TriConsumer;
+
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -20,7 +22,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BarrelBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.loot.LootTables;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -110,7 +114,7 @@ public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
 
 		for (int x = 0; x < 2; x++) {
 			for (int z = 0; z < 2; z++) {
-				Random random = new Random(region.getSeed() * Math.floorDiv(chunk.getPos().getStartX(), 8) * Math.floorDiv(chunk.getPos().getStartZ(), 8) + x + z);
+				Random random = new Random(region.getSeed() + Math.floorDiv(chunk.getPos().getStartX(), 8) + Math.floorDiv(chunk.getPos().getStartZ(), 8) + x + z);
 				if (random.nextDouble() < 0.75) {
 					generateNbt(region, chunkPos.getStartPos().add(x * 8, 0, z * 8), "communal_corridors_" + (random.nextInt(20) + 1));
 				} else {
@@ -141,22 +145,34 @@ public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
 	}
 
 	public void generateNbt(ChunkRegion region, BlockPos at, String id, BlockRotation rotation) {
-		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state) -> {
+		TriConsumer<BlockPos, BlockState, NbtCompound> checkForBlockEntity = (p, s, n) -> {
+			BlockEntity blockEntity = region.getBlockEntity(p);
+			if (blockEntity != null) {
+				if (s.isOf(blockEntity.getCachedState().getBlock())) {
+					blockEntity.writeNbt(n);
+				}
+			}
+		};
+
+		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
 			if (!state.isAir()) {
 				if (state.isOf(Blocks.BARREL)) {
 					if (region.getRandom().nextDouble() < 0.45D) {
 						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+						checkForBlockEntity.accept(pos, state, nbt);
 						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
 							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() ^ pos.getX() ^ pos.getZ() ^ pos.getY());
 						}
 					}
 				} else if (state.isOf(CornerBlocks.DEBUG_AIR_BLOCK)) {
 					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
+					checkForBlockEntity.accept(pos, state, nbt);
 				} else {
 					if (state.getBlock()instanceof DebugPaintingSpawnerBlock paintingSpawner) {
 						region.spawnEntity(DimensionalPaintingEntity.createFromMotive(region.toServerWorld(), pos, state.get(DebugPaintingSpawnerBlock.FACING), paintingSpawner.motive));
 					} else {
 						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+						checkForBlockEntity.accept(pos, state, nbt);
 					}
 				}
 			}

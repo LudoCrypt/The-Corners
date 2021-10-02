@@ -1,6 +1,11 @@
 {
 	"block.corners.stone_pillar": "Stone Pillar",
 	"block.corners.wooden_radio": "Wooden Radio",
+	"block.corners.drywall": "Drywall",
+	"block.corners.nylon_fiber_slab": "Nylon Fiber Slab",
+	"block.corners.nylon_fiber_stairs": "Nylon Fiber Stairs",
+	"block.corners.nylon_fiber_block": "Nylon Fiber",
+	"block.corners.snowy_glass_pane": "Snowy Glass Pane",
 	"itemGroup.corners.items": "The Corners",
 	// Config
 	"text.autoconfig.the_corners.title": "The Corners",

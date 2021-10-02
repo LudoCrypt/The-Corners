@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"all": "corners:block/nylon_fiber_block"
+		"all": "corners:sky/snow"
 	}
 }

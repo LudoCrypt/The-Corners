@@ -3,6 +3,8 @@ package net.ludocrypt.corners.util;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.Codec;
 
+import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -90,12 +92,8 @@ public class RegistryHelper {
 		return Registry.register(WorldReverbRegistry.REVERB_REGISTRY, TheCorners.id(id), reverb);
 	}
 
-	public static <T extends Identifier> T get(String id, T shaderId) {
-		return Registry.register(CornerShaderRegistry.SHADER_REGISTRY, TheCorners.id(id), shaderId);
-	}
-
-	public static Identifier get(String id, String shaderId) {
-		return Registry.register(CornerShaderRegistry.SHADER_REGISTRY, TheCorners.id(id), new Identifier("shaders/post/" + shaderId + ".json"));
+	public static ManagedShaderEffect get(String id, String shaderId) {
+		return Registry.register(CornerShaderRegistry.SHADER_REGISTRY, TheCorners.id(id), ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/" + shaderId + ".json")));
 	}
 
 	public static <T extends SoundEvent> T getRadio(String id, T radio) {

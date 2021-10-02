@@ -7,6 +7,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.util.TriConsumer;
+
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -20,7 +22,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BarrelBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.loot.LootTables;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -111,11 +115,11 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
-		Random random = new Random(region.getSeed() * Math.floorDiv(chunk.getPos().getStartX(), 19) * Math.floorDiv(chunk.getPos().getStartZ(), 19));
+		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
 		for (int yi = 0; yi < max; yi++) {
 			BlockPos pos = chunkPos.getStartPos().add(0, yi * 54, 0);
 
-			Random yRandom = new Random(region.getSeed() * yi ^ 2);
+			Random yRandom = new Random(region.getSeed() * yi + 2);
 			boolean hallwaySpawnsAtHeight = (yRandom.nextDouble() < 0.875D && yRandom.nextBoolean()) && (yi != 0 && yi != max - 1);
 			Direction dir = Direction.fromHorizontal(yRandom.nextInt(4));
 			BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
@@ -138,7 +142,8 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 			}
 			if (hallwaySpawnsAtHeight) {
 				if ((dir.equals(Direction.NORTH) && chunkPos.x == 0 && chunkPos.z <= 0) || (dir.equals(Direction.WEST) && chunkPos.z == 0 && chunkPos.x <= 0) || (dir.equals(Direction.SOUTH) && chunkPos.x == 0 && chunkPos.z >= 1) || (dir.equals(Direction.EAST) && chunkPos.z == 0 && chunkPos.x >= 1)) {
-					generateNbt(region, offsetPos.add(0, 4, 0), "yearning_canal_hallway_" + (random.nextInt(3) == 0 ? (random.nextInt(12) + 1) : 1), rotation);
+					Random hallRandom = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 16) + Math.floorDiv(chunkPos.getStartZ(), 16) + 2);
+					generateNbt(region, offsetPos.add(0, 4, 0), "yearning_canal_hallway_" + (hallRandom.nextInt(3) == 0 ? (hallRandom.nextInt(12) + 1) : 1), rotation);
 				}
 			}
 			continue;
@@ -167,22 +172,35 @@ public class YearningCanalChunkGenerator extends ChunkGeneratorExtraInfo {
 	}
 
 	public void generateNbt(ChunkRegion region, BlockPos at, String id, BlockRotation rotation) {
-		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state) -> {
+
+		TriConsumer<BlockPos, BlockState, NbtCompound> checkForBlockEntity = (p, s, n) -> {
+			BlockEntity blockEntity = region.getBlockEntity(p);
+			if (blockEntity != null) {
+				if (s.isOf(blockEntity.getCachedState().getBlock())) {
+					blockEntity.writeNbt(n);
+				}
+			}
+		};
+
+		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
 			if (!state.isAir()) {
 				if (state.isOf(Blocks.BARREL)) {
 					if (region.getRandom().nextDouble() < 0.45D) {
 						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+						checkForBlockEntity.accept(pos, state, nbt);
 						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
 							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() ^ pos.getX() ^ pos.getZ() ^ pos.getY());
 						}
 					}
 				} else if (state.isOf(CornerBlocks.DEBUG_AIR_BLOCK)) {
 					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
+					checkForBlockEntity.accept(pos, state, nbt);
 				} else {
 					if (state.getBlock()instanceof DebugPaintingSpawnerBlock paintingSpawner) {
 						region.spawnEntity(DimensionalPaintingEntity.createFromMotive(region.toServerWorld(), pos, state.get(DebugPaintingSpawnerBlock.FACING), paintingSpawner.motive));
 					} else {
 						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+						checkForBlockEntity.accept(pos, state, nbt);
 					}
 				}
 			}

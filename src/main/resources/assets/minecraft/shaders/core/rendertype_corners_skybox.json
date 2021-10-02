@@ -76,7 +76,7 @@
 			]
 		},
 		{
-			"name": "InverseTransformMatrix",
+			"name": "TransformMatrix",
 			"type": "matrix4x4",
 			"count": 16,
 			"values": [

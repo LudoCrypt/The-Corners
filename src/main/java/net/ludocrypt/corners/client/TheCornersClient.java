@@ -1,5 +1,6 @@
 package net.ludocrypt.corners.client;
 
+import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.ludocrypt.corners.block.entity.SkyboxBlockEntity;
@@ -19,6 +20,7 @@ public class TheCornersClient implements ClientModInitializer {
 		WorldReverbRegistry.init();
 		ServerToClientPackets.manageServerToClientPackets();
 		BlockEntityRendererRegistry.INSTANCE.register(CornerBlocks.SKYBOX_BLOCK_ENTITY, (context) -> new SkyboxBlockEntityRenderer<SkyboxBlockEntity>());
+		ShaderEffectRenderCallback.EVENT.register(tickDelta -> CornerShaderRegistry.getCurrent(MinecraftClient.getInstance().world.getRegistryKey()).render(tickDelta));
 	}
 
 	public static float getTickDelta() {
