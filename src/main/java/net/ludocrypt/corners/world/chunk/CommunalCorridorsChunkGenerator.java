@@ -1,51 +1,29 @@
 package net.ludocrypt.corners.world.chunk;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
-import org.apache.logging.log4j.util.TriConsumer;
-
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.corners.block.DebugPaintingSpawnerBlock;
-import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
-import net.ludocrypt.corners.init.CornerBlocks;
-import net.ludocrypt.corners.util.NbtPlacerUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BarrelBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.loot.LootTables;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap.Type;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.StructuresConfig;
-import net.minecraft.world.gen.chunk.VerticalBlockSample;
 
-public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
-
-	public final HashMap<String, NbtPlacerUtil> structures = new HashMap<String, NbtPlacerUtil>(30);
+public class CommunalCorridorsChunkGenerator extends LiminalChunkGenerator {
 
 	public static final Codec<CommunalCorridorsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
@@ -55,11 +33,8 @@ public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
 		})).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
 	});
 
-	public final long worldSeed;
-
 	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, biomeSource, new StructuresConfig(false), worldSeed);
-		this.worldSeed = worldSeed;
+		super(biomeSource, worldSeed, "communal_corridors");
 	}
 
 	@Override
@@ -114,7 +89,7 @@ public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
 
 		for (int x = 0; x < 2; x++) {
 			for (int z = 0; z < 2; z++) {
-				Random random = new Random(region.getSeed() + Math.floorDiv(chunk.getPos().getStartX(), 8) + Math.floorDiv(chunk.getPos().getStartZ(), 8) + x + z);
+				Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
 				if (random.nextDouble() < 0.75) {
 					generateNbt(region, chunkPos.getStartPos().add(x * 8, 0, z * 8), "communal_corridors_" + (random.nextInt(20) + 1));
 				} else {
@@ -124,59 +99,6 @@ public class CommunalCorridorsChunkGenerator extends ChunkGeneratorExtraInfo {
 		}
 
 		return CompletableFuture.completedFuture(chunk);
-	}
-
-	private void store(String id, ServerWorld world) {
-		structures.put(id, NbtPlacerUtil.load(world.getServer().getResourceManager(), TheCorners.id("nbt/communal_corridors/" + id + ".nbt")).get());
-	}
-
-	@Override
-	public int getHeight(int x, int z, Type heightmap, HeightLimitView world) {
-		return world.getTopY();
-	}
-
-	@Override
-	public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world) {
-		return new VerticalBlockSample(0, new BlockState[world.getHeight()]);
-	}
-
-	public void generateNbt(ChunkRegion region, BlockPos at, String id) {
-		generateNbt(region, at, id, BlockRotation.NONE);
-	}
-
-	public void generateNbt(ChunkRegion region, BlockPos at, String id, BlockRotation rotation) {
-		TriConsumer<BlockPos, BlockState, NbtCompound> checkForBlockEntity = (p, s, n) -> {
-			BlockEntity blockEntity = region.getBlockEntity(p);
-			if (blockEntity != null) {
-				if (s.isOf(blockEntity.getCachedState().getBlock())) {
-					blockEntity.writeNbt(n);
-				}
-			}
-		};
-
-		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
-			if (!state.isAir()) {
-				if (state.isOf(Blocks.BARREL)) {
-					if (region.getRandom().nextDouble() < 0.45D) {
-						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-						checkForBlockEntity.accept(pos, state, nbt);
-						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
-							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() ^ pos.getX() ^ pos.getZ() ^ pos.getY());
-						}
-					}
-				} else if (state.isOf(CornerBlocks.DEBUG_AIR_BLOCK)) {
-					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
-					checkForBlockEntity.accept(pos, state, nbt);
-				} else {
-					if (state.getBlock()instanceof DebugPaintingSpawnerBlock paintingSpawner) {
-						region.spawnEntity(DimensionalPaintingEntity.createFromMotive(region.toServerWorld(), pos, state.get(DebugPaintingSpawnerBlock.FACING), paintingSpawner.motive));
-					} else {
-						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-						checkForBlockEntity.accept(pos, state, nbt);
-					}
-				}
-			}
-		});
 	}
 
 	@Override

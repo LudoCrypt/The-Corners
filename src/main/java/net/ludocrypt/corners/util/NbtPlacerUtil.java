@@ -10,9 +10,13 @@ import org.apache.logging.log4j.util.TriConsumer;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.ludocrypt.corners.init.CornerBlocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtDouble;
+import net.minecraft.nbt.NbtFloat;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtIo;
@@ -22,26 +26,31 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkRegion;
 
 public class NbtPlacerUtil {
 
 	public final NbtCompound storedNbt;
 	public final HashMap<BlockPos, Pair<BlockState, NbtCompound>> positions;
+	public final NbtList entities;
 	public final int sizeX;
 	public final int sizeY;
 	public final int sizeZ;
 
-	public NbtPlacerUtil(NbtCompound storedNbt, HashMap<BlockPos, Pair<BlockState, NbtCompound>> positions, int sizeX, int sizeY, int sizeZ) {
+	public NbtPlacerUtil(NbtCompound storedNbt, HashMap<BlockPos, Pair<BlockState, NbtCompound>> positions, NbtList entities, int sizeX, int sizeY, int sizeZ) {
 		this.storedNbt = storedNbt;
 		this.positions = positions;
+		this.entities = entities;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.sizeZ = sizeZ;
 	}
 
-	public NbtPlacerUtil(NbtCompound storedNbt, HashMap<BlockPos, Pair<BlockState, NbtCompound>> positions, BlockPos sizePos) {
-		this(storedNbt, positions, sizePos.getX(), sizePos.getY(), sizePos.getZ());
+	public NbtPlacerUtil(NbtCompound storedNbt, HashMap<BlockPos, Pair<BlockState, NbtCompound>> positions, NbtList entities, BlockPos sizePos) {
+		this(storedNbt, positions, entities, sizePos.getX(), sizePos.getY(), sizePos.getZ());
 	}
 
 	public NbtPlacerUtil rotate(BlockRotation rotation) {
@@ -61,7 +70,7 @@ public class NbtPlacerUtil {
 		List<Pair<BlockPos, Pair<BlockState, NbtCompound>>> positionsPairList = positionsList.stream().filter(nbtElement -> nbtElement instanceof NbtCompound).map(element -> (NbtCompound) element).map((nbtCompound) -> Pair.of(new BlockPos(nbtCompound.getList("pos", 3).getInt(0), nbtCompound.getList("pos", 3).getInt(1), nbtCompound.getList("pos", 3).getInt(2)).rotate(rotation), Pair.of(palette.get(nbtCompound.getInt("state")), nbtCompound.getCompound("nbt")))).sorted(Comparator.comparing((pair) -> pair.getFirst().getX())).sorted(Comparator.comparing((pair) -> pair.getFirst().getY())).sorted(Comparator.comparing((pair) -> pair.getFirst().getZ())).toList();
 		positionsPairList.forEach((pair) -> positions.put(pair.getFirst().subtract(positionsPairList.get(0).getFirst()), pair.getSecond()));
 
-		return new NbtPlacerUtil(storedNbt, positions, sizeVector);
+		return new NbtPlacerUtil(storedNbt, positions, storedNbt.getList("entities", 10), sizeVector);
 	}
 
 	public static Optional<NbtPlacerUtil> load(ResourceManager manager, Identifier id) {
@@ -86,7 +95,7 @@ public class NbtPlacerUtil {
 				List<Pair<BlockPos, Pair<BlockState, NbtCompound>>> positionsPairList = positionsList.stream().filter(nbtElement -> nbtElement instanceof NbtCompound).map(element -> (NbtCompound) element).map((nbtCompound) -> Pair.of(new BlockPos(nbtCompound.getList("pos", 3).getInt(0), nbtCompound.getList("pos", 3).getInt(1), nbtCompound.getList("pos", 3).getInt(2)), Pair.of(palette.get(nbtCompound.getInt("state")), nbtCompound.getCompound("nbt")))).sorted(Comparator.comparing((pair) -> pair.getFirst().getX())).sorted(Comparator.comparing((pair) -> pair.getFirst().getY())).sorted(Comparator.comparing((pair) -> pair.getFirst().getZ())).toList();
 				positionsPairList.forEach((pair) -> positions.put(pair.getFirst().subtract(positionsPairList.get(0).getFirst()), pair.getSecond()));
 
-				return Optional.of(new NbtPlacerUtil(nbt, positions, sizeVector));
+				return Optional.of(new NbtPlacerUtil(nbt, positions, nbt.getList("entities", 10), sizeVector));
 			}
 
 			throw new NullPointerException();
@@ -111,17 +120,96 @@ public class NbtPlacerUtil {
 		return nbt;
 	}
 
-	public void generateNbt(ChunkRegion region, BlockPos at, TriConsumer<BlockPos, BlockState, NbtCompound> consumer) {
+	public NbtPlacerUtil generateNbt(ChunkRegion region, BlockPos at, TriConsumer<BlockPos, BlockState, NbtCompound> consumer) {
 		for (int xi = 0; xi < this.sizeX; xi++) {
 			for (int yi = 0; yi < this.sizeY; yi++) {
 				for (int zi = 0; zi < this.sizeZ; zi++) {
 					Pair<BlockState, NbtCompound> pair = this.positions.get(new BlockPos(xi, yi, zi));
 					BlockState state = pair.getFirst();
 					NbtCompound nbt = pair.getSecond();
-					consumer.accept(at.add(xi, yi, zi), state == null ? CornerBlocks.DEBUG_AIR_BLOCK.getDefaultState() : state, nbt);
+					consumer.accept(at.add(xi, yi, zi), state == null ? Blocks.BARRIER.getDefaultState() : state, nbt);
 				}
 			}
 		}
+		return this;
+	}
+
+	public NbtPlacerUtil spawnEntities(ChunkRegion region, BlockPos pos, BlockRotation rotation) {
+		this.entities.forEach((nbtElement) -> {
+			NbtCompound entityCompound = (NbtCompound) nbtElement;
+			NbtList nbtPos = entityCompound.getList("pos", 6);
+			Vec3d realPosition = abs(rotate(new Vec3d(nbtPos.getDouble(0), nbtPos.getDouble(1), nbtPos.getDouble(2)), rotation)).add(pos.getX(), pos.getY() - 1, pos.getZ());
+
+			NbtCompound nbt = entityCompound.getCompound("nbt").copy();
+			nbt.remove("Pos");
+			nbt.remove("UUID");
+
+			NbtList posList = new NbtList();
+			posList.add(NbtDouble.of(realPosition.x));
+			posList.add(NbtDouble.of(realPosition.y));
+			posList.add(NbtDouble.of(realPosition.z));
+			nbt.put("Pos", posList);
+
+			NbtList rotationList = new NbtList();
+			NbtList entityRotationList = nbt.getList("Rotation", 5);
+			float yawRotation = applyRotation(entityRotationList.getFloat(0), rotation);
+			rotationList.add(NbtFloat.of(yawRotation));
+			rotationList.add(NbtFloat.of(entityRotationList.getFloat(1)));
+			nbt.remove("Rotation");
+			nbt.put("Rotation", rotationList);
+
+			if (nbt.contains("Facing")) {
+				Direction dir = rotation.rotate(Direction.fromHorizontal(nbt.getByte("Facing")));
+				nbt.remove("Facing");
+				nbt.putByte("Facing", (byte) dir.getHorizontal());
+			}
+
+			getEntity(region, nbt).ifPresent((entity) -> {
+				entity.refreshPositionAndAngles(realPosition.x, realPosition.y, realPosition.z, yawRotation, entity.getPitch());
+				region.spawnEntity(entity);
+			});
+		});
+		return this;
+	}
+
+	public static Optional<Entity> getEntity(ChunkRegion region, NbtCompound nbt) {
+		try {
+			return EntityType.getEntityFromNbt(nbt, region.toServerWorld());
+		} catch (Exception e) {
+			return Optional.empty();
+		}
+	}
+
+	public static Vec3d rotate(Vec3d in, BlockRotation rotation) {
+		switch (rotation) {
+		case NONE:
+		default:
+			return in;
+		case CLOCKWISE_90:
+			return new Vec3d(-in.getZ(), in.getY(), in.getX());
+		case CLOCKWISE_180:
+			return new Vec3d(-in.getX(), in.getY(), -in.getZ());
+		case COUNTERCLOCKWISE_90:
+			return new Vec3d(in.getZ(), in.getY(), -in.getX());
+		}
+	}
+
+	public float applyRotation(float in, BlockRotation rotation) {
+		float f = MathHelper.wrapDegrees(in);
+		switch (rotation) {
+		case CLOCKWISE_180:
+			return f + 180.0F;
+		case COUNTERCLOCKWISE_90:
+			return f + 270.0F;
+		case CLOCKWISE_90:
+			return f + 90.0F;
+		default:
+			return f;
+		}
+	}
+
+	public static Vec3d abs(Vec3d in) {
+		return new Vec3d(Math.abs(in.getX()), Math.abs(in.getY()), Math.abs(in.getZ()));
 	}
 
 	public static NbtList createNbtIntList(int... ints) {

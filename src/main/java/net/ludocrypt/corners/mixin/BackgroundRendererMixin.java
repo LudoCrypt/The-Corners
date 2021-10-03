@@ -16,6 +16,8 @@ public class BackgroundRendererMixin {
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
 			return 1.0;
+		} else if (client.world.getRegistryKey().equals(CornerWorld.COMMUNAL_CORRIDORS_WORLD_REGISTRY_KEY)) {
+			return 1.0;
 		}
 		return in;
 	}

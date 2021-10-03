@@ -13,12 +13,9 @@
 	],
 	"client": [
 		"BackgroundRendererMixin",
-		"BakedQuadFactoryMixin",
-		"BakedQuadMixin",
 		"GameRendererMixin",
 		"MinecraftClientAccessor",
 		"MinecraftClientMixin",
-		"ModelLoaderMixin",
 		"RenderLayerAccessor",
 		"SkyPropertiesMixin",
 		"SoundManagerAccessor",

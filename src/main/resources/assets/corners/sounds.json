@@ -68,6 +68,19 @@
 			}
 		]
 	},
+	"music.communal_corridors": {
+		"sounds": [
+			{
+				"name": "corners:music/communal_corridors/polar",
+				"weight": 3,
+				"stream": true
+			},
+			{
+				"name": "corners:music/communal_corridors/pelt",
+				"stream": true
+			}
+		]
+	},
 	"radio.communal_corridors": {
 		"sounds": [
 			{
@@ -84,6 +97,18 @@
 				"name": "corners:radio/podcast_static_3",
 				"stream": true,
 				"weight": 2
+			},
+			{
+				"name": "corners:radio/music/poly",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/partial",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/petrify",
+				"stream": true
 			}
 		]
 	}

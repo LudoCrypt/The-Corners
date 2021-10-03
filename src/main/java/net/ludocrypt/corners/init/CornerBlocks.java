@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.ludocrypt.corners.block.CornerStairsBlock;
-import net.ludocrypt.corners.block.DebugPaintingSpawnerBlock;
 import net.ludocrypt.corners.block.RadioBlock;
 import net.ludocrypt.corners.block.SkyboxBlock;
 import net.ludocrypt.corners.block.ThinPillarBlock;
@@ -16,8 +15,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class CornerBlocks {
 
@@ -33,13 +30,8 @@ public class CornerBlocks {
 
 	public static final Block DRYWALL = get("drywall", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).breakByTool(FabricToolTags.AXES)), ItemGroup.DECORATIONS);
 
-	// Debug
-	public static final Block DEBUG_AIR_BLOCK = get("debug_air_block", new Block(FabricBlockSettings.copyOf(Blocks.STONE)));
-
 	public static void init() {
-		for (Identifier id : Registry.PAINTING_MOTIVE.getIds()) {
-			get("debug_" + id.getNamespace() + "_" + id.getPath() + "_painting_spawner", new DebugPaintingSpawnerBlock(Registry.PAINTING_MOTIVE.get(id), FabricBlockSettings.copyOf(Blocks.STONE)));
-		}
+
 	}
 
 }

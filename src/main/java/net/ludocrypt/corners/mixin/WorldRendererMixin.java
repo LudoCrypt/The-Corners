@@ -64,6 +64,8 @@ public class WorldRendererMixin {
 	private void corners$renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable, CallbackInfo ci) {
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
 			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"), f);
+		} else if (this.world.getRegistryKey().equals(CornerWorld.COMMUNAL_CORRIDORS_WORLD_REGISTRY_KEY)) {
+			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/snow"), f);
 		}
 	}
 
