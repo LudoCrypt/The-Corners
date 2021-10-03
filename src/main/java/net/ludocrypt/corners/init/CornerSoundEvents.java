@@ -11,6 +11,7 @@ public class CornerSoundEvents {
 
 	// Music
 	public static final SoundEvent MUSIC_YEARNING_CANAL = get("music.yearning_canal");
+	public static final SoundEvent MUSIC_COMMUNAL_CORRIDORS = get("music.communal_corridors");
 
 	// Radio
 	public static final SoundEvent RADIO_DEFAULT_STATIC = get("radio.default.static");

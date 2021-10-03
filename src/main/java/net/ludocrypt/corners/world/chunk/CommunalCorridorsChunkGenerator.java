@@ -10,10 +10,13 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkRegion;
@@ -82,7 +85,6 @@ public class CommunalCorridorsChunkGenerator extends LiminalChunkGenerator {
 			store("communal_corridors_decorated_5", world);
 			store("communal_corridors_decorated_6", world);
 			store("communal_corridors_decorated_7", world);
-			store("communal_corridors_decorated_8", world);
 		}
 
 		ChunkPos chunkPos = chunk.getPos();
@@ -91,10 +93,16 @@ public class CommunalCorridorsChunkGenerator extends LiminalChunkGenerator {
 			for (int z = 0; z < 2; z++) {
 				Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
 				if (random.nextDouble() < 0.75) {
-					generateNbt(region, chunkPos.getStartPos().add(x * 8, 0, z * 8), "communal_corridors_" + (random.nextInt(20) + 1));
+					generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_" + (random.nextInt(20) + 1));
 				} else {
-					generateNbt(region, chunkPos.getStartPos().add(x * 8, 0, z * 8), "communal_corridors_decorated_" + (random.nextInt(8) + 1));
+					generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_decorated_" + (random.nextInt(7) + 1));
 				}
+			}
+		}
+
+		for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
+			for (int z = chunk.getPos().getStartZ(); z < chunk.getPos().getStartZ() + 16; z++) {
+				region.setBlockState(new BlockPos(x, 0, z), Blocks.OAK_PLANKS.getDefaultState(), Block.FORCE_STATE, 0);
 			}
 		}
 
