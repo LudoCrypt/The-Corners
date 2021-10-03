@@ -23,13 +23,13 @@ vec2 sampleCube(vec3 v, out float faceIndex) {
 	float ma;	
 	vec2 uv;
 	if(vAbs.z >= vAbs.x && vAbs.z >= vAbs.y) {
-		faceIndex = v.z < 0.0 ? 3.0 : 1.0;
+		faceIndex = v.z < 0.0 ? 1.0 : 3.0;
 		ma = 0.5 / vAbs.z;
 		uv = vec2(v.z < 0.0 ? -v.x : v.x, -v.y);
 	} else if(vAbs.y >= vAbs.x) {
 		faceIndex = v.y < 0.0 ? 5.0 : 0.0;
 		ma = 0.5 / vAbs.y;
-		uv = vec2(v.x, v.y < 0.0 ? -v.z : v.z);
+		uv = vec2(-v.x, v.y < 0.0 ? v.z : -v.z);
 	} else {
 		faceIndex = v.x < 0.0 ? 4.0 : 2.0;
 		ma = 0.5 / vAbs.x;
@@ -39,13 +39,12 @@ vec2 sampleCube(vec3 v, out float faceIndex) {
 }
 
 void main() {
-	vec4 texPos = vec4(texProj0.x, -texProj0.y, texProj0.z, texProj0.w);
-
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
 	vec3 rd = normalize((inverse(ProjMat * TransformMatrix) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
 	float faceIndex = 0.0;
-	texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
+	vec4 texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
+	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);
 
 	vec3 color = textureProj(Sampler0, texPos).xyz;
 

@@ -13,7 +13,11 @@
 	],
 	"client": [
 		"BackgroundRendererMixin",
+		"BlockRenderManagerMixin",
+		"ChunkBuilderBuiltChunkRebuildTaskMixin",
+		"ChunkBuilderChunkDataMixin",
 		"GameRendererMixin",
+		"ItemRendererMixin",
 		"MinecraftClientAccessor",
 		"MinecraftClientMixin",
 		"RenderLayerAccessor",
@@ -22,6 +26,7 @@
 		"SoundSystemAccessor",
 		"SoundSystemMixin",
 		"SourceAccessor",
+		"WorldRendererChunkInfoAccessor",
 		"WorldRendererMixin"
 	],
 	"injectors": {

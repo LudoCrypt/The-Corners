@@ -5,6 +5,7 @@ import static net.ludocrypt.corners.util.RegistryHelper.get;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.ludocrypt.corners.block.CornerPaneBlock;
 import net.ludocrypt.corners.block.CornerStairsBlock;
 import net.ludocrypt.corners.block.RadioBlock;
 import net.ludocrypt.corners.block.SkyboxBlock;
@@ -27,6 +28,8 @@ public class CornerBlocks {
 	public static final Block NYLON_FIBER_BLOCK = get("nylon_fiber_block", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).breakByTool(FabricToolTags.SHEARS)), ItemGroup.DECORATIONS);
 	public static final Block NYLON_FIBER_STAIRS = get("nylon_fiber_stairs", new CornerStairsBlock(NYLON_FIBER_BLOCK.getDefaultState(), FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).breakByTool(FabricToolTags.SHEARS)), ItemGroup.DECORATIONS);
 	public static final Block NYLON_FIBER_SLAB = get("nylon_fiber_slab", new SlabBlock(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).breakByTool(FabricToolTags.SHEARS)), ItemGroup.DECORATIONS);
+
+	public static final Block SNOWY_GLASS_PANE = get("snowy_glass_pane", new CornerPaneBlock(FabricBlockSettings.copyOf(Blocks.WHITE_STAINED_GLASS_PANE)), ItemGroup.DECORATIONS);
 
 	public static final Block DRYWALL = get("drywall", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).breakByTool(FabricToolTags.AXES)), ItemGroup.DECORATIONS);
 

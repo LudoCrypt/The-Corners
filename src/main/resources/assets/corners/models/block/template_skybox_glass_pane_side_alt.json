@@ -1,0 +1,30 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#pane"
+	},
+	"elements": [
+		{
+			"from": [ 7, 0, 9 ],
+			"to": [ 9, 16, 16 ],
+			"faces": {
+				"east": { "uv": [ 0, 0, 7, 16 ], "texture": "#pane" },
+				"south": { "uv": [ 7, 0, 9, 16 ], "texture": "#edge", "cullface": "south" },
+				"west": { "uv": [ 7, 0, 0, 16 ], "texture": "#pane" },
+				"up": { "uv": [ 7, 0, 9, 7 ], "texture": "#edge" },
+				"down": { "uv": [ 7, 0, 9, 7 ], "texture": "#edge" }
+			}
+		},
+		{
+			"from": [ 7.05, 0.05, 8.95 ],
+			"to": [ 8.95, 15.95, 15.95 ],
+			"faces": {
+				"east": { "texture": "#skybox", "cullface": "east" },
+				"south": { "texture": "#skybox", "cullface": "south" },
+				"west": { "texture": "#skybox", "cullface": "west" },
+				"up": { "texture": "#skybox", "cullface": "up" },
+				"down": { "texture": "#skybox", "cullface": "down" }
+			}
+		}
+	]
+}

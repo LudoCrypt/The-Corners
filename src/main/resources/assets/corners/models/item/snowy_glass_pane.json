@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "corners:block/snowy_glass_pane",
+		"layer1": "minecraft:block/glass"
+	}
+}

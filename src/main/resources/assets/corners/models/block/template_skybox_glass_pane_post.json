@@ -1,0 +1,24 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#pane"
+	},
+	"elements": [
+		{
+			"from": [ 7, 0, 7 ],
+			"to": [ 9, 16, 9 ],
+			"faces": {
+				"up": { "uv": [7, 7, 9, 9 ], "texture": "#edge" },
+				"down": { "uv": [7, 7, 9, 9 ], "texture": "#edge" }
+			}
+		},
+		{
+			"from": [ 7, 0.05, 7 ],
+			"to": [ 9, 15.95, 9 ],
+			"faces": {
+				"up": { "texture": "#skybox", "cullface": "up" },
+				"down": { "texture": "#skybox", "cullface": "down" }
+			}
+		}
+	]
+}

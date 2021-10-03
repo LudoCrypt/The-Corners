@@ -85,6 +85,7 @@ public class CommunalCorridorsChunkGenerator extends LiminalChunkGenerator {
 			store("communal_corridors_decorated_5", world);
 			store("communal_corridors_decorated_6", world);
 			store("communal_corridors_decorated_7", world);
+			store("communal_corridors_decorated_8", world);
 		}
 
 		ChunkPos chunkPos = chunk.getPos();
@@ -95,7 +96,7 @@ public class CommunalCorridorsChunkGenerator extends LiminalChunkGenerator {
 				if (random.nextDouble() < 0.75) {
 					generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_" + (random.nextInt(20) + 1));
 				} else {
-					generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_decorated_" + (random.nextInt(7) + 1));
+					generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_decorated_" + (random.nextInt(8) + 1));
 				}
 			}
 		}
