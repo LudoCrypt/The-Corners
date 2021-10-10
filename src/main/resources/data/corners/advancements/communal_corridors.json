@@ -1,0 +1,31 @@
+{
+	"parent": "corners:root",
+	"display": {
+		"icon": {
+			"item": "corners:nylon_fiber_block"
+		},
+		"title": {
+			"translate": "advancements.communal_corridors.root.title"
+		},
+		"description": {
+			"translate": "advancements.communal_corridors.root.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": true
+	},
+	"criteria": {
+		"entered_communal_corridors": {
+			"trigger": "minecraft:changed_dimension",
+			"conditions": {
+				"to": "corners:communal_corridors"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"entered_communal_corridors"
+		]
+	]
+}

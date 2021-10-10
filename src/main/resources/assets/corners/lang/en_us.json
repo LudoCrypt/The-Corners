@@ -9,6 +9,17 @@
 	"block.corners.snowy_glass": "Snowy Glass",
 	"block.corners.snowy_glass_pane": "Snowy Glass Pane",
 	"itemGroup.corners.items": "The Corners",
+	// Advancements
+	"advancements.the_corners.root.title": "The Corners",
+	"advancements.the_corners.root.description": "The Outskirts of Reality",
+	"advancements.forgot_faq.root.title": "Forgetting the FAQ",
+	"advancements.forgot_faq.root.description": "Enter an Overworld painting in the Overworld",
+	"advancements.nevermind_radio.root.title": "I Change My Mind",
+	"advancements.nevermind_radio.root.description": "Turn off a radio while its playing",
+	"advancements.yearning_canal.root.title": "Tears of Void",
+	"advancements.yearning_canal.root.description": "Enter the Yearning Canal",
+	"advancements.communal_corridors.root.title": "Backrooms-esque",
+	"advancements.communal_corridors.root.description": "Enter the Communal Corridors",
 	// Config
 	"text.autoconfig.the_corners.title": "The Corners",
 	"text.autoconfig.the_corners.option.condensedDimensions": "Condensed Dimensions",

@@ -1,0 +1,31 @@
+{
+	"parent": "corners:root",
+	"display": {
+		"icon": {
+			"item": "minecraft:white_stained_glass"
+		},
+		"title": {
+			"translate": "advancements.yearning_canal.root.title"
+		},
+		"description": {
+			"translate": "advancements.yearning_canal.root.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": true
+	},
+	"criteria": {
+		"entered_yearning_canal": {
+			"trigger": "minecraft:changed_dimension",
+			"conditions": {
+				"to": "corners:yearning_canal"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"entered_yearning_canal"
+		]
+	]
+}

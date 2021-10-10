@@ -5,6 +5,7 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.mixin.AbstractDecorationEntityAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingMotive;
+import net.ludocrypt.corners.util.PlayerUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
@@ -67,6 +68,11 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
 				if (this.world instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
 					ServerWorld world = player.getServer().getWorld(motive.dimension.apply(spe, this));
+
+					if (this.world.getRegistryKey().equals(World.OVERWORLD) && world.getRegistryKey().equals(World.OVERWORLD)) {
+						PlayerUtil.grantAdvancement(player, TheCorners.id("forgetting_the_faq"));
+					}
+
 					TeleportTarget teleportTarget = motive.teleportTarget.apply(spe, this);
 					DimensionalPaintingEntity.isPaingintTeleport = true;
 					FabricDimensions.teleport(spe, world, teleportTarget);

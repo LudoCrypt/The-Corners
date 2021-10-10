@@ -1,0 +1,28 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:painting"
+		},
+		"title": {
+			"translate": "advancements.the_corners.root.title"
+		},
+		"description": {
+			"translate": "advancements.the_corners.root.description"
+		},
+		"frame": "task",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": false,
+		"background": "corners:textures/block/wooden_radio_top.png"
+	},
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+	"requirements": [
+		[
+			"impossible"
+		]
+	]
+}

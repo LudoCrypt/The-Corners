@@ -1,0 +1,28 @@
+{
+	"parent": "corners:communal_corridors",
+	"display": {
+		"icon": {
+			"item": "corners:wooden_radio"
+		},
+		"title": {
+			"translate": "advancements.nevermind_radio.root.title"
+		},
+		"description": {
+			"translate": "advancements.nevermind_radio.root.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": true
+	},
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+	"dimension_static": [
+		[
+			"impossible"
+		]
+	]
+}

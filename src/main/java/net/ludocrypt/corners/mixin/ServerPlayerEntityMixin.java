@@ -5,11 +5,14 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
+import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
+import net.ludocrypt.corners.util.PlayerUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,6 +37,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 			DimensionalPaintingEntity.isPaingintTeleport = false;
 		} else {
 			portalId = 1032;
+		}
+	}
+
+	@Inject(method = "tick", at = @At("TAIL"))
+	private void corners$tick(CallbackInfo ci) {
+		if (this.world.getRegistryKey().getValue().getNamespace().equals("corners")) {
+			PlayerUtil.grantAdvancement(this, TheCorners.id("root"));
 		}
 	}
 
