@@ -16,8 +16,8 @@
 			"from": [ 7, 0.05, 7 ],
 			"to": [ 9, 15.95, 9 ],
 			"faces": {
-				"up": { "texture": "#skybox", "cullface": "up" },
-				"down": { "texture": "#skybox", "cullface": "down" }
+				"up": { "texture": "#skybox" },
+				"down": { "texture": "#skybox" }
 			}
 		}
 	]

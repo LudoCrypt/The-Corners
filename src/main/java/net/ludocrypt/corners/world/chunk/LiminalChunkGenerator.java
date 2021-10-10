@@ -13,6 +13,7 @@ import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap.Type;
@@ -37,6 +38,12 @@ public abstract class LiminalChunkGenerator extends ChunkGeneratorExtraInfo {
 		structures.put(id, NbtPlacerUtil.load(world.getServer().getResourceManager(), TheCorners.id("nbt/" + this.nbtId + "/" + id + ".nbt")).get());
 	}
 
+	protected void store(String id, ServerWorld world, int from, int to) {
+		for (int i = from; i <= to; i++) {
+			store(id + "_" + i, world);
+		}
+	}
+
 	@Override
 	public int getHeight(int x, int z, Type heightmap, HeightLimitView world) {
 		return world.getTopY();
@@ -55,11 +62,9 @@ public abstract class LiminalChunkGenerator extends ChunkGeneratorExtraInfo {
 		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
 			if (!state.isAir()) {
 				if (state.isOf(Blocks.BARREL)) {
-					if (region.getRandom().nextDouble() < 0.45D) {
-						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
-							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() ^ pos.getX() ^ pos.getZ() ^ pos.getY());
-						}
+					region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+					if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
+						barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() + MathHelper.hashCode(pos));
 					}
 				} else if (state.isOf(Blocks.BARRIER)) {
 					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);

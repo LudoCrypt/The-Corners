@@ -20,11 +20,11 @@
 	"custom": {
 		"modmenu": {
 			"links": {
-				"credits.the_garden.ludocrypt.youtube": "https://www.youtube.com/c/LudoCrypt/",
-				"credits.the_garden.ludocrypt.bandcamp": "https://ludocrypt.bandcamp.com/",
-				"credits.the_garden.angel_craig.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
-				"credits.the_garden.angel_craig.bandcamp": "https://angelcraig.bandcamp.com/",
-				"credits.the_garden.slice.instagram": "https://www.instagram.com/_.slice_/"
+				"credits.the_corners.ludocrypt.youtube": "https://www.youtube.com/c/LudoCrypt/",
+				"credits.the_corners.ludocrypt.bandcamp": "https://ludocrypt.bandcamp.com/",
+				"credits.the_corners.angel_craig.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
+				"credits.the_corners.angel_craig.bandcamp": "https://angelcraig.bandcamp.com/",
+				"credits.the_corners.slice.instagram": "https://www.instagram.com/_.slice_/"
 			}
 		}
 	},
@@ -50,6 +50,7 @@
 		"fabricloader": ">=0.11.3",
 		"fabric": "*",
 		"minecraft": "1.17.x",
-		"java": ">=16"
+		"java": ">=16",
+		"satin": "1.6.x"
 	}
 }

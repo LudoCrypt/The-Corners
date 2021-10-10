@@ -1,6 +1,6 @@
 package net.ludocrypt.corners.init;
 
-import static net.ludocrypt.corners.util.RegistryHelper.get;
+import static net.ludocrypt.corners.util.RegistryHelper.getShader;
 
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
@@ -21,7 +21,8 @@ public class CornerShaderRegistry {
 
 	public static final SimpleRegistry<ManagedShaderEffect> SHADER_REGISTRY = FabricRegistryBuilder.createDefaulted(ManagedShaderEffect.class, TheCorners.id("shader_registry"), TheCorners.id("default_shader")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
 	public static final ManagedShaderEffect DEFAULT = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/empty_shader.json"));
-	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = get(CornerWorld.YEARNING_CANAL, CornerWorld.YEARNING_CANAL);
+	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = getShader(CornerWorld.YEARNING_CANAL);
+	public static final ManagedShaderEffect COMMUNAL_CORRIDORS_SHADER = getShader(CornerWorld.COMMUNAL_CORRIDORS, true);
 
 	public static void init() {
 		Registry.register(SHADER_REGISTRY, TheCorners.id("default_shader"), DEFAULT);

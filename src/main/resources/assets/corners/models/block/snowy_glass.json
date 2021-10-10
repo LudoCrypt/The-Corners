@@ -1,0 +1,7 @@
+{
+	"parent": "corners:block/template_skybox_glass",
+	"textures": {
+		"glass": "minecraft:block/glass",
+		"skybox": "corners:sky/snow"
+	}
+}

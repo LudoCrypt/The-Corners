@@ -10,6 +10,11 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BarrelBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -58,36 +63,10 @@ public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
 	@Override
 	public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, ChunkGenerator chunkGenerator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> list) {
 		if (structures.isEmpty()) {
-			store("yearning_canal_1", world);
-			store("yearning_canal_2", world);
-			store("yearning_canal_3", world);
-			store("yearning_canal_4", world);
-			store("yearning_canal_5", world);
-			store("yearning_canal_6", world);
-			store("yearning_canal_7", world);
-			store("yearning_canal_8", world);
-			store("yearning_canal_9", world);
-			store("yearning_canal_10", world);
-			store("yearning_canal_11", world);
-			store("yearning_canal_12", world);
-			store("yearning_canal_13", world);
-			store("yearning_canal_14", world);
-			store("yearning_canal_15", world);
+			store("yearning_canal", world, 1, 15);
 			store("yearning_canal_bottom", world);
 			store("yearning_canal_top", world);
-			store("yearning_canal_hallway_1", world);
-			store("yearning_canal_hallway_2", world);
-			store("yearning_canal_hallway_3", world);
-			store("yearning_canal_hallway_4", world);
-			store("yearning_canal_hallway_5", world);
-			store("yearning_canal_hallway_6", world);
-			store("yearning_canal_hallway_7", world);
-			store("yearning_canal_hallway_8", world);
-			store("yearning_canal_hallway_9", world);
-			store("yearning_canal_hallway_10", world);
-			store("yearning_canal_hallway_11", world);
-			store("yearning_canal_hallway_12", world);
-			store("yearning_canal_hallway_13", world);
+			store("yearning_canal_hallway", world, 1, 13);
 			store("yearning_canal_hallway_connected", world);
 		}
 
@@ -129,6 +108,32 @@ public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
 		}
 
 		return CompletableFuture.completedFuture(chunk);
+	}
+
+	@Override
+	protected void generateNbt(ChunkRegion region, BlockPos at, String id, BlockRotation rotation) {
+		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
+			if (!state.isAir()) {
+				if (state.isOf(Blocks.BARREL)) {
+					if (region.getRandom().nextDouble() < 0.45D) {
+						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
+							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() + MathHelper.hashCode(pos));
+						}
+					}
+				} else if (state.isOf(Blocks.BARRIER)) {
+					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
+				} else {
+					region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+				}
+				BlockEntity blockEntity = region.getBlockEntity(pos);
+				if (blockEntity != null) {
+					if (state.isOf(blockEntity.getCachedState().getBlock())) {
+						blockEntity.writeNbt(nbt);
+					}
+				}
+			}
+		}).spawnEntities(region, at, rotation);
 	}
 
 	@Override

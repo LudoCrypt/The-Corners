@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.ludocrypt.corners.client.render.block.SkyboxBlockEntityRenderer;
+import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.minecraft.client.gl.Program;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Shader;
@@ -27,7 +27,7 @@ public class GameRendererMixin {
 	private void corners$loadShaders(ResourceManager manager, CallbackInfo ci, List<Program> list, List<Pair<Shader, Consumer<Shader>>> list2) {
 		try {
 			list2.add(Pair.of(new Shader(manager, "rendertype_corners_skybox", VertexFormats.POSITION), (shader) -> {
-				SkyboxBlockEntityRenderer.SKYBOX_SHADER = shader;
+				SkyboxShaders.SKYBOX_SHADER = shader;
 			}));
 		} catch (IOException e) {
 			list2.forEach((pair) -> {

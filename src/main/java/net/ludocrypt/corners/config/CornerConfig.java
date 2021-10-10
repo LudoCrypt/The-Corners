@@ -13,6 +13,12 @@ public class CornerConfig implements ConfigData {
 	@ConfigEntry.Gui.RequiresRestart
 	public boolean condensedDimensions = false;
 
+	@ConfigEntry.Gui.Tooltip()
+	public boolean delayMusicWithRadio = true;
+
+	@ConfigEntry.Gui.Tooltip()
+	public boolean disableStrongShaders = false;
+
 	public static void init() {
 		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);
 	}

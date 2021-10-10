@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 public class DimensionalPaintingMotive extends PaintingMotive {
 
+	public final RegistryKey<World> radioRedirect;
 	public final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, RegistryKey<World>> dimension;
 	public final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget;
 
@@ -28,26 +29,27 @@ public class DimensionalPaintingMotive extends PaintingMotive {
 		}
 	};
 
-	public DimensionalPaintingMotive(int width, int height, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, RegistryKey<World>> dimension, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget) {
+	public DimensionalPaintingMotive(int width, int height, RegistryKey<World> radioRedirect, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, RegistryKey<World>> dimension, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget) {
 		super(width, height);
+		this.radioRedirect = radioRedirect;
 		this.dimension = dimension;
 		this.teleportTarget = teleportTarget;
 	}
 
 	public DimensionalPaintingMotive(int width, int height, RegistryKey<World> dimension, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget) {
-		this(width, height, (player, painting) -> dimension, teleportTarget);
+		this(width, height, dimension, (player, painting) -> dimension, teleportTarget);
 	}
 
 	public DimensionalPaintingMotive(int width, int height, RegistryKey<World> dimension, TeleportTarget teleport) {
-		this(width, height, (player, painting) -> dimension, (player, painting) -> teleport);
+		this(width, height, dimension, (player, painting) -> dimension, (player, painting) -> teleport);
 	}
 
 	public static DimensionalPaintingMotive create(int width, int height, RegistryKey<World> dimension, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, Vec3d> teleportTarget) {
-		return new DimensionalPaintingMotive(width, height, (player, painting) -> dimension, (player, painting) -> new TeleportTarget(teleportTarget.apply(player, painting), player.getVelocity(), player.getYaw(), player.getPitch()));
+		return new DimensionalPaintingMotive(width, height, dimension, (player, painting) -> dimension, (player, painting) -> new TeleportTarget(teleportTarget.apply(player, painting), player.getVelocity(), player.getYaw(), player.getPitch()));
 	}
 
 	public static DimensionalPaintingMotive create(int width, int height, RegistryKey<World> dimension, Vec3d dest) {
-		return new DimensionalPaintingMotive(width, height, (player, painting) -> dimension, (player, painting) -> new TeleportTarget(dest, player.getVelocity(), player.getYaw(), player.getPitch()));
+		return new DimensionalPaintingMotive(width, height, dimension, (player, painting) -> dimension, (player, painting) -> new TeleportTarget(dest, player.getVelocity(), player.getYaw(), player.getPitch()));
 	}
 
 }

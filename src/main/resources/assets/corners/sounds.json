@@ -77,6 +77,11 @@
 			},
 			{
 				"name": "corners:music/communal_corridors/pelt",
+				"weight": 2,
+				"stream": true
+			},
+			{
+				"name": "corners:music/communal_corridors/the_colds",
 				"stream": true
 			}
 		]

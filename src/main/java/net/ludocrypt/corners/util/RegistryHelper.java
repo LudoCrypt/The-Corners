@@ -8,6 +8,7 @@ import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.client.TheCornersClient;
 import net.ludocrypt.corners.client.sound.ReverbSettings;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
@@ -86,6 +87,17 @@ public class RegistryHelper {
 
 	public static <T extends ReverbSettings> T get(String id, T reverb) {
 		return Registry.register(WorldReverbRegistry.REVERB_REGISTRY, TheCorners.id(id), reverb);
+	}
+
+	public static ManagedShaderEffect getShader(String id) {
+		return get(id, id);
+	}
+
+	public static ManagedShaderEffect getShader(String id, boolean strong) {
+		if (strong) {
+			TheCornersClient.strongShaders.add(TheCorners.id(id));
+		}
+		return get(id, id);
 	}
 
 	public static ManagedShaderEffect get(String id, String shaderId) {

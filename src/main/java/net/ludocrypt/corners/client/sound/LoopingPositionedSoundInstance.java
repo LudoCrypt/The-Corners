@@ -1,6 +1,7 @@
 package net.ludocrypt.corners.client.sound;
 
-import net.ludocrypt.corners.init.CornerBlocks;
+import net.ludocrypt.corners.access.MusicTrackerAccess;
+import net.ludocrypt.corners.block.RadioBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.TickableSoundInstance;
@@ -36,8 +37,9 @@ public class LoopingPositionedSoundInstance extends PositionedSoundInstance impl
 
 	@Override
 	public void tick() {
-		if (!this.world.getBlockState(pos).isOf(CornerBlocks.WOODEN_RADIO)) {
+		if (!(this.world.getBlockState(pos).getBlock() instanceof RadioBlock)) {
 			this.isDone = true;
+			((MusicTrackerAccess) (MinecraftClient.getInstance().getMusicTracker())).getRadioPositions().remove(pos);
 		}
 	}
 

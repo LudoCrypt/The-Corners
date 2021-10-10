@@ -2,13 +2,13 @@ package net.ludocrypt.corners.mixin;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.google.common.collect.Lists;
 
 import net.ludocrypt.corners.access.ItemRendererAccess;
-import net.ludocrypt.corners.client.render.block.SkyboxBlockEntityRenderer;
-import net.ludocrypt.corners.client.render.model.FilterSkyQuadBakedModel;
+import net.ludocrypt.corners.client.render.sky.RemoveSkyboxQuadsBakedModel;
+import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -49,25 +49,26 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 	@Inject(method = "getHeldItemModel", at = @At("RETURN"), cancellable = true)
 	public void corners$getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
 		if (!isPure) {
-			ci.setReturnValue(new FilterSkyQuadBakedModel(ci.getReturnValue()));
+			ci.setReturnValue(new RemoveSkyboxQuadsBakedModel(ci.getReturnValue()));
 		}
 	}
 
-	@Inject(method = "Lnet/minecraft/client/render/item/ItemRenderer;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemModel(Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/item/ItemStack;IILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;)V"))
+	@Inject(method = "Lnet/minecraft/client/render/item/ItemRenderer;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemModel(Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/item/ItemStack;IILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;)V", shift = Shift.AFTER))
 	public void corners$renderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		BakedModel bakedModel = ((ItemRendererAccess) (ItemRenderer) (Object) this).getItemModelPure(stack, null, null, 0);
 		List<BakedQuad> quads = Lists.newArrayList();
+		SkyboxShaders.addAll(quads, bakedModel, null);
 		for (Direction dir : Direction.values()) {
-			quads.addAll(bakedModel.getQuads(null, dir, new Random(0)).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
+			SkyboxShaders.addAll(quads, bakedModel, null, dir);
 		}
 		Iterator<BakedQuad> quadIterator = quads.iterator();
 
 		while (quadIterator.hasNext()) {
 			BakedQuad quad = quadIterator.next();
 			Matrix4f matrix = matrices.peek().getModel();
-			SkyboxBlockEntityRenderer.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
-			VertexConsumer consumer = vertexConsumers.getBuffer(SkyboxBlockEntityRenderer.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxBlockEntityRenderer.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-			FilterSkyQuadBakedModel.quad(consumer, matrix, quad);
+			SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
+			VertexConsumer consumer = vertexConsumers.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
+			SkyboxShaders.quad(consumer, matrix, quad);
 		}
 	}
 

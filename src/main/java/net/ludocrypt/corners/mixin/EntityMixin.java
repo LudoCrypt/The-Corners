@@ -17,9 +17,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
+
+	@Shadow
+	public World world;
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	private void corners$interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> ci) {

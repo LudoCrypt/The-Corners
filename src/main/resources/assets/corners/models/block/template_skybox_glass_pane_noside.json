@@ -4,7 +4,8 @@
 		"particle": "#pane"
 	},
 	"elements": [
-		{   "from": [ 7, 0, 7 ],
+		{
+			"from": [ 7, 0, 7 ],
 			"to": [ 9, 16, 9 ],
 			"faces": {
 				"north": { "uv": [  9, 0,  7, 16 ], "texture": "#pane" }
@@ -14,7 +15,7 @@
 			"from": [ 7, 0, 7.05 ],
 			"to": [ 9, 16, 9 ],
 			"faces": {
-				"north": { "texture": "#skybox", "cullface": "north" }
+				"north": { "texture": "#skybox" }
 			}
 		}
 	]

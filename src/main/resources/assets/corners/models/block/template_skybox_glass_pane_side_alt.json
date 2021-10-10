@@ -19,11 +19,11 @@
 			"from": [ 7.05, 0.05, 8.95 ],
 			"to": [ 8.95, 15.95, 15.95 ],
 			"faces": {
-				"east": { "texture": "#skybox", "cullface": "east" },
+				"east": { "texture": "#skybox" },
 				"south": { "texture": "#skybox", "cullface": "south" },
-				"west": { "texture": "#skybox", "cullface": "west" },
-				"up": { "texture": "#skybox", "cullface": "up" },
-				"down": { "texture": "#skybox", "cullface": "down" }
+				"west": { "texture": "#skybox" },
+				"up": { "texture": "#skybox" },
+				"down": { "texture": "#skybox" }
 			}
 		}
 	]

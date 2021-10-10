@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 
 import net.ludocrypt.corners.access.BlockRenderManagerAccess;
 import net.ludocrypt.corners.access.ChunkBuilderChunkDataAccess;
+import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -32,12 +33,13 @@ import net.minecraft.util.math.Direction;
 @Mixin(targets = "net.minecraft.client.render.chunk.ChunkBuilder$BuiltChunk$RebuildTask")
 public class ChunkBuilderBuiltChunkRebuildTaskMixin {
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkRendererRegion;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;", shift = Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "Lnet/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask;render(FFFLnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;Lnet/minecraft/client/render/chunk/BlockBufferBuilderStorage;)Ljava/util/Set;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkRendererRegion;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;", shift = Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void corners$render(float cameraX, float cameraY, float cameraZ, ChunkBuilder.ChunkData data, BlockBufferBuilderStorage buffers, CallbackInfoReturnable<Set<BlockEntity>> cir, int i, BlockPos blockPos, BlockPos blockPos2, ChunkOcclusionDataBuilder chunkOcclusionDataBuilder, Set<BlockEntity> set, ChunkRendererRegion chunkRendererRegion, MatrixStack matrixStack, Random random, BlockRenderManager blockRenderManager, Iterator<BlockPos> var15, BlockPos blockPos3, BlockState blockState) {
 		List<BakedQuad> quads = Lists.newArrayList();
 		BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(blockState);
+		SkyboxShaders.addAll(quads, model, blockState);
 		for (Direction dir : Direction.values()) {
-			quads.addAll(model.getQuads(blockState, dir, new Random(0)).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
+			SkyboxShaders.addAll(quads, model, blockState, dir);
 		}
 		if (!quads.isEmpty()) {
 			((ChunkBuilderChunkDataAccess) data).getSkyboxBlocks().put(blockPos3.toImmutable(), blockState);

@@ -29,7 +29,7 @@ public class CornerWorld {
 	public static final String YEARNING_CANAL = "yearning_canal";
 	public static final Identifier YEARNING_CANAL_ID = TheCorners.id(YEARNING_CANAL);
 	public static final RegistryKey<Biome> YEARNING_CANAL_BIOME = get("yearning_canal", YearningCanalBiome.create());
-	public static final DimensionType YEARNING_CANAL_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(1200), true, false, false, false, 1.0, false, false, true, false, false, 0, CornerConfig.getInstance().condensedDimensions ? 432 : 2032, CornerConfig.getInstance().condensedDimensions ? 432 : 2032, DirectBiomeAccessType.INSTANCE, YEARNING_CANAL_ID, YEARNING_CANAL_ID, 1.0F);
+	public static final DimensionType YEARNING_CANAL_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(1200), true, false, false, true, 1.0, false, false, true, false, false, 0, CornerConfig.getInstance().condensedDimensions ? 432 : 2032, CornerConfig.getInstance().condensedDimensions ? 432 : 2032, DirectBiomeAccessType.INSTANCE, YEARNING_CANAL_ID, YEARNING_CANAL_ID, 1.0F);
 	public static final RegistryKey<DimensionType> YEARNING_CANAL_DIMENSION_TYPE_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_TYPE_KEY, YEARNING_CANAL_ID);
 	public static final RegistryKey<DimensionOptions> YEARNING_CANAL_DIMENSION_OPTOINS_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_KEY, YEARNING_CANAL_ID);
 	public static final RegistryKey<World> YEARNING_CANAL_WORLD_REGISTRY_KEY = RegistryKey.of(Registry.WORLD_KEY, YEARNING_CANAL_ID);
@@ -38,7 +38,7 @@ public class CornerWorld {
 	// Communal Corridors
 	public static final String COMMUNAL_CORRIDORS = "communal_corridors";
 	public static final Identifier COMMUNAL_CORRIDORS_ID = TheCorners.id(COMMUNAL_CORRIDORS);
-	public static final DimensionType COMMUNAL_CORRIDORS_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(23500), true, false, false, false, 1.0, false, false, true, false, false, 0, 128, 128, DirectBiomeAccessType.INSTANCE, COMMUNAL_CORRIDORS_ID, COMMUNAL_CORRIDORS_ID, 0.075F);
+	public static final DimensionType COMMUNAL_CORRIDORS_DIMENSION_TYPE = DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, DirectBiomeAccessType.INSTANCE, COMMUNAL_CORRIDORS_ID, COMMUNAL_CORRIDORS_ID, 0.075F);
 	public static final RegistryKey<Biome> COMMUNAL_CORRIDORS_BIOME = get("communal_corridors", CommunalCorridorsBiome.create());
 	public static final RegistryKey<DimensionType> COMMUNAL_CORRIDORS_DIMENSION_TYPE_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_TYPE_KEY, COMMUNAL_CORRIDORS_ID);
 	public static final RegistryKey<DimensionOptions> COMMUNAL_CORRIDORS_DIMENSION_OPTOINS_REGISTRY_KEY = RegistryKey.of(Registry.DIMENSION_KEY, COMMUNAL_CORRIDORS_ID);

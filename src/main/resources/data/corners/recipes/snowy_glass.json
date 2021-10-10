@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"###"
+	],
+	"key": {
+		"#": {
+			"item": "corners:snowy_glass_pane"
+		}
+	},
+	"result": {
+		"item": "corners:snowy_glass",
+		"count": 1
+	}
+}

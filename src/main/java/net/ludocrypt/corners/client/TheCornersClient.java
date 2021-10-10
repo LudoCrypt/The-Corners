@@ -1,11 +1,13 @@
 package net.ludocrypt.corners.client;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
-import net.ludocrypt.corners.block.entity.SkyboxBlockEntity;
-import net.ludocrypt.corners.client.render.block.SkyboxBlockEntityRenderer;
+import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.ludocrypt.corners.init.WorldReverbRegistry;
@@ -13,17 +15,25 @@ import net.ludocrypt.corners.mixin.MinecraftClientAccessor;
 import net.ludocrypt.corners.packet.ServerToClientPackets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.Identifier;
 
 public class TheCornersClient implements ClientModInitializer {
+
+	public static final List<Identifier> strongShaders = Lists.newArrayList();
 
 	@Override
 	public void onInitializeClient() {
 		CornerShaderRegistry.init();
 		WorldReverbRegistry.init();
 		ServerToClientPackets.manageServerToClientPackets();
-		BlockEntityRendererRegistry.INSTANCE.register(CornerBlocks.SKYBOX_BLOCK_ENTITY, (context) -> new SkyboxBlockEntityRenderer<SkyboxBlockEntity>());
-		ShaderEffectRenderCallback.EVENT.register(tickDelta -> CornerShaderRegistry.getCurrent(MinecraftClient.getInstance().world.getRegistryKey()).render(tickDelta));
-		BlockRenderLayerMap.INSTANCE.putBlock(CornerBlocks.SNOWY_GLASS_PANE, RenderLayer.getTranslucent());
+		ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
+			MinecraftClient client = MinecraftClient.getInstance();
+			if (CornerConfig.getInstance().disableStrongShaders && strongShaders.contains(client.world.getRegistryKey().getValue())) {
+				return;
+			}
+			CornerShaderRegistry.getCurrent(client).render(tickDelta);
+		});
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS);
 	}
 
 	public static float getTickDelta() {

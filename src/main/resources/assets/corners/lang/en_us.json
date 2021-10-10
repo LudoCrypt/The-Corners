@@ -1,20 +1,26 @@
 {
 	"block.corners.stone_pillar": "Stone Pillar",
 	"block.corners.wooden_radio": "Wooden Radio",
+	"block.corners.tuned_radio": "Tuned Radio",
 	"block.corners.drywall": "Drywall",
 	"block.corners.nylon_fiber_slab": "Nylon Fiber Slab",
 	"block.corners.nylon_fiber_stairs": "Nylon Fiber Stairs",
 	"block.corners.nylon_fiber_block": "Nylon Fiber",
+	"block.corners.snowy_glass": "Snowy Glass",
 	"block.corners.snowy_glass_pane": "Snowy Glass Pane",
 	"itemGroup.corners.items": "The Corners",
 	// Config
 	"text.autoconfig.the_corners.title": "The Corners",
 	"text.autoconfig.the_corners.option.condensedDimensions": "Condensed Dimensions",
 	"text.autoconfig.the_corners.option.condensedDimensions.@Tooltip": "Caps dimension height for lag reduction in extreme cases",
+	"text.autoconfig.the_corners.option.delayMusicWithRadio": "Delay Music With Radio",
+	"text.autoconfig.the_corners.option.delayMusicWithRadio.@Tooltip": "Prevents ambient music to play while a radio is on",
+	"text.autoconfig.the_corners.option.disableStrongShaders": "Disable Strong Shaders",
+	"text.autoconfig.the_corners.option.disableStrongShaders.@Tooltip": "Disables potentially harmful shaders",
 	// Credits
-	"credits.the_garden.ludocrypt.youtube": "LudoCrypt's Youtube",
-	"credits.the_garden.ludocrypt.bandcamp": "LudoCrypt's Bandcamp",
-	"credits.the_garden.angel_craig.youtube": "Angel Craig's Youtube",
-	"credits.the_garden.angel_craig.bandcamp": "Angel Craig's Bandcamp",
-	"credits.the_garden.slice.instagram": "Slice's Instagram"
+	"credits.the_corners.ludocrypt.youtube": "LudoCrypt's Youtube",
+	"credits.the_corners.ludocrypt.bandcamp": "LudoCrypt's Bandcamp",
+	"credits.the_corners.angel_craig.youtube": "Angel Craig's Youtube",
+	"credits.the_corners.angel_craig.bandcamp": "Angel Craig's Bandcamp",
+	"credits.the_corners.slice.instagram": "Slice's Instagram"
 }

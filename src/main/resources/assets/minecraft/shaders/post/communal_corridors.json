@@ -1,0 +1,43 @@
+{
+	"targets": [
+		"swap",
+		"previous"
+	],
+	"passes": [
+		{
+			"name": "chromastort",
+			"intarget": "minecraft:main",
+			"outtarget": "swap",
+			"auxtargets": [
+				{
+					"name": "PrevSampler",
+					"id": "previous"
+				}
+			],
+			"uniforms": [
+				{
+					"name": "dispFactor",
+					"values": [
+						0.375
+					]
+				},
+				{
+					"name": "intensity",
+					"values": [
+						0.375
+					]
+				}
+			]
+		},
+		{
+			"name": "blit",
+			"intarget": "swap",
+			"outtarget": "previous"
+		},
+		{
+			"name": "blit",
+			"intarget": "swap",
+			"outtarget": "minecraft:main"
+		}
+	]
+}

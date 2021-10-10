@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.ludocrypt.corners.access.BlockRenderManagerAccess;
-import net.ludocrypt.corners.client.render.model.FilterSkyQuadBakedModel;
+import net.ludocrypt.corners.client.render.sky.RemoveSkyboxQuadsBakedModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.block.BlockModels;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -23,7 +23,7 @@ public class BlockRenderManagerMixin implements BlockRenderManagerAccess {
 
 	@Inject(method = "getModel", at = @At("RETURN"), cancellable = true)
 	private void corners$getModel(BlockState state, CallbackInfoReturnable<BakedModel> ci) {
-		ci.setReturnValue(new FilterSkyQuadBakedModel(ci.getReturnValue()));
+		ci.setReturnValue(new RemoveSkyboxQuadsBakedModel(ci.getReturnValue()));
 	}
 
 	@Override

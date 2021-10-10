@@ -27,10 +27,10 @@ import net.fabricmc.api.Environment;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.access.BlockRenderManagerAccess;
 import net.ludocrypt.corners.access.ChunkBuilderChunkDataAccess;
-import net.ludocrypt.corners.client.render.block.SkyboxBlockEntityRenderer;
-import net.ludocrypt.corners.client.render.model.FilterSkyQuadBakedModel;
+import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.init.CornerWorld;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -118,8 +118,11 @@ public class WorldRendererMixin {
 
 			List<BakedQuad> quads = Lists.newArrayList();
 			BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(state);
+			SkyboxShaders.addAll(quads, model, state);
 			for (Direction dir : Direction.values()) {
-				quads.addAll(model.getQuads(state, dir, new Random(0)).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
+				if (Block.shouldDrawSide(state, world, pos, dir, pos.offset(dir))) {
+					SkyboxShaders.addAll(quads, model, state, dir);
+				}
 			}
 
 			Iterator<BakedQuad> quadIterator = quads.iterator();
@@ -127,9 +130,9 @@ public class WorldRendererMixin {
 			while (quadIterator.hasNext()) {
 				BakedQuad quad = quadIterator.next();
 				Matrix4f matrix = matrices.peek().getModel();
-				SkyboxBlockEntityRenderer.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
-				VertexConsumer consumer = immediate.getBuffer(SkyboxBlockEntityRenderer.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxBlockEntityRenderer.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-				FilterSkyQuadBakedModel.quad(consumer, matrix, quad);
+				SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
+				VertexConsumer consumer = immediate.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
+				SkyboxShaders.quad(consumer, matrix, quad);
 			}
 
 			matrices.pop();

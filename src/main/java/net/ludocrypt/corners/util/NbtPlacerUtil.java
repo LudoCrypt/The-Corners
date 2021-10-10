@@ -137,8 +137,8 @@ public class NbtPlacerUtil {
 	public NbtPlacerUtil spawnEntities(ChunkRegion region, BlockPos pos, BlockRotation rotation) {
 		this.entities.forEach((nbtElement) -> {
 			NbtCompound entityCompound = (NbtCompound) nbtElement;
-			NbtList nbtPos = entityCompound.getList("pos", 6);
-			Vec3d realPosition = abs(rotate(new Vec3d(nbtPos.getDouble(0), nbtPos.getDouble(1), nbtPos.getDouble(2)), rotation)).add(pos.getX(), pos.getY() - 1, pos.getZ());
+			NbtList nbtPos = entityCompound.getList("blockPos", 3);
+			Vec3d realPosition = abs(rotate(new Vec3d(nbtPos.getInt(0), nbtPos.getInt(1), nbtPos.getInt(2)), rotation)).add(pos.getX(), pos.getY(), pos.getZ());
 
 			NbtCompound nbt = entityCompound.getCompound("nbt").copy();
 			nbt.remove("Pos");
