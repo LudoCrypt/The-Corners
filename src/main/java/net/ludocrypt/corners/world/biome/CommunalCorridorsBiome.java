@@ -1,5 +1,6 @@
 package net.ludocrypt.corners.world.biome;
 
+import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
@@ -22,6 +23,7 @@ public class CommunalCorridorsBiome {
 		biomeEffects.waterFogColor(13548960);
 		biomeEffects.fogColor(13548960);
 		biomeEffects.grassColor(13818488);
+		biomeEffects.loopSound(CornerSoundEvents.BIOME_LOOP_COMMUNAL_CORRIDORS);
 		BiomeEffects effects = biomeEffects.build();
 
 		biome.spawnSettings(spawnSettings.build());

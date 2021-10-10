@@ -116,5 +116,13 @@
 				"stream": true
 			}
 		]
+	},
+	"biome.communal_corridors.loop": {
+		"sounds": [
+			{
+				"name": "corners:ambient/communal_corridors/loop",
+				"stream": true
+			}
+		]
 	}
 }

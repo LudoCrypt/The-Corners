@@ -18,6 +18,9 @@ public class CornerSoundEvents {
 	public static final SoundEvent RADIO_YEARNING_CANAL = get("radio.yearning_canal");
 	public static final SoundEvent RADIO_COMMUNAL_CORRIDORS = get("radio.communal_corridors");
 
+	// Ambient
+	public static final SoundEvent BIOME_LOOP_COMMUNAL_CORRIDORS = get("biome.communal_corridors.loop");
+
 	public static void init() {
 
 	}
