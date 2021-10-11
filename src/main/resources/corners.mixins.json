@@ -6,8 +6,10 @@
 	"mixins": [
 		"AbstractDecorationEntityAccessor",
 		"ChunkStatusMixin",
+		"DimensionOptionsMixin",
 		"DimensionTypeMixin",
 		"EntityMixin",
+		"LevelStorageMixin",
 		"ServerPlayerEntityMixin"
 	],
 	"client": [
