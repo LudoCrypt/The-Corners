@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.SortedSet;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,15 +12,13 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
-import it.unimi.dsi.fastutil.objects.ObjectListIterator;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.ludocrypt.corners.TheCorners;
@@ -32,12 +29,10 @@ import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.init.CornerWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BlockBreakingInfo;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.Tessellator;
@@ -47,6 +42,8 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.client.render.chunk.ChunkBuilder.BuiltChunk;
+import net.minecraft.client.render.chunk.ChunkBuilder.ChunkData;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -77,8 +74,13 @@ public class WorldRendererMixin {
 	@Shadow
 	private ClientWorld world;
 
-	@Unique
-	private HashMap<BlockPos, BlockState> skyboxBlocks = new HashMap<BlockPos, BlockState>();
+	@Shadow
+	@Final
+	private ObjectArrayList<WorldRenderer.ChunkInfo> visibleChunks;
+
+	@Shadow
+	@Final
+	private BufferBuilderStorage bufferBuilders;
 
 	@Inject(method = "processWorldEvent", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void corners$processWorldEvent(PlayerEntity source, int eventId, BlockPos pos, int data, CallbackInfo ci, Random random) {
@@ -98,50 +100,48 @@ public class WorldRendererMixin {
 		}
 	}
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;getBlockEntities()Ljava/util/List;", ordinal = 0, shift = Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci, Profiler profiler, Vec3d vec3d, double d, double e, double f, Matrix4f matrix4f2, boolean bl, Frustum frustum2, boolean bl3, VertexConsumerProvider.Immediate immediate, ObjectListIterator<Entry<SortedSet<BlockBreakingInfo>>> var39, WorldRenderer.ChunkInfo chunkInfo) {
-		skyboxBlocks = ((ChunkBuilderChunkDataAccess) ((WorldRendererChunkInfoAccessor) chunkInfo).getChunk().getData()).getSkyboxBlocks();
-	}
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;updateChunks(J)V", shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci, Profiler profiler, Vec3d vec3d, double d, double e, double f) {
+		Iterator<WorldRenderer.ChunkInfo> chunkInforator = this.visibleChunks.iterator();
+		while (chunkInforator.hasNext()) {
+			WorldRenderer.ChunkInfo info = chunkInforator.next();
+			BuiltChunk chunk = ((WorldRendererChunkInfoAccessor) info).getChunk();
+			ChunkData data = chunk.data.get();
+			HashMap<BlockPos, BlockState> skyboxes = ((ChunkBuilderChunkDataAccess) data).getSkyboxBlocks();
+			Iterator<java.util.Map.Entry<BlockPos, BlockState>> iterator = skyboxes.entrySet().iterator();
+			VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
+			while (iterator.hasNext()) {
+				java.util.Map.Entry<BlockPos, BlockState> entry = iterator.next();
+				BlockPos pos = entry.getKey();
+				BlockState state = entry.getValue();
+				matrices.push();
+				matrices.translate(pos.getX() - d, pos.getY() - e, pos.getZ() - f);
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/List;iterator()Ljava/util/Iterator;", ordinal = 0, shift = Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci, Profiler profiler, Vec3d vec3d, double d, double e, double f, Matrix4f matrix4f2, boolean bl, Frustum frustum2, boolean bl3, VertexConsumerProvider.Immediate immediate, ObjectListIterator<Entry<SortedSet<BlockBreakingInfo>>> var39, WorldRenderer.ChunkInfo chunkInfo, List<BlockEntity> list) {
-		Iterator<java.util.Map.Entry<BlockPos, BlockState>> iterator = skyboxBlocks.entrySet().iterator();
-		while (iterator.hasNext()) {
-			java.util.Map.Entry<BlockPos, BlockState> entry = iterator.next();
-			BlockPos pos = entry.getKey();
-			BlockState state = entry.getValue();
-			matrices.push();
-			matrices.translate(pos.getX() - d, pos.getY() - e, pos.getZ() - f);
+				MinecraftClient client = MinecraftClient.getInstance();
+				BlockRenderManager blockRenderManager = client.getBlockRenderManager();
 
-			MinecraftClient client = MinecraftClient.getInstance();
-			BlockRenderManager blockRenderManager = client.getBlockRenderManager();
-
-			List<BakedQuad> quads = Lists.newArrayList();
-			BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(state);
-			SkyboxShaders.addAll(quads, model, state);
-			for (Direction dir : Direction.values()) {
-				if (Block.shouldDrawSide(state, world, pos, dir, pos.offset(dir))) {
-					SkyboxShaders.addAll(quads, model, state, dir);
+				List<BakedQuad> quads = Lists.newArrayList();
+				BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(state);
+				SkyboxShaders.addAll(quads, model, state);
+				for (Direction dir : Direction.values()) {
+					if (Block.shouldDrawSide(state, world, pos, dir, pos.offset(dir))) {
+						SkyboxShaders.addAll(quads, model, state, dir);
+					}
 				}
+
+				Iterator<BakedQuad> quadIterator = quads.iterator();
+
+				while (quadIterator.hasNext()) {
+					BakedQuad quad = quadIterator.next();
+					Matrix4f matrix = matrices.peek().getModel();
+					SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
+					VertexConsumer consumer = immediate.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
+					SkyboxShaders.quad(consumer, matrix, quad);
+				}
+
+				matrices.pop();
 			}
-
-			Iterator<BakedQuad> quadIterator = quads.iterator();
-
-			while (quadIterator.hasNext()) {
-				BakedQuad quad = quadIterator.next();
-				Matrix4f matrix = matrices.peek().getModel();
-				SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
-				VertexConsumer consumer = immediate.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-				SkyboxShaders.quad(consumer, matrix, quad);
-			}
-
-			matrices.pop();
 		}
-	}
-
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z", ordinal = 0))
-	private boolean corners$render$keepBoning(List<?> in) {
-		return in.isEmpty() && skyboxBlocks.isEmpty();
 	}
 
 	@Unique
