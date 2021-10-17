@@ -3,6 +3,7 @@ package net.ludocrypt.corners.mixin;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.spongepowered.asm.mixin.Final;
@@ -108,10 +109,10 @@ public class WorldRendererMixin {
 			BuiltChunk chunk = ((WorldRendererChunkInfoAccessor) info).getChunk();
 			ChunkData data = chunk.data.get();
 			HashMap<BlockPos, BlockState> skyboxes = ((ChunkBuilderChunkDataAccess) data).getSkyboxBlocks();
-			Iterator<java.util.Map.Entry<BlockPos, BlockState>> iterator = skyboxes.entrySet().iterator();
+			Iterator<Entry<BlockPos, BlockState>> iterator = skyboxes.entrySet().iterator();
 			VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
 			while (iterator.hasNext()) {
-				java.util.Map.Entry<BlockPos, BlockState> entry = iterator.next();
+				Entry<BlockPos, BlockState> entry = iterator.next();
 				BlockPos pos = entry.getKey();
 				BlockState state = entry.getValue();
 				matrices.push();
