@@ -33,7 +33,7 @@ public class TheCornersClient implements ClientModInitializer {
 			}
 			CornerShaderRegistry.getCurrent(client).render(tickDelta);
 		});
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS);
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS);
 	}
 
 	public static float getTickDelta() {

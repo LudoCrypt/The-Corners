@@ -1,0 +1,8 @@
+{
+	"replace": false,
+	"values": [
+		"corners:stone_pillar",
+		"corners:snowy_glass",
+		"corners:snowy_glass_pane"
+	]
+}

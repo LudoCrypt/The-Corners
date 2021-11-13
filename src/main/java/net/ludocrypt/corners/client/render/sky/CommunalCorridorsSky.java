@@ -2,10 +2,10 @@ package net.ludocrypt.corners.client.render.sky;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.util.math.Vec3d;
 
-public class CommunalCorridorsSky extends SkyProperties {
+public class CommunalCorridorsSky extends DimensionEffects {
 
 	public CommunalCorridorsSky() {
 		super(Float.NaN, false, SkyType.NONE, true, false);

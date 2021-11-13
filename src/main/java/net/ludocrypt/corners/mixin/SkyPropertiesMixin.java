@@ -10,16 +10,16 @@ import net.fabricmc.api.Environment;
 import net.ludocrypt.corners.client.render.sky.CommunalCorridorsSky;
 import net.ludocrypt.corners.client.render.sky.YearningCanalSky;
 import net.ludocrypt.corners.init.CornerWorld;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-@Mixin(SkyProperties.class)
+@Mixin(DimensionEffects.class)
 public class SkyPropertiesMixin {
 
 	@Shadow
 	@Final
-	private static Object2ObjectMap<Identifier, SkyProperties> BY_IDENTIFIER;
+	private static Object2ObjectMap<Identifier, DimensionEffects> BY_IDENTIFIER;
 
 	static {
 		BY_IDENTIFIER.put(CornerWorld.YEARNING_CANAL_ID, new YearningCanalSky());

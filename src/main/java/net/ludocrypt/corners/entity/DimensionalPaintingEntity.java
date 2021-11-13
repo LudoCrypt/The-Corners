@@ -18,7 +18,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
-@SuppressWarnings("deprecation")
 public class DimensionalPaintingEntity extends PaintingEntity {
 
 	public static boolean isPaingintTeleport = false;

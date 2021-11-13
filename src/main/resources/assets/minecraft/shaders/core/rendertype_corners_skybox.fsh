@@ -1,7 +1,6 @@
 #version 150
 
-#moj_import <matrix.glsl>
-#moj_import <projection.glsl>
+#moj_import <fog.glsl>
 
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
@@ -10,11 +9,15 @@ uniform sampler2D Sampler3;
 uniform sampler2D Sampler4;
 uniform sampler2D Sampler5;
 
+in float vertexDistance;
 in vec4 texProj0;
 in vec4 glPos;
 
 uniform mat4 ProjMat;
-uniform mat4 TransformMatrix;
+uniform mat4 ModelViewMat;
+uniform float FogStart;
+uniform float FogEnd;
+uniform vec4 FogColor;
 
 out vec4 fragColor;
 
@@ -41,7 +44,7 @@ vec2 sampleCube(vec3 v, out float faceIndex) {
 void main() {
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
-	vec3 rd = normalize((inverse(ProjMat * TransformMatrix) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
+	vec3 rd = normalize((inverse(ProjMat * ModelViewMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
 	float faceIndex = 0.0;
 	vec4 texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
 	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);
@@ -62,5 +65,5 @@ void main() {
 		color = textureProj(Sampler5, texPos).xyz;
 	}
 
-    fragColor = vec4(color, 1.0);
+    fragColor = linear_fog(vec4(color, 1.0), vertexDistance, FogStart, FogEnd, FogColor);
 }

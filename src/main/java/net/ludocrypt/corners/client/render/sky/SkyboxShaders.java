@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.lwjgl.system.MemoryStack;
@@ -16,7 +17,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.Shader;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.BakedModel;
@@ -24,6 +24,7 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.Vector4f;
 
 public class SkyboxShaders {
@@ -41,7 +42,7 @@ public class SkyboxShaders {
 		addAll(list, model, state, null);
 	}
 
-	public static void quad(VertexConsumer consumer, Matrix4f matrix4f, BakedQuad quad) {
+	public static void quad(Consumer<Vec3f> consumer, Matrix4f matrix4f, BakedQuad quad) {
 		int[] js = quad.getVertexData();
 		int j = js.length / 8;
 		MemoryStack memoryStack = MemoryStack.stackPush();
@@ -58,7 +59,7 @@ public class SkyboxShaders {
 
 				Vector4f vector4f = new Vector4f(f, g, h, 1.0F);
 				vector4f.transform(matrix4f);
-				consumer.vertex(vector4f.getX(), vector4f.getY(), vector4f.getZ()).next();
+				consumer.accept(new Vec3f(vector4f.getX(), vector4f.getY(), vector4f.getZ()));
 			}
 		} catch (Throwable var33) {
 			if (memoryStack != null) {

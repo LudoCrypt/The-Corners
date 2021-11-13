@@ -66,9 +66,8 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 		while (quadIterator.hasNext()) {
 			BakedQuad quad = quadIterator.next();
 			Matrix4f matrix = matrices.peek().getModel();
-			SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
 			VertexConsumer consumer = vertexConsumers.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-			SkyboxShaders.quad(consumer, matrix, quad);
+			SkyboxShaders.quad((vec3f) -> consumer.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
 		}
 	}
 

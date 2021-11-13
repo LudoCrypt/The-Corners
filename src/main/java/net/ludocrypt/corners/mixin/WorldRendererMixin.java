@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -33,12 +32,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferBuilderStorage;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
@@ -58,7 +55,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import net.minecraft.util.profiler.Profiler;
 
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
@@ -101,8 +97,16 @@ public class WorldRendererMixin {
 		}
 	}
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;updateChunks(J)V", shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci, Profiler profiler, Vec3d vec3d, double d, double e, double f) {
+	@Inject(method = "renderWorldBorder", at = @At("RETURN"))
+	private void corners$renderWorldBorder$actuallyLetsJustRenderOurSkyboxQuadsHere(Camera camera, CallbackInfo ci) {
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		MatrixStack matrices = new MatrixStack();
+		matrices.push();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.enableBlend();
+		RenderSystem.enableDepthTest();
+		RenderSystem.defaultBlendFunc();
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 		Iterator<WorldRenderer.ChunkInfo> chunkInforator = this.visibleChunks.iterator();
 		while (chunkInforator.hasNext()) {
 			WorldRenderer.ChunkInfo info = chunkInforator.next();
@@ -110,13 +114,12 @@ public class WorldRendererMixin {
 			ChunkData data = chunk.data.get();
 			HashMap<BlockPos, BlockState> skyboxes = ((ChunkBuilderChunkDataAccess) data).getSkyboxBlocks();
 			Iterator<Entry<BlockPos, BlockState>> iterator = skyboxes.entrySet().iterator();
-			VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
 			while (iterator.hasNext()) {
 				Entry<BlockPos, BlockState> entry = iterator.next();
 				BlockPos pos = entry.getKey();
 				BlockState state = entry.getValue();
 				matrices.push();
-				matrices.translate(pos.getX() - d, pos.getY() - e, pos.getZ() - f);
+				matrices.translate(pos.getX() - camera.getPos().getX(), pos.getY() - camera.getPos().getY(), pos.getZ() - camera.getPos().getZ());
 
 				MinecraftClient client = MinecraftClient.getInstance();
 				BlockRenderManager blockRenderManager = client.getBlockRenderManager();
@@ -135,14 +138,22 @@ public class WorldRendererMixin {
 				while (quadIterator.hasNext()) {
 					BakedQuad quad = quadIterator.next();
 					Matrix4f matrix = matrices.peek().getModel();
-					SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("TransformMatrix").set(matrix);
-					VertexConsumer consumer = immediate.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-					SkyboxShaders.quad(consumer, matrix, quad);
+					RenderSystem.setShader(() -> SkyboxShaders.SKYBOX_SHADER);
+					for (int i = 0; i < 6; i++) {
+						RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
+					}
+					SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
 				}
 
 				matrices.pop();
 			}
 		}
+		bufferBuilder.end();
+		BufferRenderer.draw(bufferBuilder);
+		RenderSystem.disableBlend();
+		matrices.pop();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.depthMask(true);
 	}
 
 	@Unique
