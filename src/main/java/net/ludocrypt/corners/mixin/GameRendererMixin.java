@@ -26,9 +26,7 @@ public class GameRendererMixin {
 	@Inject(method = "loadShaders", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 53, shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void corners$loadShaders(ResourceManager manager, CallbackInfo ci, List<Program> list, List<Pair<Shader, Consumer<Shader>>> list2) {
 		try {
-			list2.add(Pair.of(new Shader(manager, "rendertype_corners_skybox", VertexFormats.POSITION), (shader) -> {
-				SkyboxShaders.SKYBOX_SHADER = shader;
-			}));
+			list2.add(Pair.of(new Shader(manager, "rendertype_corners_skybox", VertexFormats.POSITION), (shader) -> SkyboxShaders.SKYBOX_SHADER = shader));
 		} catch (IOException e) {
 			list2.forEach((pair) -> {
 				pair.getFirst().close();

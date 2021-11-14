@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DimensionEffects.class)
-public class SkyPropertiesMixin {
+public class DimensionEffectsMixin {
 
 	@Shadow
 	@Final

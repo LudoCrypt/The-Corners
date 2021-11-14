@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.google.common.collect.Lists;
 
 import net.ludocrypt.corners.access.BlockRenderManagerAccess;
-import net.ludocrypt.corners.access.ChunkBuilderChunkDataAccess;
+import net.ludocrypt.corners.access.ContainsSkyboxBlocksAccess;
 import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -42,7 +42,7 @@ public class ChunkBuilderBuiltChunkRebuildTaskMixin {
 			SkyboxShaders.addAll(quads, model, blockState, dir);
 		}
 		if (!quads.isEmpty()) {
-			((ChunkBuilderChunkDataAccess) data).getSkyboxBlocks().put(blockPos3.toImmutable(), blockState);
+			((ContainsSkyboxBlocksAccess) data).getSkyboxBlocks().put(blockPos3.toImmutable(), blockState);
 		}
 	}
 

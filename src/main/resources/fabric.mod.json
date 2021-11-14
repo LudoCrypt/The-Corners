@@ -44,6 +44,7 @@
 	},
 	"accessWidener": "corners.accesswidener",
 	"mixins": [
+		"corners.sodium.mixins.json",
 		"corners.mixins.json"
 	],
 	"depends": {

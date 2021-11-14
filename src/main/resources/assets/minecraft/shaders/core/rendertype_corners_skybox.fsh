@@ -8,13 +8,14 @@ uniform sampler2D Sampler2;
 uniform sampler2D Sampler3;
 uniform sampler2D Sampler4;
 uniform sampler2D Sampler5;
+uniform sampler2D Framebuffer;
 
 in float vertexDistance;
 in vec4 texProj0;
 in vec4 glPos;
 
 uniform mat4 ProjMat;
-uniform mat4 ModelViewMat;
+uniform mat4 RotationMatrix;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
@@ -23,7 +24,7 @@ out vec4 fragColor;
 
 vec2 sampleCube(vec3 v, out float faceIndex) {
 	vec3 vAbs = abs(v);
-	float ma;	
+	float ma;
 	vec2 uv;
 	if(vAbs.z >= vAbs.x && vAbs.z >= vAbs.y) {
 		faceIndex = v.z < 0.0 ? 1.0 : 3.0;
@@ -41,29 +42,37 @@ vec2 sampleCube(vec3 v, out float faceIndex) {
 	return uv * ma + 0.5;
 }
 
+vec4 blendOpacity(vec4 foreground, vec4 background) {
+	return vec4(
+			(background.x * (1 - foreground.w) + foreground.x * foreground.w),
+			(background.y * (1 - foreground.w) + foreground.y * foreground.w),
+			(background.z * (1 - foreground.w) + foreground.z * foreground.w),
+			1.0);
+}
+
 void main() {
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
-	vec3 rd = normalize((inverse(ProjMat * ModelViewMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
+	vec3 rd = normalize((inverse(ProjMat * RotationMatrix) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
 	float faceIndex = 0.0;
 	vec4 texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
 	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);
 
-	vec3 color = textureProj(Sampler0, texPos).xyz;
+	vec4 color = textureProj(Sampler0, texPos);
 
 	if (faceIndex == 0.0) {
-		color = textureProj(Sampler0, texPos).xyz;
+		color = textureProj(Sampler0, texPos);
 	} else if (faceIndex == 1.0) {
-		color = textureProj(Sampler1, texPos).xyz;
+		color = textureProj(Sampler1, texPos);
 	} else if (faceIndex == 2.0) {
-		color = textureProj(Sampler2, texPos).xyz;
+		color = textureProj(Sampler2, texPos);
 	} else if (faceIndex == 3.0) {
-		color = textureProj(Sampler3, texPos).xyz;
+		color = textureProj(Sampler3, texPos);
 	} else if (faceIndex == 4.0) {
-		color = textureProj(Sampler4, texPos).xyz;
+		color = textureProj(Sampler4, texPos);
 	} else if (faceIndex == 5.0) {
-		color = textureProj(Sampler5, texPos).xyz;
+		color = textureProj(Sampler5, texPos);
 	}
 
-    fragColor = linear_fog(vec4(color, 1.0), vertexDistance, FogStart, FogEnd, FogColor);
+    fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
 }

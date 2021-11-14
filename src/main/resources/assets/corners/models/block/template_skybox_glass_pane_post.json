@@ -13,8 +13,8 @@
 			}
 		},
 		{
-			"from": [ 7, 0.05, 7 ],
-			"to": [ 9, 15.95, 9 ],
+			"from": [ 7, 0.1, 7 ],
+			"to": [ 9, 15.9, 9 ],
 			"faces": {
 				"up": { "texture": "#skybox" },
 				"down": { "texture": "#skybox" }
