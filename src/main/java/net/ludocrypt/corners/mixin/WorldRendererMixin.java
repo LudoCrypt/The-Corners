@@ -1,9 +1,7 @@
 package net.ludocrypt.corners.mixin;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import org.spongepowered.asm.mixin.Final;
@@ -16,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 
@@ -44,8 +43,6 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.chunk.ChunkBuilder.BuiltChunk;
-import net.minecraft.client.render.chunk.ChunkBuilder.ChunkData;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -61,7 +58,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 @Environment(EnvType.CLIENT)
-@Mixin(value = WorldRenderer.class, priority = 1001)
+@Mixin(value = WorldRenderer.class, priority = 420)
 public class WorldRendererMixin {
 
 	@Shadow
@@ -92,7 +89,7 @@ public class WorldRendererMixin {
 		}
 	}
 
-	@Inject(method = "render", at = @At(value = "RETURN", shift = At.Shift.BEFORE))
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.AFTER, remap = false))
 	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
 		// Render Skyboxes
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
@@ -102,10 +99,13 @@ public class WorldRendererMixin {
 		}
 
 		// Render Skybox Quads
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		RenderSystem.enableBlend();
 		RenderSystem.enableDepthTest();
-		RenderSystem.defaultBlendFunc();
+		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.depthMask(true);
+		RenderSystem.polygonOffset(3.0F, 3.0F);
+		RenderSystem.enablePolygonOffset();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 		this.getSkyboxPairs().forEach((pair) -> {
 			BlockPos pos = pair.getFirst();
@@ -130,8 +130,8 @@ public class WorldRendererMixin {
 			while (quadIterator.hasNext()) {
 				BakedQuad quad = quadIterator.next();
 				Matrix4f matrix = matrices.peek().getModel();
-				SkyboxShaders.SKYBOX_CORE_SHADER.findUniformMat4("RotationMatrix").set(matrix);
-				RenderSystem.setShader(SkyboxShaders.SKYBOX_CORE_SHADER::getProgram);
+				RenderSystem.setShader(() -> SkyboxShaders.SKYBOX_SHADER);
+				RenderSystem.getShader().getUniform("RotMat").set(matrix);
 				for (int i = 0; i < 6; i++) {
 					RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
 				}
@@ -139,10 +139,12 @@ public class WorldRendererMixin {
 			}
 			matrices.pop();
 		});
-
 		bufferBuilder.end();
 		BufferRenderer.draw(bufferBuilder);
+		RenderSystem.polygonOffset(0.0F, 0.0F);
+		RenderSystem.disablePolygonOffset();
 		RenderSystem.disableBlend();
+		RenderSystem.applyModelViewMatrix();
 		RenderSystem.depthMask(true);
 	}
 
@@ -150,20 +152,7 @@ public class WorldRendererMixin {
 	private List<Pair<BlockPos, BlockState>> getSkyboxPairs() {
 		if (!FabricLoader.getInstance().isModLoaded("sodium")) {
 			List<Pair<BlockPos, BlockState>> list = Lists.newArrayList();
-			Iterator<WorldRenderer.ChunkInfo> chunkInforator = this.visibleChunks.iterator();
-			while (chunkInforator.hasNext()) {
-				WorldRenderer.ChunkInfo info = chunkInforator.next();
-				BuiltChunk chunk = ((WorldRendererChunkInfoAccessor) info).getChunk();
-				ChunkData data = chunk.data.get();
-				HashMap<BlockPos, BlockState> skyboxes = ((ContainsSkyboxBlocksAccess) data).getSkyboxBlocks();
-				Iterator<Entry<BlockPos, BlockState>> iterator = skyboxes.entrySet().iterator();
-				while (iterator.hasNext()) {
-					Entry<BlockPos, BlockState> entry = iterator.next();
-					BlockPos pos = entry.getKey();
-					BlockState state = entry.getValue();
-					list.add(Pair.of(pos, state));
-				}
-			}
+			this.visibleChunks.forEach((info) -> ((ContainsSkyboxBlocksAccess) ((WorldRendererChunkInfoAccessor) info).getChunk().data.get()).getSkyboxBlocks().forEach((pos, state) -> list.add(Pair.of(pos, state))));
 			return list;
 		} else {
 			return ((SodiumWorldRendererAccess) (WorldRenderer) (Object) this).getSodiumSkyboxModelPairs();
@@ -174,7 +163,7 @@ public class WorldRendererMixin {
 	private void corners$renderCubemap(MatrixStack matrices, Identifier identifier, float tickDelta) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.depthMask(false);
+		RenderSystem.depthMask(MinecraftClient.isFabulousGraphicsOrBetter());
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		Vec3d color = client.world.method_23777(client.gameRenderer.getCamera().getPos(), tickDelta).multiply(255);
@@ -183,8 +172,7 @@ public class WorldRendererMixin {
 		int b = (int) Math.floor(color.z);
 		int a = 255;
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
 		for (int i = 0; i < 6; ++i) {
 			matrices.push();
@@ -220,7 +208,8 @@ public class WorldRendererMixin {
 			bufferBuilder.vertex(matrix4f, -100.0F, -100.0F, 100.0F).texture(0.0F, 1.0F).color(r, g, b, a).next();
 			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, 100.0F).texture(1.0F, 1.0F).color(r, g, b, a).next();
 			bufferBuilder.vertex(matrix4f, 100.0F, -100.0F, -100.0F).texture(1.0F, 0.0F).color(r, g, b, a).next();
-			tessellator.draw();
+			bufferBuilder.end();
+			BufferRenderer.draw(bufferBuilder);
 			matrices.pop();
 		}
 

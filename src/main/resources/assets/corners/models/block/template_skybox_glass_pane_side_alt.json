@@ -16,8 +16,8 @@
 			}
 		},
 		{
-			"from": [ 7.1, 0.1, 8.9 ],
-			"to": [ 8.9, 15.9, 15.9 ],
+			"from": [ 7, 0, 9 ],
+			"to": [ 9, 16, 16 ],
 			"faces": {
 				"east": { "texture": "#skybox" },
 				"south": { "texture": "#skybox", "cullface": "south" },

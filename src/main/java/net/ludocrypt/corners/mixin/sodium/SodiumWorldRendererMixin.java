@@ -22,12 +22,12 @@ public class SodiumWorldRendererMixin implements ContainsSkyboxBlocksAccess {
 	@Unique
 	private final HashMap<BlockPos, BlockState> skyboxBlocks = Maps.newHashMap();
 
-	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/SodiumWorldRenderer;unloadWorld()V", at = @At("TAIL"))
+	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/SodiumWorldRenderer;unloadWorld()V", at = @At("TAIL"), remap = false)
 	private void corners$unloadWorld(CallbackInfo ci) {
 		this.skyboxBlocks.clear();
 	}
 
-	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/SodiumWorldRenderer;onChunkRenderUpdated(IIILme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;)V", at = @At("TAIL"))
+	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/SodiumWorldRenderer;onChunkRenderUpdated(IIILme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;)V", at = @At("TAIL"), remap = false)
 	private void corners$onChunkRenderUpdated(int x, int y, int z, ChunkRenderData before, ChunkRenderData after, CallbackInfo ci) {
 		((ContainsSkyboxBlocksAccess) before).getSkyboxBlocks().keySet().forEach(skyboxBlocks::remove);
 		skyboxBlocks.putAll(((ContainsSkyboxBlocksAccess) after).getSkyboxBlocks());

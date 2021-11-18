@@ -21,7 +21,7 @@ public class ChunkRenderDataBuilderMixin implements ContainsSkyboxBlocksAccess {
 	@Unique
 	private final HashMap<BlockPos, BlockState> skyboxBlocks = Maps.newHashMap();
 
-	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData$Builder;build()Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;", at = @At("RETURN"), cancellable = true)
+	@Inject(method = "Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData$Builder;build()Lme/jellysquid/mods/sodium/client/render/chunk/data/ChunkRenderData;", at = @At("RETURN"), cancellable = true, remap = false)
 	private void corners$build(CallbackInfoReturnable<ChunkRenderData> ci) {
 		ChunkRenderData data = ci.getReturnValue();
 		((ContainsSkyboxBlocksAccess) data).getSkyboxBlocks().putAll(skyboxBlocks);

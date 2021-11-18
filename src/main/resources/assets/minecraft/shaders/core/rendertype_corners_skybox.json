@@ -103,7 +103,7 @@
 			]
 		},
 		{
-			"name": "RotationMatrix",
+			"name": "RotMat",
 			"type": "matrix4x4",
 			"count": 16,
 			"values": [

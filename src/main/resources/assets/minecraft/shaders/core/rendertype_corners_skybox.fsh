@@ -8,17 +8,16 @@ uniform sampler2D Sampler2;
 uniform sampler2D Sampler3;
 uniform sampler2D Sampler4;
 uniform sampler2D Sampler5;
-uniform sampler2D Framebuffer;
 
 in float vertexDistance;
 in vec4 texProj0;
 in vec4 glPos;
 
 uniform mat4 ProjMat;
-uniform mat4 RotationMatrix;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
+uniform mat4 RotMat;
 
 out vec4 fragColor;
 
@@ -53,7 +52,7 @@ vec4 blendOpacity(vec4 foreground, vec4 background) {
 void main() {
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
-	vec3 rd = normalize((inverse(ProjMat * RotationMatrix) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
+	vec3 rd = normalize((inverse(ProjMat * RotMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
 	float faceIndex = 0.0;
 	vec4 texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
 	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);
