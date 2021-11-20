@@ -14,10 +14,10 @@ in vec4 texProj0;
 in vec4 glPos;
 
 uniform mat4 ProjMat;
+uniform mat4 ModelViewMat;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
-uniform mat4 RotMat;
 
 out vec4 fragColor;
 
@@ -41,18 +41,10 @@ vec2 sampleCube(vec3 v, out float faceIndex) {
 	return uv * ma + 0.5;
 }
 
-vec4 blendOpacity(vec4 foreground, vec4 background) {
-	return vec4(
-			(background.x * (1 - foreground.w) + foreground.x * foreground.w),
-			(background.y * (1 - foreground.w) + foreground.y * foreground.w),
-			(background.z * (1 - foreground.w) + foreground.z * foreground.w),
-			1.0);
-}
-
 void main() {
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
-	vec3 rd = normalize((inverse(ProjMat * RotMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
+	vec3 rd = normalize((inverse(ProjMat * ModelViewMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz);
 	float faceIndex = 0.0;
 	vec4 texPos = vec4(sampleCube(rd, faceIndex), 1.0, 1.0);
 	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);

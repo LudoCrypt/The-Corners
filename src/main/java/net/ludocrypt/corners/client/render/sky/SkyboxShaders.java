@@ -5,23 +5,17 @@ import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.lwjgl.system.MemoryStack;
 
-import ladysnake.satin.api.managed.ManagedCoreShader;
-import ladysnake.satin.api.managed.ShaderEffectManager;
-import net.ludocrypt.corners.mixin.RenderLayerAccessor;
 import net.ludocrypt.corners.util.CachedFunction;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.Shader;
-import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
@@ -31,15 +25,22 @@ public class SkyboxShaders {
 
 	public static Shader SKYBOX_SHADER;
 	public static final RenderPhase.Shader SKYBOX_RENDER_PHASE = new RenderPhase.Shader(() -> SKYBOX_SHADER);
-	public static final Function<Identifier, RenderLayer> SKYBOX_RENDER_LAYER = CachedFunction.memoize((skybox) -> RenderLayerAccessor.callOf("rendertype_corners_skybox", VertexFormats.POSITION, VertexFormat.DrawMode.QUADS, 256, false, false, RenderLayer.MultiPhaseParameters.builder().shader(SKYBOX_RENDER_PHASE).texture(RenderPhase.Textures.create().add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_0.png"), false, false).add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_1.png"), false, false).add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_2.png"), false, false).add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_3.png"), false, false).add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_4.png"), false, false).add(new Identifier(skybox.getNamespace(), skybox.getPath() + "_5.png"), false, false).build()).build(false)));
-	public static final ManagedCoreShader SKYBOX_CORE_SHADER = ShaderEffectManager.getInstance().manageCoreShader(new Identifier("rendertype_corners_skybox"), VertexFormats.POSITION);
+	public static final CachedFunction<Shader, GlUniform> rotMat = CachedFunction.memoize((shader) -> new GlUniform("RotMat", GlUniform.getTypeIndex("matrix4x4"), 16, shader));
+
+	public static void addAll(List<BakedQuad> list, BakedModel model, BlockState state, Direction dir, Random random) {
+		list.addAll(model.getQuads(state, dir, random).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
+	}
 
 	public static void addAll(List<BakedQuad> list, BakedModel model, BlockState state, Direction dir) {
-		list.addAll(model.getQuads(state, dir, new Random(0)).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
+		addAll(list, model, state, dir, new Random(0));
 	}
 
 	public static void addAll(List<BakedQuad> list, BakedModel model, BlockState state) {
-		addAll(list, model, state, null);
+		addAll(list, model, state, (Direction) null);
+	}
+
+	public static void addAll(List<BakedQuad> list, BakedModel model, BlockState state, Random random) {
+		addAll(list, model, state, null, random);
 	}
 
 	public static void quad(Consumer<Vec3f> consumer, Matrix4f matrix4f, BakedQuad quad) {

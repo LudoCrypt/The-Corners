@@ -14,12 +14,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.ludocrypt.corners.access.ItemRendererAccess;
 import net.ludocrypt.corners.client.render.sky.RemoveSkyboxQuadsBakedModel;
 import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
-import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
@@ -29,7 +37,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 @Mixin(ItemRenderer.class)
@@ -63,13 +71,42 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 		}
 		Iterator<BakedQuad> quadIterator = quads.iterator();
 
+		RenderSystem.enableBlend();
+		RenderSystem.enableDepthTest();
+		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.depthMask(true);
+		RenderSystem.polygonOffset(3.0F, 3.0F);
+		RenderSystem.enablePolygonOffset();
+
+		MinecraftClient client = MinecraftClient.getInstance();
+		Camera camera = client.gameRenderer.getCamera();
+		MatrixStack modelViewStack = RenderSystem.getModelViewStack();
+		modelViewStack.push();
+		modelViewStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
+		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+		RenderSystem.applyModelViewMatrix();
+
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
+
 		while (quadIterator.hasNext()) {
 			BakedQuad quad = quadIterator.next();
-			Matrix4f matrix = matrices.peek().getModel();
-			SkyboxShaders.SKYBOX_SHADER.getUniformOrDefault("RotMat").set(new MatrixStack().peek().getModel());
-			VertexConsumer consumer = vertexConsumers.getBuffer(SkyboxShaders.SKYBOX_CORE_SHADER.getRenderLayer(SkyboxShaders.SKYBOX_RENDER_LAYER.apply(new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath()))));
-			SkyboxShaders.quad((vec3f) -> consumer.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
+			RenderSystem.setShader(() -> SkyboxShaders.SKYBOX_SHADER);
+			for (int i = 0; i < 6; i++) {
+				RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
+			}
+			SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrices.peek().getModel(), quad);
 		}
+
+		bufferBuilder.end();
+		BufferRenderer.draw(bufferBuilder);
+		RenderSystem.polygonOffset(0.0F, 0.0F);
+		RenderSystem.disablePolygonOffset();
+		RenderSystem.disableBlend();
+		modelViewStack.pop();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.depthMask(true);
 	}
 
 	@Shadow

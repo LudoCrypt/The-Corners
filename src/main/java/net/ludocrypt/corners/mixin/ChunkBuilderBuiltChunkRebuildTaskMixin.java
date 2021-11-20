@@ -37,9 +37,9 @@ public class ChunkBuilderBuiltChunkRebuildTaskMixin {
 	private void corners$render(float cameraX, float cameraY, float cameraZ, ChunkBuilder.ChunkData data, BlockBufferBuilderStorage buffers, CallbackInfoReturnable<Set<BlockEntity>> cir, int i, BlockPos blockPos, BlockPos blockPos2, ChunkOcclusionDataBuilder chunkOcclusionDataBuilder, Set<BlockEntity> set, ChunkRendererRegion chunkRendererRegion, MatrixStack matrixStack, Random random, BlockRenderManager blockRenderManager, Iterator<BlockPos> var15, BlockPos blockPos3, BlockState blockState) {
 		List<BakedQuad> quads = Lists.newArrayList();
 		BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(blockState);
-		SkyboxShaders.addAll(quads, model, blockState);
+		SkyboxShaders.addAll(quads, model, blockState, random);
 		for (Direction dir : Direction.values()) {
-			SkyboxShaders.addAll(quads, model, blockState, dir);
+			SkyboxShaders.addAll(quads, model, blockState, dir, random);
 		}
 		if (!quads.isEmpty()) {
 			((ContainsSkyboxBlocksAccess) data).getSkyboxBlocks().put(blockPos3.toImmutable(), blockState);

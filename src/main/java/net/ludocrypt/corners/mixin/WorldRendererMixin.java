@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -26,6 +27,7 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.access.BlockRenderManagerAccess;
 import net.ludocrypt.corners.access.ContainsSkyboxBlocksAccess;
 import net.ludocrypt.corners.access.SodiumWorldRendererAccess;
+import net.ludocrypt.corners.client.TheCornersClient;
 import net.ludocrypt.corners.client.render.sky.SkyboxShaders;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.init.CornerWorld;
@@ -42,7 +44,6 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -58,7 +59,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 @Environment(EnvType.CLIENT)
-@Mixin(value = WorldRenderer.class, priority = 420)
+@Mixin(value = WorldRenderer.class, priority = 1001)
 public class WorldRendererMixin {
 
 	@Shadow
@@ -89,13 +90,18 @@ public class WorldRendererMixin {
 		}
 	}
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.AFTER, remap = false))
-	private void corners$render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
+	@Inject(method = "render", at = @At(value = "RETURN", shift = Shift.BEFORE))
+	private void corners$render$return(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
+		this.corners$render$skyboxes(matrices, camera);
+	}
+
+	@Unique
+	private void corners$render$skyboxes(MatrixStack matrices, Camera camera) {
 		// Render Skyboxes
 		if (this.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
-			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"), tickDelta);
+			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/yearning_canal"));
 		} else if (this.world.getRegistryKey().equals(CornerWorld.COMMUNAL_CORRIDORS_WORLD_REGISTRY_KEY)) {
-			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/snow"), tickDelta);
+			this.corners$renderCubemap(matrices, TheCorners.id("textures/sky/snow"));
 		}
 
 		// Render Skybox Quads
@@ -105,6 +111,14 @@ public class WorldRendererMixin {
 		RenderSystem.depthMask(true);
 		RenderSystem.polygonOffset(3.0F, 3.0F);
 		RenderSystem.enablePolygonOffset();
+
+		MatrixStack modelViewStack = RenderSystem.getModelViewStack();
+		modelViewStack.push();
+		modelViewStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
+		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+		RenderSystem.applyModelViewMatrix();
+
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 		this.getSkyboxPairs().forEach((pair) -> {
@@ -113,15 +127,12 @@ public class WorldRendererMixin {
 			matrices.push();
 			matrices.translate(pos.getX() - camera.getPos().getX(), pos.getY() - camera.getPos().getY(), pos.getZ() - camera.getPos().getZ());
 
-			MinecraftClient client = MinecraftClient.getInstance();
-			BlockRenderManager blockRenderManager = client.getBlockRenderManager();
-
 			List<BakedQuad> quads = Lists.newArrayList();
-			BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(state);
-			SkyboxShaders.addAll(quads, model, state);
+			BakedModel model = ((BlockRenderManagerAccess) MinecraftClient.getInstance().getBlockRenderManager()).getModelPure(state);
+			SkyboxShaders.addAll(quads, model, state, new Random(state.getRenderingSeed(pos)));
 			for (Direction dir : Direction.values()) {
 				if (Block.shouldDrawSide(state, world, pos, dir, pos.offset(dir))) {
-					SkyboxShaders.addAll(quads, model, state, dir);
+					SkyboxShaders.addAll(quads, model, state, dir, new Random(state.getRenderingSeed(pos)));
 				}
 			}
 
@@ -129,13 +140,11 @@ public class WorldRendererMixin {
 
 			while (quadIterator.hasNext()) {
 				BakedQuad quad = quadIterator.next();
-				Matrix4f matrix = matrices.peek().getModel();
 				RenderSystem.setShader(() -> SkyboxShaders.SKYBOX_SHADER);
-				RenderSystem.getShader().getUniform("RotMat").set(matrix);
 				for (int i = 0; i < 6; i++) {
 					RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
 				}
-				SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
+				SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrices.peek().getModel(), quad);
 			}
 			matrices.pop();
 		});
@@ -144,6 +153,7 @@ public class WorldRendererMixin {
 		RenderSystem.polygonOffset(0.0F, 0.0F);
 		RenderSystem.disablePolygonOffset();
 		RenderSystem.disableBlend();
+		modelViewStack.pop();
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.depthMask(true);
 	}
@@ -160,13 +170,13 @@ public class WorldRendererMixin {
 	}
 
 	@Unique
-	private void corners$renderCubemap(MatrixStack matrices, Identifier identifier, float tickDelta) {
+	private void corners$renderCubemap(MatrixStack matrices, Identifier identifier) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.depthMask(MinecraftClient.isFabulousGraphicsOrBetter());
 
 		MinecraftClient client = MinecraftClient.getInstance();
-		Vec3d color = client.world.method_23777(client.gameRenderer.getCamera().getPos(), tickDelta).multiply(255);
+		Vec3d color = client.world.method_23777(client.gameRenderer.getCamera().getPos(), TheCornersClient.getTickDelta()).multiply(255);
 		int r = (int) Math.floor(color.x);
 		int g = (int) Math.floor(color.y);
 		int b = (int) Math.floor(color.z);
