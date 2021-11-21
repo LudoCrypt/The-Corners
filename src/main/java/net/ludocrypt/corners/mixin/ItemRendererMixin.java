@@ -37,6 +37,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
@@ -77,35 +78,41 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 		RenderSystem.depthMask(true);
 		RenderSystem.polygonOffset(3.0F, 3.0F);
 		RenderSystem.enablePolygonOffset();
-
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 		MinecraftClient client = MinecraftClient.getInstance();
 		Camera camera = client.gameRenderer.getCamera();
 		MatrixStack modelViewStack = RenderSystem.getModelViewStack();
 		modelViewStack.push();
+
+		Matrix4f matrix = matrices.peek().getModel().copy();
+
+		matrix.loadIdentity();
+		matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(180));
+		matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(camera.getYaw()));
+		matrix.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
+		matrix.multiply(matrices.peek().getModel().copy());
+
 		modelViewStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
 		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+
 		RenderSystem.applyModelViewMatrix();
-
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
-
 		while (quadIterator.hasNext()) {
 			BakedQuad quad = quadIterator.next();
 			RenderSystem.setShader(() -> SkyboxShaders.SKYBOX_SHADER);
 			for (int i = 0; i < 6; i++) {
 				RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
 			}
-			SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrices.peek().getModel(), quad);
+			SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
 		}
-
 		bufferBuilder.end();
 		BufferRenderer.draw(bufferBuilder);
 		RenderSystem.polygonOffset(0.0F, 0.0F);
 		RenderSystem.disablePolygonOffset();
-		RenderSystem.disableBlend();
 		modelViewStack.pop();
 		RenderSystem.applyModelViewMatrix();
+		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
 	}
 

@@ -90,9 +90,18 @@ public class WorldRendererMixin {
 		}
 	}
 
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(IZ)V", shift = At.Shift.AFTER, remap = false))
+	private void corners$render$clear(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
+		if (!FabricLoader.getInstance().isModLoaded("iris")) {
+			this.corners$render$skyboxes(matrices, camera);
+		}
+	}
+
 	@Inject(method = "render", at = @At(value = "RETURN", shift = Shift.BEFORE))
 	private void corners$render$return(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
-		this.corners$render$skyboxes(matrices, camera);
+		if (FabricLoader.getInstance().isModLoaded("iris")) {
+			this.corners$render$skyboxes(matrices, camera);
+		}
 	}
 
 	@Unique
@@ -111,6 +120,8 @@ public class WorldRendererMixin {
 		RenderSystem.depthMask(true);
 		RenderSystem.polygonOffset(3.0F, 3.0F);
 		RenderSystem.enablePolygonOffset();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 
 		MatrixStack modelViewStack = RenderSystem.getModelViewStack();
 		modelViewStack.push();
@@ -119,8 +130,6 @@ public class WorldRendererMixin {
 		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
 		RenderSystem.applyModelViewMatrix();
 
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
 		this.getSkyboxPairs().forEach((pair) -> {
 			BlockPos pos = pair.getFirst();
 			BlockState state = pair.getSecond();
@@ -130,6 +139,7 @@ public class WorldRendererMixin {
 			List<BakedQuad> quads = Lists.newArrayList();
 			BakedModel model = ((BlockRenderManagerAccess) MinecraftClient.getInstance().getBlockRenderManager()).getModelPure(state);
 			SkyboxShaders.addAll(quads, model, state, new Random(state.getRenderingSeed(pos)));
+
 			for (Direction dir : Direction.values()) {
 				if (Block.shouldDrawSide(state, world, pos, dir, pos.offset(dir))) {
 					SkyboxShaders.addAll(quads, model, state, dir, new Random(state.getRenderingSeed(pos)));
@@ -144,17 +154,26 @@ public class WorldRendererMixin {
 				for (int i = 0; i < 6; i++) {
 					RenderSystem.setShaderTexture(i, new Identifier(quad.getSprite().getId().getNamespace(), "textures/" + quad.getSprite().getId().getPath() + "_" + i + ".png"));
 				}
-				SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrices.peek().getModel(), quad);
+
+				Matrix4f matrix = matrices.peek().getModel().copy();
+				matrix.loadIdentity();
+				matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(180));
+				matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(camera.getYaw()));
+				matrix.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
+				matrix.multiply(matrices.peek().getModel().copy());
+
+				SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
 			}
 			matrices.pop();
 		});
+
 		bufferBuilder.end();
 		BufferRenderer.draw(bufferBuilder);
 		RenderSystem.polygonOffset(0.0F, 0.0F);
 		RenderSystem.disablePolygonOffset();
-		RenderSystem.disableBlend();
 		modelViewStack.pop();
 		RenderSystem.applyModelViewMatrix();
+		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
 	}
 
