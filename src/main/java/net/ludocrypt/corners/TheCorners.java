@@ -7,7 +7,6 @@ import net.fabricmc.api.ModInitializer;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
-import net.ludocrypt.corners.init.CornerFeatures;
 import net.ludocrypt.corners.init.CornerItems;
 import net.ludocrypt.corners.init.CornerPaintings;
 import net.ludocrypt.corners.init.CornerSoundEvents;
@@ -25,7 +24,6 @@ public class TheCorners implements ModInitializer {
 		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerItems.init();
-		CornerFeatures.init();
 		CornerWorld.init();
 		CornerEntities.init();
 		CornerSoundEvents.init();
