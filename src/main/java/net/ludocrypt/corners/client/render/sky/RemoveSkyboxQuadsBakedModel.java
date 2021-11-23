@@ -3,6 +3,8 @@ package net.ludocrypt.corners.client.render.sky;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
@@ -21,7 +23,11 @@ public class RemoveSkyboxQuadsBakedModel implements BakedModel {
 
 	@Override
 	public List<BakedQuad> getQuads(BlockState state, Direction face, Random random) {
-		return wrapper.getQuads(state, face, random).stream().filter((quad) -> !quad.getSprite().getId().getPath().startsWith("sky/")).toList();
+		List<BakedQuad> quads = wrapper.getQuads(state, face, random);
+		if (quads == null) {
+			quads = Lists.newArrayList();
+		}
+		return quads.stream().filter((quad) -> !quad.getSprite().getId().getPath().startsWith("sky/")).toList();
 	}
 
 	@Override
