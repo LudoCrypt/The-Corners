@@ -11,6 +11,8 @@ import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.client.render.sky.CommunalCorridorsSky;
+import net.ludocrypt.corners.client.render.sky.YearningCanalSky;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
@@ -21,6 +23,7 @@ import net.ludocrypt.corners.packet.ServerToClientPackets;
 import net.ludocrypt.limlib.api.render.SkyHook;
 import net.ludocrypt.limlib.api.sound.LiminalTravelSound;
 import net.ludocrypt.limlib.api.sound.ReverbSettings;
+import net.ludocrypt.limlib.impl.render.LiminalDimensionEffects;
 import net.ludocrypt.limlib.impl.render.LiminalSkyRendering;
 import net.ludocrypt.limlib.impl.sound.LiminalTravelSounds;
 import net.ludocrypt.limlib.impl.sound.LiminalWorldReverb;
@@ -47,13 +50,14 @@ public class TheCornersClient implements ClientModInitializer {
 			CornerShaderRegistry.getCurrent(client).render(tickDelta);
 		});
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS);
-		LiminalSkyRendering.register(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey, new SkyHook.SkyboxSky(TheCorners.id("textures/sky/yearning_canal")));
-		LiminalTravelSounds.register(CornerWorld.YEARNING_CANAL.worldId, new LiminalTravelSound.SimpleTravelSound(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey, CornerSoundEvents.PAINTING_PORTAL_TRAVEL));
-		LiminalWorldReverb.register(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey, new ReverbSettings().setDecayTime(20));
 
-		LiminalSkyRendering.register(CornerWorld.COMMUNAL_CORRIDORS.worldWorldRegistryKey, new SkyHook.SkyboxSky(TheCorners.id("textures/sky/snow")));
-		LiminalTravelSounds.register(CornerWorld.COMMUNAL_CORRIDORS.worldId, new LiminalTravelSound.SimpleTravelSound(CornerWorld.COMMUNAL_CORRIDORS.worldWorldRegistryKey, CornerSoundEvents.PAINTING_PORTAL_TRAVEL));
-		LiminalWorldReverb.register(CornerWorld.COMMUNAL_CORRIDORS.worldWorldRegistryKey, new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F));
+		LiminalSkyRendering.register(CornerWorld.YEARNING_CANAL, new SkyHook.SkyboxSky(TheCorners.id("textures/sky/yearning_canal")));
+		LiminalDimensionEffects.register(CornerWorld.YEARNING_CANAL, new YearningCanalSky());
+		LiminalWorldReverb.register(CornerWorld.YEARNING_CANAL, new ReverbSettings().setDecayTime(20));
+
+		LiminalSkyRendering.register(CornerWorld.COMMUNAL_CORRIDORS, new SkyHook.SkyboxSky(TheCorners.id("textures/sky/snow")));
+		LiminalDimensionEffects.register(CornerWorld.COMMUNAL_CORRIDORS, new CommunalCorridorsSky());
+		LiminalWorldReverb.register(CornerWorld.COMMUNAL_CORRIDORS, new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F));
 
 		LiminalTravelSounds.register(TheCorners.id("from_corners"), new LiminalTravelSound() {
 			@Override
