@@ -5,11 +5,7 @@
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
 		"AbstractDecorationEntityAccessor",
-		"ChunkStatusMixin",
-		"DimensionOptionsMixin",
-		"DimensionTypeMixin",
 		"EntityMixin",
-		"LevelStorageMixin",
 		"ServerPlayerEntityMixin"
 	],
 	"client": [
@@ -17,7 +13,6 @@
 		"BlockRenderManagerMixin",
 		"ChunkBuilderBuiltChunkRebuildTaskMixin",
 		"ChunkBuilderChunkDataMixin",
-		"DimensionEffectsMixin",
 		"GameRendererAccessor",
 		"GameRendererMixin",
 		"ItemRendererMixin",
@@ -25,10 +20,6 @@
 		"MinecraftClientMixin",
 		"MusicTrackerMixin",
 		"RenderLayerAccessor",
-		"SoundManagerAccessor",
-		"SoundSystemAccessor",
-		"SoundSystemMixin",
-		"SourceAccessor",
 		"WorldRendererChunkInfoAccessor",
 		"WorldRendererMixin"
 	],

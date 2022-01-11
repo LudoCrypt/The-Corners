@@ -1,21 +1,16 @@
 package net.ludocrypt.corners.world.chunk;
 
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BarrelBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.loot.LootTables;
-import net.minecraft.server.world.ChunkHolder.Unloaded;
+import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.config.CornerConfig;
+import net.ludocrypt.limlib.api.world.FlatMultiNoiseSampler;
+import net.ludocrypt.limlib.api.world.NbtChunkGenerator;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
@@ -25,13 +20,14 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkRegion;
+import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
+public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 
 	public static final Codec<YearningCanalChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
@@ -42,7 +38,7 @@ public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
 	});
 
 	public YearningCanalChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, worldSeed, "yearning_canal");
+		super(biomeSource, new FlatMultiNoiseSampler(1.0F), worldSeed, TheCorners.id("yearning_canal"));
 	}
 
 	@Override
@@ -56,12 +52,7 @@ public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
 	}
 
 	@Override
-	public void buildSurface(ChunkRegion region, Chunk chunk) {
-
-	}
-
-	@Override
-	public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, ChunkGenerator chunkGenerator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> list) {
+	public CompletableFuture<Chunk> populateNoise(Executor executor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, StructureManager structureManager, ServerLightingProvider lightingProvider) {
 		if (structures.isEmpty()) {
 			store("yearning_canal", world, 1, 15);
 			store("yearning_canal_bottom", world);
@@ -111,34 +102,13 @@ public class YearningCanalChunkGenerator extends LiminalChunkGenerator {
 	}
 
 	@Override
-	protected void generateNbt(ChunkRegion region, BlockPos at, String id, BlockRotation rotation) {
-		structures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> {
-			if (!state.isAir()) {
-				if (state.isOf(Blocks.BARREL)) {
-					if (region.getRandom().nextDouble() < 0.45D) {
-						region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-						if (region.getBlockEntity(pos)instanceof BarrelBlockEntity barrel) {
-							barrel.setLootTable(LootTables.SIMPLE_DUNGEON_CHEST, region.getSeed() + MathHelper.hashCode(pos));
-						}
-					}
-				} else if (state.isOf(Blocks.BARRIER)) {
-					region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
-				} else {
-					region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-				}
-				BlockEntity blockEntity = region.getBlockEntity(pos);
-				if (blockEntity != null) {
-					if (state.isOf(blockEntity.getCachedState().getBlock())) {
-						blockEntity.writeNbt(nbt);
-					}
-				}
-			}
-		}).spawnEntities(region, at, rotation);
+	public int getWorldHeight() {
+		return CornerConfig.getInstance().condensedDimensions ? 432 : 2032;
 	}
 
 	@Override
-	public int getPlacementRadius() {
-		return 1;
+	public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world) {
+		return world.getTopY();
 	}
 
 }

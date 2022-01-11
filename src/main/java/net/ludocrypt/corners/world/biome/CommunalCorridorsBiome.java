@@ -5,7 +5,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
-import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
 public class CommunalCorridorsBiome {
 
@@ -15,7 +14,6 @@ public class CommunalCorridorsBiome {
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 
 		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
-		generationSettings.surfaceBuilder(ConfiguredSurfaceBuilders.NOPE);
 
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(13548960);
@@ -32,9 +30,6 @@ public class CommunalCorridorsBiome {
 
 		biome.precipitation(Biome.Precipitation.NONE);
 		biome.category(Biome.Category.NONE);
-
-		biome.depth(0.0F);
-		biome.scale(0.0F);
 
 		biome.temperature(0.8F);
 		biome.downfall(0.0F);

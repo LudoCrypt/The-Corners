@@ -28,9 +28,9 @@ public class MinecraftClientMixin {
 	@Inject(method = "getMusicType", at = @At("HEAD"), cancellable = true)
 	private void corners$getMusicType(CallbackInfoReturnable<MusicSound> ci) {
 		if (this.player != null) {
-			if (this.world.getRegistryKey() == CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY) {
+			if (this.world.getRegistryKey() == CornerWorld.YEARNING_CANAL.worldWorldRegistryKey) {
 				ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_YEARNING_CANAL, 3000, 8000, true));
-			} else if (this.world.getRegistryKey() == CornerWorld.COMMUNAL_CORRIDORS_WORLD_REGISTRY_KEY) {
+			} else if (this.world.getRegistryKey() == CornerWorld.COMMUNAL_CORRIDORS.worldWorldRegistryKey) {
 				ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS, 3000, 8000, true));
 			}
 		}

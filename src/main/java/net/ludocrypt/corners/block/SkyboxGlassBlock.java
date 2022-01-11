@@ -13,6 +13,7 @@ public class SkyboxGlassBlock extends GlassBlock {
 		super(settings);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return super.getOutlineShape(state, world, pos, context);

@@ -14,9 +14,9 @@ public class BackgroundRendererMixin {
 	@ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
 	private static double corners$modifySkyColor(double in) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL_WORLD_REGISTRY_KEY)) {
+		if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey)) {
 			return 1.0;
-		} else if (client.world.getRegistryKey().equals(CornerWorld.COMMUNAL_CORRIDORS_WORLD_REGISTRY_KEY)) {
+		} else if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey)) {
 			return 1.0;
 		}
 		return in;

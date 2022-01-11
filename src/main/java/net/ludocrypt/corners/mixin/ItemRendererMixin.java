@@ -50,13 +50,13 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 	@Override
 	public BakedModel getItemModelPure(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed) {
 		isPure = true;
-		BakedModel model = this.getHeldItemModel(stack, world, entity, seed);
+		BakedModel model = this.getModel(stack, world, entity, seed);
 		isPure = false;
 		return model;
 	}
 
-	@Inject(method = "getHeldItemModel", at = @At("RETURN"), cancellable = true)
-	public void corners$getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
+	@Inject(method = "getModel", at = @At("RETURN"), cancellable = true)
+	public void corners$getModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> ci) {
 		if (!isPure) {
 			ci.setReturnValue(new RemoveSkyboxQuadsBakedModel(ci.getReturnValue()));
 		}
@@ -85,13 +85,13 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 		MatrixStack modelViewStack = RenderSystem.getModelViewStack();
 		modelViewStack.push();
 
-		Matrix4f matrix = matrices.peek().getModel().copy();
+		Matrix4f matrix = matrices.peek().getPositionMatrix().copy();
 
 		matrix.loadIdentity();
 		matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(180));
 		matrix.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(camera.getYaw()));
 		matrix.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(matrices.peek().getModel().copy());
+		matrix.multiply(matrices.peek().getPositionMatrix().copy());
 
 		modelViewStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
 		modelViewStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
@@ -117,6 +117,6 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 	}
 
 	@Shadow
-	public abstract BakedModel getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed);
+	public abstract BakedModel getModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int seed);
 
 }

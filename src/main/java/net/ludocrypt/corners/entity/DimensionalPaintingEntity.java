@@ -2,6 +2,7 @@ package net.ludocrypt.corners.entity;
 
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.client.TheCornersClient;
 import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.mixin.AbstractDecorationEntityAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingMotive;
@@ -19,8 +20,6 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 public class DimensionalPaintingEntity extends PaintingEntity {
-
-	public static boolean isPaingintTeleport = false;
 
 	public DimensionalPaintingEntity(EntityType<? extends DimensionalPaintingEntity> type, World world) {
 		super(type, world);
@@ -71,9 +70,8 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 					if (this.world.getRegistryKey().equals(World.OVERWORLD) && world.getRegistryKey().equals(World.OVERWORLD)) {
 						PlayerUtil.grantAdvancement(player, TheCorners.id("forgetting_the_faq"));
 					}
-
+					TheCornersClient.comingFromPainting = true;
 					TeleportTarget teleportTarget = motive.teleportTarget.apply(spe, this);
-					DimensionalPaintingEntity.isPaingintTeleport = true;
 					FabricDimensions.teleport(spe, world, teleportTarget);
 				}
 			}

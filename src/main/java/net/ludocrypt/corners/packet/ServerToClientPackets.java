@@ -5,12 +5,12 @@ import java.util.List;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.ludocrypt.corners.access.MusicTrackerAccess;
-import net.ludocrypt.corners.access.SoundSystemAccess;
 import net.ludocrypt.corners.client.sound.LoopingPositionedSoundInstance;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
-import net.ludocrypt.corners.mixin.SoundManagerAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingMotive;
+import net.ludocrypt.limlib.access.SoundSystemAccess;
+import net.ludocrypt.limlib.mixin.SoundManagerAccessor;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;

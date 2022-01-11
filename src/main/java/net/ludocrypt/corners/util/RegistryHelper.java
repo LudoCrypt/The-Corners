@@ -9,10 +9,10 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.client.TheCornersClient;
-import net.ludocrypt.corners.client.sound.ReverbSettings;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerShaderRegistry;
-import net.ludocrypt.corners.init.WorldReverbRegistry;
+import net.ludocrypt.limlib.api.world.LiminalWorld;
+import net.ludocrypt.limlib.impl.world.LiminalDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -31,14 +31,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.decorator.DecoratorConfig;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
 public class RegistryHelper {
 
@@ -48,6 +40,10 @@ public class RegistryHelper {
 
 	public static <T extends Block> T get(String id, T block) {
 		return Registry.register(Registry.BLOCK, TheCorners.id(id), block);
+	}
+
+	public static <T extends LiminalWorld> T get(String id, T block) {
+		return Registry.register(LiminalDimensions.LIMINAL_WORLD_REGISTRY, TheCorners.id(id), block);
 	}
 
 	public static <T extends BlockEntity> BlockEntityType<T> get(String id, FabricBlockEntityTypeBuilder<T> builder) {
@@ -85,10 +81,6 @@ public class RegistryHelper {
 		return Registry.register(Registry.SOUND_EVENT, TheCorners.id(id), sound);
 	}
 
-	public static <T extends ReverbSettings> T get(String id, T reverb) {
-		return Registry.register(WorldReverbRegistry.REVERB_REGISTRY, TheCorners.id(id), reverb);
-	}
-
 	public static ManagedShaderEffect getShader(String id) {
 		return get(id, id);
 	}
@@ -115,26 +107,6 @@ public class RegistryHelper {
 	public static RegistryKey<Biome> get(String id, Biome biome) {
 		Registry.register(BuiltinRegistries.BIOME, TheCorners.id(id), biome);
 		return RegistryKey.of(Registry.BIOME_KEY, TheCorners.id(id));
-	}
-
-	public static <SC extends SurfaceConfig, T extends ConfiguredSurfaceBuilder<SC>> T get(String id, T feature) {
-		return Registry.register(BuiltinRegistries.CONFIGURED_SURFACE_BUILDER, id, feature);
-	}
-
-	public static <C extends SurfaceConfig, T extends SurfaceBuilder<C>> T get(String id, T feature) {
-		return Registry.register(Registry.SURFACE_BUILDER, id, feature);
-	}
-
-	public static <FC extends FeatureConfig, F extends Feature<FC>, T extends ConfiguredFeature<FC, F>> T get(String id, T feature) {
-		return Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, id, feature);
-	}
-
-	public static <FC extends FeatureConfig, T extends Feature<FC>> T get(String id, T feature) {
-		return Registry.register(Registry.FEATURE, id, feature);
-	}
-
-	public static <DC extends DecoratorConfig, T extends Decorator<DC>> T get(String id, T decorator) {
-		return Registry.register(Registry.DECORATOR, id, decorator);
 	}
 
 }

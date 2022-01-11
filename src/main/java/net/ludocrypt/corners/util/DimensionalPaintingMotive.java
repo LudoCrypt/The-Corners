@@ -23,7 +23,7 @@ public class DimensionalPaintingMotive extends PaintingMotive {
 		BlockPos pos = player.getSpawnPointPosition();
 		if (pos != null) {
 			ServerWorld serverWorld = player.getServer().getOverworld();
-			return PlayerEntity.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnPointSet(), true).orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
+			return PlayerEntity.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnForced(), true).orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
 		} else {
 			return Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos());
 		}

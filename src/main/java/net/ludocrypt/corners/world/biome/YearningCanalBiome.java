@@ -4,7 +4,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
-import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders;
 
 public class YearningCanalBiome {
 
@@ -14,7 +13,6 @@ public class YearningCanalBiome {
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 
 		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
-		generationSettings.surfaceBuilder(ConfiguredSurfaceBuilders.NOPE);
 
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(16777215);
@@ -30,9 +28,6 @@ public class YearningCanalBiome {
 
 		biome.precipitation(Biome.Precipitation.NONE);
 		biome.category(Biome.Category.NONE);
-
-		biome.depth(0.0F);
-		biome.scale(0.0F);
 
 		biome.temperature(0.8F);
 		biome.downfall(0.0F);

@@ -21,8 +21,8 @@ public class CornerShaderRegistry {
 
 	public static final SimpleRegistry<ManagedShaderEffect> SHADER_REGISTRY = FabricRegistryBuilder.createDefaulted(ManagedShaderEffect.class, TheCorners.id("shader_registry"), TheCorners.id("default_shader")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
 	public static final ManagedShaderEffect DEFAULT = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/empty_shader.json"));
-	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = getShader(CornerWorld.YEARNING_CANAL);
-	public static final ManagedShaderEffect COMMUNAL_CORRIDORS_SHADER = getShader(CornerWorld.COMMUNAL_CORRIDORS, true);
+	public static final ManagedShaderEffect YEARNING_CANAL_SHADER = getShader(CornerWorld.YEARNING_CANAL.world);
+	public static final ManagedShaderEffect COMMUNAL_CORRIDORS_SHADER = getShader(CornerWorld.COMMUNAL_CORRIDORS.world, true);
 
 	public static void init() {
 		Registry.register(SHADER_REGISTRY, TheCorners.id("default_shader"), DEFAULT);
