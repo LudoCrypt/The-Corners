@@ -2,6 +2,15 @@ package net.ludocrypt.corners.init;
 
 import static net.ludocrypt.corners.util.RegistryHelper.get;
 
+import java.util.Optional;
+
+import org.apache.commons.lang3.mutable.Mutable;
+
+import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
+import net.ludocrypt.limlib.api.sound.LiminalTravelSound;
+import net.ludocrypt.limlib.impl.sound.LiminalTravelSounds;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 
 public class CornerSoundEvents {
@@ -22,7 +31,22 @@ public class CornerSoundEvents {
 	public static final SoundEvent BIOME_LOOP_COMMUNAL_CORRIDORS = get("biome.communal_corridors.loop");
 
 	public static void init() {
+		LiminalTravelSounds.register(TheCorners.id("from_corners"), new LiminalTravelSound() {
 
+			@Override
+			public void hookSound(ServerWorld from, ServerWorld to, Mutable<Optional<SoundEvent>> mutable) {
+				if (DimensionalPaintingEntity.comingFromPainting) {
+					mutable.setValue(Optional.of(CornerSoundEvents.PAINTING_PORTAL_TRAVEL));
+				}
+
+				DimensionalPaintingEntity.comingFromPainting = false;
+			}
+
+			@Override
+			public int priority() {
+				return 500;
+			}
+		});
 	}
 
 }
