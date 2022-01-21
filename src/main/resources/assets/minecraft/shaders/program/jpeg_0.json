@@ -1,0 +1,115 @@
+{
+	"blend": {
+		"func": "add",
+		"srcrgb": "one",
+		"dstrgb": "zero"
+	},
+	"vertex": "blit",
+	"fragment": "jpeg_0",
+	"attributes": [
+		"Position"
+	],
+	"samplers": [
+		{
+			"name": "DiffuseSampler"
+		}
+	],
+	"uniforms": [
+		{
+			"name": "ProjMat",
+			"type": "matrix4x4",
+			"count": 16,
+			"values": [
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			]
+		},
+		{
+			"name": "OutSize",
+			"type": "float",
+			"count": 2,
+			"values": [
+				1.0,
+				1.0
+			]
+		},
+		{
+			"name": "blockSize",
+			"type": "float",
+			"count": 1,
+			"values": [
+				8.0
+			]
+		},
+		{
+			"name": "highFreqMultiplier",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeY",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeYf",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeC",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeCf",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeA",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "quantizeAf",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		}
+	]
+}

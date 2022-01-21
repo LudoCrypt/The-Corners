@@ -1,0 +1,27 @@
+{
+	"targets": [
+		"state_0",
+		"state_1"
+	],
+	"passes": [
+		{
+			"name": "jpeg_0",
+			"intarget": "minecraft:main",
+			"outtarget": "state_0",
+			"uniforms": [
+			]
+		},
+		{
+			"name": "jpeg_1",
+			"intarget": "state_0",
+			"outtarget": "state_1",
+			"uniforms": [
+			]
+		},
+		{
+			"name": "blit",
+			"intarget": "state_1",
+			"outtarget": "minecraft:main"
+		}
+	]
+}
