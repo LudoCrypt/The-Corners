@@ -3,14 +3,10 @@ package net.ludocrypt.corners.util;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.Codec;
 
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.corners.client.TheCornersClient;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
-import net.ludocrypt.corners.init.CornerShaderRegistry;
 import net.ludocrypt.limlib.api.world.LiminalWorld;
 import net.ludocrypt.limlib.impl.world.LiminalDimensions;
 import net.minecraft.block.Block;
@@ -79,21 +75,6 @@ public class RegistryHelper {
 
 	public static <T extends SoundEvent> T get(String id, T sound) {
 		return Registry.register(Registry.SOUND_EVENT, TheCorners.id(id), sound);
-	}
-
-	public static ManagedShaderEffect getShader(String id) {
-		return get(id, id);
-	}
-
-	public static ManagedShaderEffect getShader(String id, boolean strong) {
-		if (strong) {
-			TheCornersClient.strongShaders.add(TheCorners.id(id));
-		}
-		return get(id, id);
-	}
-
-	public static ManagedShaderEffect get(String id, String shaderId) {
-		return Registry.register(CornerShaderRegistry.SHADER_REGISTRY, TheCorners.id(id), ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/" + shaderId + ".json")));
 	}
 
 	public static <T extends SoundEvent> T getRadio(String id, T radio) {

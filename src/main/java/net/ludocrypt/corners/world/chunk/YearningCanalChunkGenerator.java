@@ -53,14 +53,6 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 
 	@Override
 	public CompletableFuture<Chunk> populateNoise(Executor executor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, StructureManager structureManager, ServerLightingProvider lightingProvider) {
-		if (structures.isEmpty()) {
-			store("yearning_canal", world, 1, 15);
-			store("yearning_canal_bottom", world);
-			store("yearning_canal_top", world);
-			store("yearning_canal_hallway", world, 1, 13);
-			store("yearning_canal_hallway_connected", world);
-		}
-
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
 		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
@@ -99,6 +91,20 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 		}
 
 		return CompletableFuture.completedFuture(chunk);
+	}
+
+	@Override
+	public void storeStructures(ServerWorld world) {
+		store("yearning_canal", world, 1, 15);
+		store("yearning_canal_bottom", world);
+		store("yearning_canal_top", world);
+		store("yearning_canal_hallway", world, 1, 13);
+		store("yearning_canal_hallway_connected", world);
+	}
+
+	@Override
+	public int getChunkRadius() {
+		return 1;
 	}
 
 	@Override

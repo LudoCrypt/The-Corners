@@ -17,7 +17,6 @@
 		"GameRendererMixin",
 		"ItemRendererMixin",
 		"MinecraftClientAccessor",
-		"MinecraftClientMixin",
 		"MusicTrackerMixin",
 		"RenderLayerAccessor",
 		"WorldRendererChunkInfoAccessor",

@@ -8,7 +8,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.api.world.FlatMultiNoiseSampler;
 import net.ludocrypt.limlib.api.world.NbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -39,7 +38,7 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 	});
 
 	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, new FlatMultiNoiseSampler(1.0F), worldSeed, TheCorners.id("communal_corridors"));
+		super(biomeSource, worldSeed, TheCorners.id("communal_corridors"));
 	}
 
 	@Override
@@ -54,12 +53,6 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 
 	@Override
 	public CompletableFuture<Chunk> populateNoise(Executor executor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, StructureManager structureManager, ServerLightingProvider lightingProvider) {
-		if (structures.isEmpty()) {
-			store("communal_corridors", world, 1, 5);
-			store("communal_corridors_decorated", world, 1, 22);
-			store("communal_corridors_decorated_big", world, 1, 3);
-		}
-
 		ChunkPos chunkPos = chunk.getPos();
 		Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
 
@@ -85,6 +78,18 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 		}
 
 		return CompletableFuture.completedFuture(chunk);
+	}
+
+	@Override
+	public void storeStructures(ServerWorld world) {
+		store("communal_corridors", world, 1, 5);
+		store("communal_corridors_decorated", world, 1, 22);
+		store("communal_corridors_decorated_big", world, 1, 3);
+	}
+
+	@Override
+	public int getChunkRadius() {
+		return 1;
 	}
 
 	@Override
