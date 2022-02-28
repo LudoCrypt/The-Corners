@@ -9,7 +9,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.api.world.FlatMultiNoiseSampler;
 import net.ludocrypt.limlib.api.world.NbtChunkGenerator;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -38,7 +37,7 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 	});
 
 	public YearningCanalChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, new FlatMultiNoiseSampler(1.0F), worldSeed, TheCorners.id("yearning_canal"));
+		super(biomeSource, worldSeed, TheCorners.id("yearning_canal"));
 	}
 
 	@Override
