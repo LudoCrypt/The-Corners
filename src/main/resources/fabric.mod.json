@@ -50,6 +50,7 @@
 		"fabricloader": ">=0.11.3",
 		"fabric": "*",
 		"minecraft": "1.18.x",
-		"satin": "1.7.x"
+		"cloth-config": "*",
+		"satin": "*"
 	}
 }
