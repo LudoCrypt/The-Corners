@@ -7,8 +7,8 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
-import net.ludocrypt.limlib.api.world.LiminalWorld;
-import net.ludocrypt.limlib.impl.world.LiminalDimensions;
+import net.ludocrypt.limlib.api.LiminalWorld;
+import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -39,7 +39,7 @@ public class RegistryHelper {
 	}
 
 	public static <T extends LiminalWorld> T get(String id, T block) {
-		return Registry.register(LiminalDimensions.LIMINAL_WORLD_REGISTRY, TheCorners.id(id), block);
+		return Registry.register(LimlibRegistries.LIMINAL_WORLD, TheCorners.id(id), block);
 	}
 
 	public static <T extends BlockEntity> BlockEntityType<T> get(String id, FabricBlockEntityTypeBuilder<T> builder) {

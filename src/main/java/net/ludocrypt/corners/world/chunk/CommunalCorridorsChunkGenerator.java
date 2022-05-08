@@ -1,24 +1,34 @@
 package net.ludocrypt.corners.world.chunk;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.api.world.NbtChunkGenerator;
+import net.ludocrypt.limlib.api.LiminalUtil;
+import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.loot.LootTables;
+import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
@@ -27,7 +37,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
+public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public static final Codec<CommunalCorridorsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
@@ -37,8 +47,10 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 		})).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
 	});
 
+	private long worldSeed;
+
 	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, worldSeed, TheCorners.id("communal_corridors"));
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("communal_corridors"), LiminalUtil.createMultiNoiseSampler());
 	}
 
 	@Override
@@ -52,7 +64,7 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(Executor executor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, StructureManager structureManager, ServerLightingProvider lightingProvider) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
 		ChunkPos chunkPos = chunk.getPos();
 		Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
 
@@ -88,7 +100,7 @@ public class CommunalCorridorsChunkGenerator extends NbtChunkGenerator {
 	}
 
 	@Override
-	public int getChunkRadius() {
+	public int chunkRadius() {
 		return 1;
 	}
 

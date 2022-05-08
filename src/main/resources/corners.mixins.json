@@ -19,6 +19,7 @@
 		"MinecraftClientAccessor",
 		"MusicTrackerMixin",
 		"RenderLayerAccessor",
+		"SoundManagerAccessor",
 		"WorldRendererChunkInfoAccessor",
 		"WorldRendererMixin"
 	],

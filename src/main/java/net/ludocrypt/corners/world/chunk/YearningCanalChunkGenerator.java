@@ -1,23 +1,33 @@
 package net.ludocrypt.corners.world.chunk;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.api.world.NbtChunkGenerator;
+import net.ludocrypt.limlib.api.LiminalUtil;
+import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
+import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
@@ -26,7 +36,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-public class YearningCanalChunkGenerator extends NbtChunkGenerator {
+public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public static final Codec<YearningCanalChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
@@ -36,8 +46,10 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 		})).apply(instance, instance.stable(YearningCanalChunkGenerator::new));
 	});
 
+	private long worldSeed;
+
 	public YearningCanalChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(biomeSource, worldSeed, TheCorners.id("yearning_canal"));
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("yearning_canal"), LiminalUtil.createMultiNoiseSampler());
 	}
 
 	@Override
@@ -51,7 +63,7 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(Executor executor, Chunk chunk, ChunkStatus targetStatus, ServerWorld world, ChunkRegion region, StructureManager structureManager, ServerLightingProvider lightingProvider) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
 		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
@@ -81,8 +93,8 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 			}
 			if (hallwaySpawnsAtHeight) {
 				if ((dir.equals(Direction.NORTH) && chunkPos.x == 0 && chunkPos.z <= 0) || (dir.equals(Direction.WEST) && chunkPos.z == 0 && chunkPos.x <= 0) || (dir.equals(Direction.SOUTH) && chunkPos.x == 0 && chunkPos.z >= 1) || (dir.equals(Direction.EAST) && chunkPos.z == 0 && chunkPos.x >= 1)) {
-					Random hallRandom = new Random(region.getSeed() + MathHelper.hashCode(chunkPos.getStartX(), chunkPos.getStartZ(), 2));
-					generateNbt(region, offsetPos.add(0, 4, 0), "yearning_canal_hallway_" + (hallRandom.nextInt(3) == 0 ? (hallRandom.nextInt(13) + 1) : 1), rotation);
+					Random hallRandom = new Random(region.getSeed() + MathHelper.hashCode(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ()));
+					generateNbt(region, offsetPos.add(0, 4, 0), "yearning_canal_hallway_" + (hallRandom.nextInt(27) == 0 ? (hallRandom.nextInt(13) + 1) : 1), rotation);
 				}
 			}
 			continue;
@@ -102,7 +114,7 @@ public class YearningCanalChunkGenerator extends NbtChunkGenerator {
 	}
 
 	@Override
-	public int getChunkRadius() {
+	public int chunkRadius() {
 		return 1;
 	}
 

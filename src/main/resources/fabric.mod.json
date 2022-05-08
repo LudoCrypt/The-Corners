@@ -3,10 +3,10 @@
 	"id": "corners",
 	"version": "${version}",
 	"name": "The Corners",
-	"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nAngel Craig, for creating the amazingly chilling OST!\nSlice, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life into her own OST!\nBig thank you to Basement Spider for helping with the Wooden Radio textures!",
+	"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nRacoon Syndrome, for creating the amazingly chilling OST!\nSlice, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life with her own OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Wooden Radio textures!",
 	"authors": [
 		"LudoCrypt",
-		"Angel Craig",
+		"Racoon Syndrome",
 		"Slice"
 	],
 	"contributors": [
@@ -22,8 +22,8 @@
 			"links": {
 				"credits.the_corners.ludocrypt.youtube": "https://www.youtube.com/c/LudoCrypt/",
 				"credits.the_corners.ludocrypt.bandcamp": "https://ludocrypt.bandcamp.com/",
-				"credits.the_corners.angel_craig.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
-				"credits.the_corners.angel_craig.bandcamp": "https://angelcraig.bandcamp.com/",
+				"credits.the_corners.racoon_syndrome.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
+				"credits.the_corners.racoon_syndrome.bandcamp": "https://racsyndrome.bandcamp.com/",
 				"credits.the_corners.slice.instagram": "https://www.instagram.com/_.slice_/"
 			}
 		}

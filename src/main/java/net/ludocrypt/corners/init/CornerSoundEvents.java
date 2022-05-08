@@ -2,9 +2,6 @@ package net.ludocrypt.corners.init;
 
 import static net.ludocrypt.corners.util.RegistryHelper.get;
 
-import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.corners.client.sound.CornerTravelSound;
-import net.ludocrypt.limlib.impl.world.LiminalSoundRegistry;
 import net.minecraft.sound.SoundEvent;
 
 public class CornerSoundEvents {
@@ -25,7 +22,6 @@ public class CornerSoundEvents {
 	public static final SoundEvent BIOME_LOOP_COMMUNAL_CORRIDORS = get("biome.communal_corridors.loop");
 
 	public static void init() {
-		LiminalSoundRegistry.registerOverride(TheCorners.id("painting_travel"), new CornerTravelSound());
 	}
 
 }

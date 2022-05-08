@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.api.render.LiminalShader;
+import net.ludocrypt.limlib.api.render.LiminalShaderApplier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
-public class StrongLiminalShader extends LiminalShader.SimpleShader {
+public class StrongLiminalShader extends LiminalShaderApplier.SimpleShader {
 
 	public static final Codec<StrongLiminalShader> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(Identifier.CODEC.fieldOf("shader").stable().forGetter((shader) -> {
@@ -26,7 +26,7 @@ public class StrongLiminalShader extends LiminalShader.SimpleShader {
 	}
 
 	@Override
-	public Codec<? extends LiminalShader> getCodec() {
+	public Codec<? extends LiminalShaderApplier> getCodec() {
 		return CODEC;
 	}
 

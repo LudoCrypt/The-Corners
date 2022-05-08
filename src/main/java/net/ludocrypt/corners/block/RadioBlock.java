@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.corners.util.PlayerUtil;
+import net.ludocrypt.limlib.api.LiminalUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -43,7 +43,7 @@ public class RadioBlock extends HorizontalFacingBlock {
 		if (world.isReceivingRedstonePower(pos)) {
 			sendOut(world, pos, !state.get(POWERED));
 			if (state.get(POWERED)) {
-				PlayerUtil.grantAdvancement(player, TheCorners.id("nevermind_radio"));
+				LiminalUtil.grantAdvancement(player, TheCorners.id("nevermind_radio"));
 			}
 			world.setBlockState(pos, state.cycle(POWERED));
 			return ActionResult.SUCCESS;

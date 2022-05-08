@@ -11,13 +11,13 @@ import net.minecraft.client.render.BackgroundRenderer;
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
 
-	@ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
-	private static double corners$modifySkyColor(double in) {
+	@ModifyVariable(method = "render", at = @At("STORE"), index = 7)
+	private static float corners$modifySkyColor(float in) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey)) {
-			return 1.0;
-		} else if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.worldWorldRegistryKey)) {
-			return 1.0;
+		if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.getWorldKey())) {
+			return 1.0F;
+		} else if (client.world.getRegistryKey().equals(CornerWorld.YEARNING_CANAL.getWorldKey())) {
+			return 1.0F;
 		}
 		return in;
 	}

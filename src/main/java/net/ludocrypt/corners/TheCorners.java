@@ -13,8 +13,9 @@ import net.ludocrypt.corners.init.CornerPaintings;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.init.CornerWorld;
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.limlib.impl.world.LiminalShaderRegistry;
+import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class TheCorners implements ModInitializer {
 
@@ -30,7 +31,7 @@ public class TheCorners implements ModInitializer {
 		CornerEntities.init();
 		CornerSoundEvents.init();
 		ClientToServerPackets.manageClientToServerPackets();
-		LiminalShaderRegistry.register(id("stong_simple_shader"), StrongLiminalShader.CODEC);
+		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 	}
 
 	public static Identifier id(String id) {
