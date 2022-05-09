@@ -3,6 +3,8 @@ package net.ludocrypt.corners.client.render.sky;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.limlib.api.render.LiminalShaderApplier;
 import net.minecraft.client.MinecraftClient;
@@ -21,6 +23,7 @@ public class StrongLiminalShader extends LiminalShaderApplier.SimpleShader {
 	}
 
 	@Override
+	@Environment(EnvType.CLIENT)
 	public boolean shouldRender(MinecraftClient client, float tickdelta) {
 		return !CornerConfig.getInstance().disableStrongShaders;
 	}
