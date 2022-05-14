@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.limlib.api.LiminalWorld;
+import net.ludocrypt.limlib.api.world.maze.MazeComponent;
+import net.ludocrypt.limlib.api.world.maze.MazeGenerator;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -81,8 +83,12 @@ public class RegistryHelper {
 		return Registry.register(CornerRadioRegistry.RADIO_REGISTRY, TheCorners.id(id), radio);
 	}
 
-	public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T item) {
-		return Registry.register(Registry.CHUNK_GENERATOR, TheCorners.id(id), item);
+	public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T chunkGenerator) {
+		return Registry.register(Registry.CHUNK_GENERATOR, TheCorners.id(id), chunkGenerator);
+	}
+
+	public static <C extends ChunkGenerator, M extends MazeComponent, T extends Codec<? extends MazeGenerator<C, M>>> T getMaze(String id, T mazeGenerator) {
+		return Registry.register(LimlibRegistries.LIMINAL_MAZE_GENERATOR, TheCorners.id(id), mazeGenerator);
 	}
 
 	public static RegistryKey<Biome> get(String id, Biome biome) {

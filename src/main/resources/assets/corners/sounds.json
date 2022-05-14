@@ -124,5 +124,62 @@
 				"stream": true
 			}
 		]
+	},
+	"music.hoary_crossroads": {
+		"sounds": [
+			{
+				"name": "corners:music/hoary_crossroads/crossroads",
+				"weight": 3,
+				"stream": true
+			},
+			{
+				"name": "corners:music/hoary_crossroads/crossroads",
+				"weight": 2,
+				"stream": true
+			},
+			{
+				"name": "corners:music/hoary_crossroads/i_leave_trails",
+				"stream": true
+			}
+		]
+	},
+	"radio.hoary_crossroads": {
+		"sounds": [
+			{
+				"name": "corners:radio/podcast_static_1",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_2",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_3",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/music/poly",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/partial",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/petrify",
+				"stream": true
+			}
+		]
+	},
+	"biome.hoary_crossroads.loop": {
+		"sounds": [
+			{
+				"name": "corners:ambient/hoary_crossroads/loop",
+				"stream": true
+			}
+		]
 	}
 }

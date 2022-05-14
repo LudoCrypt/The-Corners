@@ -1,0 +1,119 @@
+{
+	"multipart": [
+		{
+			"when": {
+				"layers": "7|6|5|4|3|2|1|0"
+			},
+			"apply": {
+				"model": "corners:block/dark_railing_post"
+			}
+		},
+		{
+			"when": {
+				"north": "true",
+				"layers": "5|4|3|2|1|0"
+			},
+			"apply": {
+				"model": "corners:block/dark_railing_side",
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"east": "true",
+				"layers": "5|4|3|2|1|0"
+			},
+			"apply": {
+				"model": "corners:block/dark_railing_side",
+				"y": 90,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"south": "true",
+				"layers": "5|4|3|2|1|0"
+			},
+			"apply": {
+				"model": "corners:block/dark_railing_side",
+				"y": 180,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"west": "true",
+				"layers": "5|4|3|2|1|0"
+			},
+			"apply": {
+				"model": "corners:block/dark_railing_side",
+				"y": 270,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"layers": 1
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height2"
+			}
+		},
+		{
+			"when": {
+				"layers": 2
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height4"
+			}
+		},
+		{
+			"when": {
+				"layers": 3
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height6"
+			}
+		},
+		{
+			"when": {
+				"layers": 4
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height8"
+			}
+		},
+		{
+			"when": {
+				"layers": 5
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height10"
+			}
+		},
+		{
+			"when": {
+				"layers": 6
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height12"
+			}
+		},
+		{
+			"when": {
+				"layers": 7
+			},
+			"apply": {
+				"model": "minecraft:block/snow_height14"
+			}
+		},
+		{
+			"when": {
+				"layers": 8
+			},
+			"apply": {
+				"model": "minecraft:block/snow_block"
+			}
+		}
+	]
+}

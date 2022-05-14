@@ -3,6 +3,7 @@
 	"values": [
 		"corners:stone_pillar",
 		"corners:snowy_glass",
-		"corners:snowy_glass_pane"
+		"corners:snowy_glass_pane",
+		"corners:dark_railing"
 	]
 }

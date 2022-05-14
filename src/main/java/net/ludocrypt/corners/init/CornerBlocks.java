@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.ludocrypt.corners.block.CornerStairsBlock;
 import net.ludocrypt.corners.block.RadioBlock;
+import net.ludocrypt.corners.block.RailingBlock;
 import net.ludocrypt.corners.block.SkyboxGlassBlock;
 import net.ludocrypt.corners.block.SkyboxGlassPaneBlock;
 import net.ludocrypt.corners.block.ThinPillarBlock;
@@ -28,6 +29,8 @@ public class CornerBlocks {
 
 	public static final Block SNOWY_GLASS = get("snowy_glass", new SkyboxGlassBlock(FabricBlockSettings.copyOf(Blocks.GLASS)), ItemGroup.DECORATIONS);
 	public static final Block SNOWY_GLASS_PANE = get("snowy_glass_pane", new SkyboxGlassPaneBlock(FabricBlockSettings.copyOf(Blocks.GLASS_PANE)), ItemGroup.DECORATIONS);
+
+	public static final Block DARK_RAILING = get("dark_railing", new RailingBlock(FabricBlockSettings.copyOf(Blocks.STONE)), ItemGroup.DECORATIONS);
 
 	public static void init() {
 		FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();

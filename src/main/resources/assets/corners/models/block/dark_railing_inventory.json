@@ -1,0 +1,7 @@
+{
+	"parent": "corners:block/railing_inventory",
+	"textures": {
+		"0": "corners:block/dark_railing",
+		"1": "corners:block/dark_railing_top"
+	}
+}
