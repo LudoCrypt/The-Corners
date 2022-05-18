@@ -1,0 +1,22 @@
+package net.ludocrypt.corners.mixin;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.ludocrypt.corners.init.CornerWorld;
+import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.server.world.ServerWorld;
+
+@Mixin(ServerWorld.class)
+public class ServerWorldMixin {
+
+	@Inject(method = "Lnet/minecraft/server/world/ServerWorld;tickWeather()V", at = @At("HEAD"))
+	private void corners$tickWeather(CallbackInfo ci) {
+		if (((ServerWorld) (Object) this).getRegistryKey().equals(CornerWorld.HOARY_CROSSROADS.getWorldKey())) {
+			((ServerWorld) (Object) this).getServer().getPlayerManager().sendToDimension(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.RAIN_GRADIENT_CHANGED, 2.0F), ((ServerWorld) (Object) this).getRegistryKey());
+		}
+	}
+
+}

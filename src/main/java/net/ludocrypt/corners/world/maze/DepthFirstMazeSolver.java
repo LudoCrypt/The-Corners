@@ -84,13 +84,21 @@ public class DepthFirstMazeSolver extends MazeComponent {
 
 				peek = stack.peek();
 			}
+
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					this.maze[y * this.width + x].setVisited(false);
+				}
+			}
+
 			paths.add(stack);
 		});
 
 		paths.forEach((path) -> {
 			for (int i = 0; i < path.size(); i++) {
+				Vec2i pos = path.get(i);
+
 				if (i + 1 != path.size()) {
-					Vec2i pos = path.get(i);
 					Vec2i nextPos = path.get(i + 1);
 
 					if (nextPos.equals(new Vec2i(pos.getX() + 1, pos.getY()))) { // North
@@ -105,6 +113,24 @@ public class DepthFirstMazeSolver extends MazeComponent {
 					} else if (nextPos.equals(new Vec2i(pos.getX(), pos.getY() - 1))) { // West
 						this.cellState(pos.getX(), pos.getY()).west();
 						this.cellState(nextPos.getX(), nextPos.getY()).east();
+					}
+				}
+
+				if (this.ends.contains(pos) || pos.equals(this.start)) {
+					if (pos.getX() == 0) {
+						this.cellState(pos.getX(), pos.getY()).south();
+					}
+
+					if (pos.getY() == 0) {
+						this.cellState(pos.getX(), pos.getY()).west();
+					}
+
+					if (pos.getX() == width - 1) {
+						this.cellState(pos.getX(), pos.getY()).north();
+					}
+
+					if (pos.getY() == height - 1) {
+						this.cellState(pos.getX(), pos.getY()).east();
 					}
 				}
 			}

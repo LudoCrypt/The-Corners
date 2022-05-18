@@ -146,30 +146,35 @@
 	"radio.hoary_crossroads": {
 		"sounds": [
 			{
-				"name": "corners:radio/podcast_static_1",
+				"name": "corners:radio/wind_static_1",
 				"stream": true,
 				"weight": 2
 			},
 			{
-				"name": "corners:radio/podcast_static_2",
+				"name": "corners:radio/wind_static_2",
 				"stream": true,
 				"weight": 2
 			},
 			{
-				"name": "corners:radio/podcast_static_3",
+				"name": "corners:radio/wind_static_3",
 				"stream": true,
 				"weight": 2
 			},
 			{
-				"name": "corners:radio/music/poly",
+				"name": "corners:radio/wind_static_4",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/music/trickle",
 				"stream": true
 			},
 			{
-				"name": "corners:radio/music/partial",
+				"name": "corners:radio/music/trickle",
 				"stream": true
 			},
 			{
-				"name": "corners:radio/music/petrify",
+				"name": "corners:radio/music/trickle",
 				"stream": true
 			}
 		]

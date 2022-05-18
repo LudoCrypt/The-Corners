@@ -17,10 +17,10 @@ public class HoaryCrossroadsBiome {
 
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(16777215);
-		biomeEffects.waterColor(16777215);
-		biomeEffects.waterFogColor(16777215);
+		biomeEffects.waterColor(5152865);
+		biomeEffects.waterFogColor(5344859);
 		biomeEffects.fogColor(16777215);
-		biomeEffects.grassColor(12252383);
+		biomeEffects.grassColor(6796479);
 		biomeEffects.loopSound(CornerSoundEvents.BIOME_LOOP_HOARY_CROSSROADS);
 		BiomeEffects effects = biomeEffects.build();
 
