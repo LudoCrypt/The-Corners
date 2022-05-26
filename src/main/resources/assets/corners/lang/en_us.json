@@ -21,6 +21,8 @@
 	"advancements.yearning_canal.root.description": "Enter the Yearning Canal",
 	"advancements.communal_corridors.root.title": "Backrooms-esque",
 	"advancements.communal_corridors.root.description": "Enter the Communal Corridors",
+	"advancements.hoary_crossroads.root.title": "Unabridged Road",
+	"advancements.hoary_crossroads.root.description": "Enter the Hoary Crossroads",
 	// Config
 	"text.autoconfig.the_corners.title": "The Corners",
 	"text.autoconfig.the_corners.option.condensedDimensions": "Condensed Dimensions",

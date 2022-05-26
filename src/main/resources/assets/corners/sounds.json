@@ -133,12 +133,12 @@
 				"stream": true
 			},
 			{
-				"name": "corners:music/hoary_crossroads/crossroads",
+				"name": "corners:music/hoary_crossroads/i_leave_trails",
 				"weight": 2,
 				"stream": true
 			},
 			{
-				"name": "corners:music/hoary_crossroads/i_leave_trails",
+				"name": "corners:music/hoary_crossroads/wandering",
 				"stream": true
 			}
 		]
@@ -170,11 +170,7 @@
 				"stream": true
 			},
 			{
-				"name": "corners:radio/music/trickle",
-				"stream": true
-			},
-			{
-				"name": "corners:radio/music/trickle",
+				"name": "corners:radio/music/solemn",
 				"stream": true
 			}
 		]

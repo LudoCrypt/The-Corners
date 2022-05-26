@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -89,6 +90,18 @@ public class RailingBlock extends FenceBlock {
 		}
 
 		return placementState;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+		BlockState defaultState = super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+
+		if (state.get(LAYERS) > 0 && !Blocks.SNOW.canPlaceAt(Blocks.SNOW.getDefaultState(), world, pos)) {
+			defaultState = defaultState.with(LAYERS, 0);
+		}
+
+		return defaultState;
 	}
 
 }

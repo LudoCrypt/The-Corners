@@ -16,7 +16,7 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.MathHelper;
 
 @Mixin(BackgroundRenderer.class)
-public class BackgroundRendererMixin {
+public abstract class BackgroundRendererMixin {
 
 	@ModifyVariable(method = "render", at = @At(value = "STORE", ordinal = 2), index = 7)
 	private static float corners$modifySkyColor(float in) {
@@ -38,6 +38,8 @@ public class BackgroundRendererMixin {
 		float fogEnd = RenderSystem.getShaderFogEnd();
 
 		if (client.world.getRegistryKey().equals(CornerWorld.HOARY_CROSSROADS.getWorldKey())) {
+			fogStart = fogStart / 2;
+			fogEnd = fogEnd / 2;
 			float cameraHeight = (float) (camera.getPos().getY() - client.world.getBottomY());
 			float fogScalar = (float) MathHelper.clamp(Math.atan(((cameraHeight - 263.0F) * Math.tan(1)) / 263.0F) + 1, 0.0F, 1.0F);
 			RenderSystem.setShaderFogStart(fogStart * fogScalar);

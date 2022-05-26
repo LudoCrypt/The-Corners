@@ -8,7 +8,8 @@
 		"BlockMixin",
 		"EntityMixin",
 		"ServerPlayerEntityMixin",
-		"ServerWorldMixin"
+		"ServerWorldMixin",
+		"SnowBlockMixin"
 	],
 	"client": [
 		"BackgroundRendererMixin",
