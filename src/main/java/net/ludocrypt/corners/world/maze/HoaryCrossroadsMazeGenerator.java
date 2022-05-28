@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -117,8 +117,8 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 	public void decorateCell(BlockPos pos, BlockPos mazePos, Chunk chunk, ChunkRegion region, AbstractNbtChunkGenerator chunkGenerator, MazeComponent maze, CellState state, int thickness) {
 		Random random = new Random(blockSeed(pos.getX(), blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
 		Pair<MazePiece, BlockRotation> mazeSegment = MazePiece.getFromCell(state, random);
-		if (mazeSegment.first != MazePiece.BLANK) {
-			placeNbt(getPiece(mazeSegment.first, random), getPieceAsBottom(mazeSegment.first, random), chunkGenerator, region, pos, mazeSegment.second);
+		if (mazeSegment.getFirst() != MazePiece.BLANK) {
+			placeNbt(getPiece(mazeSegment.getFirst(), random), getPieceAsBottom(mazeSegment.getFirst(), random), chunkGenerator, region, pos, mazeSegment.getSecond());
 		} else if (random.nextInt(67) == 0) {
 			BlockPos offset = pos.add(random.nextInt(7), 0, random.nextInt(7));
 			chunkGenerator.generateNbt(region, offset.add(0, 264, 0), "hoary_crossroads_obelisk_" + random.nextInt(5), BlockRotation.random(random));
