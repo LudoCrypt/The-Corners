@@ -33,8 +33,8 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 			return chunkGenerator.width;
 		}), Codec.INT.fieldOf("height").stable().forGetter((chunkGenerator) -> {
 			return chunkGenerator.height;
-		}), Codec.INT.fieldOf("dilation").stable().forGetter((chunkGenerator) -> {
-			return chunkGenerator.dilation;
+		}), Codec.INT.fieldOf("divisor").stable().forGetter((chunkGenerator) -> {
+			return chunkGenerator.divisor;
 		}), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
 			return chunkGenerator.seedModifier;
 		})).apply(instance, instance.stable(HoaryCrossroadsMazeGenerator::new));
@@ -42,11 +42,11 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 
 	private final HashMap<BlockPos, MazeComponent> grandMazeMap = new HashMap<BlockPos, MazeComponent>(30);
 
-	private int dilation;
+	private int divisor;
 
 	public HoaryCrossroadsMazeGenerator(int width, int height, int dilation, long seedModifier) {
-		super(width * dilation, height * dilation, 8, false, seedModifier);
-		this.dilation = dilation;
+		super(width, height, 8, false, seedModifier);
+		this.divisor = dilation;
 	}
 
 	@Override
@@ -57,57 +57,57 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 		if (this.grandMazeMap.containsKey(grandMazePos)) {
 			grandMaze = this.grandMazeMap.get(grandMazePos);
 		} else {
-			grandMaze = new DepthFirstMaze(width / dilation, height / dilation, new Random(blockSeed(grandMazePos.getX(), this.seedModifier, grandMazePos.getZ())));
+			grandMaze = new DepthFirstMaze(width / divisor, height / divisor, new Random(blockSeed(grandMazePos.getX(), this.seedModifier, grandMazePos.getZ())));
 			grandMaze.generateMaze();
 			this.grandMazeMap.put(grandMazePos, grandMaze);
 		}
 
-		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / thickness) / width) / dilation, (((mazePos.getZ() - grandMazePos.getZ()) / thickness) / height) / dilation);
+		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / thickness) / width) / divisor, (((mazePos.getZ() - grandMazePos.getZ()) / thickness) / height) / divisor);
 
 		Vec2i start = null;
 		List<Vec2i> endings = Lists.newArrayList();
 
 		if (originCell.isSouth() || originCell.getPosition().getX() == 0) {
 			if (start == null) {
-				start = new Vec2i(0, (height / dilation) / 2);
+				start = new Vec2i(0, (height / divisor) / 2);
 			}
 		}
 
 		if (originCell.isWest() || originCell.getPosition().getY() == 0) {
 			if (start == null) {
-				start = new Vec2i((width / dilation) / 2, 0);
+				start = new Vec2i((width / divisor) / 2, 0);
 			} else {
-				endings.add(new Vec2i((width / dilation) / 2, 0));
+				endings.add(new Vec2i((width / divisor) / 2, 0));
 			}
 		}
 
-		if (originCell.isNorth() || originCell.getPosition().getX() == (width / dilation) - 1) {
+		if (originCell.isNorth() || originCell.getPosition().getX() == (width / divisor) - 1) {
 			if (start == null) {
-				start = new Vec2i((width / dilation) - 1, (height / dilation) / 2);
+				start = new Vec2i((width / divisor) - 1, (height / divisor) / 2);
 			} else {
-				endings.add(new Vec2i((width / dilation) - 1, (height / dilation) / 2));
+				endings.add(new Vec2i((width / divisor) - 1, (height / divisor) / 2));
 			}
 		}
 
-		if (originCell.isEast() || originCell.getPosition().getY() == (height / dilation) - 1) {
+		if (originCell.isEast() || originCell.getPosition().getY() == (height / divisor) - 1) {
 			if (start == null) {
-				start = new Vec2i((width / dilation) / 2, (height / dilation) - 1);
+				start = new Vec2i((width / divisor) / 2, (height / divisor) - 1);
 			} else {
-				endings.add(new Vec2i((width / dilation) / 2, (height / dilation) - 1));
+				endings.add(new Vec2i((width / divisor) / 2, (height / divisor) - 1));
 			}
 		}
 
 		// Allow Grand Nubs
 		if (endings.isEmpty()) {
-			endings.add(new Vec2i(random.nextInt((width / dilation) - 2) + 1, random.nextInt((height / dilation) - 2) + 1));
+			endings.add(new Vec2i(random.nextInt((width / divisor) - 2) + 1, random.nextInt((height / divisor) - 2) + 1));
 		}
 
-		MazeComponent mazeToSolve = new DepthFirstMaze(width / dilation, height / dilation, random);
+		MazeComponent mazeToSolve = new DepthFirstMaze(width / divisor, height / divisor, random);
 		mazeToSolve.generateMaze();
 		DepthFirstMazeSolver solvedMaze = new DepthFirstMazeSolver(mazeToSolve, start, endings, random);
 		solvedMaze.generateMaze();
 
-		MazeComponent maze = new DilateMaze(solvedMaze, dilation);
+		MazeComponent maze = new DilateMaze(solvedMaze, divisor);
 		maze.generateMaze();
 
 		return maze;

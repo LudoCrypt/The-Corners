@@ -57,6 +57,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	public HoaryCrossroadsChunkGenerator(BiomeSource biomeSource, long worldSeed, HoaryCrossroadsMazeGenerator mazeGenerator) {
 		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("hoary_crossroads"), LiminalUtil.createMultiNoiseSampler());
 		this.mazeGenerator = mazeGenerator;
+		this.worldSeed = worldSeed;
 	}
 
 	@Override

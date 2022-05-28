@@ -51,6 +51,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
 		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("communal_corridors"), LiminalUtil.createMultiNoiseSampler());
+		this.worldSeed = worldSeed;
 	}
 
 	@Override

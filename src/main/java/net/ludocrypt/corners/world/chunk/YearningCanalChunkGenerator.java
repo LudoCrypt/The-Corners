@@ -50,6 +50,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public YearningCanalChunkGenerator(BiomeSource biomeSource, long worldSeed) {
 		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("yearning_canal"), LiminalUtil.createMultiNoiseSampler());
+		this.worldSeed = worldSeed;
 	}
 
 	@Override
