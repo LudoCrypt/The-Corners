@@ -1,8 +1,10 @@
 {
-	"parent": "corners:block/template_skybox_glass_pane_post",
+	"parent": "block/template_glass_pane_post",
 	"textures": {
 		"pane": "minecraft:block/glass",
-		"edge": "minecraft:block/glass_pane_top",
-		"skybox": "corners:sky/snow"
+		"edge": "minecraft:block/glass_pane_top"
+	},
+	"limlib_extra": {
+		"corners:skybox": "corners:shader/snowy_glass_pane_post"
 	}
 }

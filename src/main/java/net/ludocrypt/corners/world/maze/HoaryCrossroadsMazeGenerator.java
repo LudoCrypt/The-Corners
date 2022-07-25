@@ -2,7 +2,6 @@ package net.ludocrypt.corners.world.maze;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -22,6 +21,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
@@ -57,7 +57,7 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 		if (this.grandMazeMap.containsKey(grandMazePos)) {
 			grandMaze = this.grandMazeMap.get(grandMazePos);
 		} else {
-			grandMaze = new DepthFirstMaze(width / divisor, height / divisor, new Random(blockSeed(grandMazePos.getX(), this.seedModifier, grandMazePos.getZ())));
+			grandMaze = new DepthFirstMaze(width / divisor, height / divisor, Random.create(blockSeed(grandMazePos.getX(), this.seedModifier, grandMazePos.getZ())));
 			grandMaze.generateMaze();
 			this.grandMazeMap.put(grandMazePos, grandMaze);
 		}
@@ -115,7 +115,7 @@ public class HoaryCrossroadsMazeGenerator extends MazeGenerator<AbstractNbtChunk
 
 	@Override
 	public void decorateCell(BlockPos pos, BlockPos mazePos, Chunk chunk, ChunkRegion region, AbstractNbtChunkGenerator chunkGenerator, MazeComponent maze, CellState state, int thickness) {
-		Random random = new Random(blockSeed(pos.getX(), blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
+		Random random = Random.create(blockSeed(pos.getX(), blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
 		Pair<MazePiece, BlockRotation> mazeSegment = MazePiece.getFromCell(state, random);
 		if (mazeSegment.getFirst() != MazePiece.BLANK) {
 			placeNbt(getPiece(mazeSegment.getFirst(), random), getPieceAsBottom(mazeSegment.getFirst(), random), chunkGenerator, region, pos, mazeSegment.getSecond());

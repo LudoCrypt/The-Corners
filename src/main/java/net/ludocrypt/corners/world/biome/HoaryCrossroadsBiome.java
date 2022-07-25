@@ -29,7 +29,6 @@ public class HoaryCrossroadsBiome {
 		biome.effects(effects);
 
 		biome.precipitation(Biome.Precipitation.SNOW);
-		biome.category(Biome.Category.NONE);
 
 		biome.temperature(-1.0F);
 		biome.downfall(1.0F);

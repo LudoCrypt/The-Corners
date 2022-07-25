@@ -40,6 +40,9 @@
 		],
 		"modmenu": [
 			"net.ludocrypt.corners.config.CornerModmenu"
+		],
+		"limlib": [
+			"net.ludocrypt.corners.init.CornerWorlds"
 		]
 	},
 	"accessWidener": "corners.accesswidener",
@@ -49,7 +52,7 @@
 	"depends": {
 		"fabricloader": ">=0.11.3",
 		"fabric": "*",
-		"minecraft": "1.18.x",
+		"minecraft": "1.19.x",
 		"cloth-config": "*",
 		"satin": "*"
 	}

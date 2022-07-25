@@ -5,26 +5,18 @@
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
 		"AbstractDecorationEntityAccessor",
-		"BlockMixin",
 		"EntityMixin",
+		"PaintingEntityAccessor",
 		"ServerPlayerEntityMixin",
 		"ServerWorldMixin",
 		"SnowBlockMixin"
 	],
 	"client": [
 		"BackgroundRendererMixin",
-		"BlockRenderManagerMixin",
-		"ChunkBuilderBuiltChunkRebuildTaskMixin",
-		"ChunkBuilderChunkDataMixin",
 		"GameRendererAccessor",
-		"GameRendererMixin",
-		"ItemRendererMixin",
 		"MinecraftClientAccessor",
 		"MusicTrackerMixin",
-		"RenderLayerAccessor",
-		"SoundManagerAccessor",
-		"WorldRendererChunkInfoAccessor",
-		"WorldRendererMixin"
+		"SoundManagerAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

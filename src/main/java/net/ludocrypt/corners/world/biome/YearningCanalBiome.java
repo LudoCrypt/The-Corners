@@ -27,7 +27,6 @@ public class YearningCanalBiome {
 		biome.effects(effects);
 
 		biome.precipitation(Biome.Precipitation.NONE);
-		biome.category(Biome.Category.NONE);
 
 		biome.temperature(0.8F);
 		biome.downfall(0.0F);

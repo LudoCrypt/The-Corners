@@ -1,7 +1,6 @@
 {
-	"parent": "corners:block/template_skybox_glass",
-	"textures": {
-		"glass": "minecraft:block/glass",
-		"skybox": "corners:sky/snow"
+	"parent": "minecraft:block/glass",
+	"limlib_extra": {
+		"corners:skybox": "corners:shader/snowy_glass"
 	}
 }

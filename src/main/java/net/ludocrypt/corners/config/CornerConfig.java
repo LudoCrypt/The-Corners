@@ -19,12 +19,12 @@ public class CornerConfig implements ConfigData {
 	@ConfigEntry.Gui.Tooltip()
 	public boolean disableStrongShaders = false;
 
-	public static void init() {
-		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);
-	}
-
 	public static CornerConfig getInstance() {
 		return AutoConfig.getConfigHolder(CornerConfig.class).getConfig();
+	}
+
+	static {
+		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);
 	}
 
 }

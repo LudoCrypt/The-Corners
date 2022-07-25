@@ -13,7 +13,6 @@ import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -21,8 +20,8 @@ import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureSet;
+import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -30,8 +29,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -42,16 +39,11 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	public static final Codec<CommunalCorridorsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
 			return chunkGenerator.biomeSource;
-		}), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
-			return chunkGenerator.worldSeed;
 		})).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
 	});
 
-	private long worldSeed;
-
-	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("communal_corridors"), LiminalUtil.createMultiNoiseSampler());
-		this.worldSeed = worldSeed;
+	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource) {
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id("communal_corridors"));
 	}
 
 	@Override
@@ -60,12 +52,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public ChunkGenerator withSeed(long seed) {
-		return new CommunalCorridorsChunkGenerator(this.biomeSource, seed);
-	}
-
-	@Override
-	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> fullChunkConverter, List<Chunk> chunks, Chunk chunk, boolean regenerate) {
 		ChunkPos chunkPos = chunk.getPos();
 		Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
 
@@ -116,7 +103,12 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world) {
-		return world.getTopY();
+	public int getSeaLevel() {
+		return 0;
+	}
+
+	@Override
+	public int getMinimumY() {
+		return 0;
 	}
 }

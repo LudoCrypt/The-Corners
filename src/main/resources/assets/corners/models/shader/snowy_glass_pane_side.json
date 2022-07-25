@@ -1,0 +1,7 @@
+{
+	"parent": "block/template_glass_pane_side",
+	"textures": {
+		"pane": "corners:sky/snow",
+		"edge": "corners:sky/snow"
+	}
+}

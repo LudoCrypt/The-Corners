@@ -10,6 +10,7 @@ import com.mojang.authlib.GameProfile;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.limlib.api.LiminalUtil;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,8 +18,8 @@ import net.minecraft.world.World;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
-	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
-		super(world, pos, yaw, profile);
+	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, PlayerPublicKey publicKey) {
+		super(world, pos, yaw, gameProfile, publicKey);
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))

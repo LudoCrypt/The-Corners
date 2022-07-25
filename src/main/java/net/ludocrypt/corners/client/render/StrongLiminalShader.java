@@ -1,4 +1,4 @@
-package net.ludocrypt.corners.client.render.sky;
+package net.ludocrypt.corners.client.render;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

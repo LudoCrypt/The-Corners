@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"corners:overworld",
+		"corners:overworld_thin",
+		"corners:overworld_wide",
+		"corners:yearning_canal",
+		"corners:communal_corridors",
+		"corners:hoary_crossroads"
+	]
+}

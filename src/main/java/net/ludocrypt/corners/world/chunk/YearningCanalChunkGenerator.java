@@ -14,13 +14,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureSet;
+import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -29,8 +28,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -41,16 +38,11 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	public static final Codec<YearningCanalChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
 			return chunkGenerator.biomeSource;
-		}), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
-			return chunkGenerator.worldSeed;
 		})).apply(instance, instance.stable(YearningCanalChunkGenerator::new));
 	});
 
-	private long worldSeed;
-
-	public YearningCanalChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, TheCorners.id("yearning_canal"), LiminalUtil.createMultiNoiseSampler());
-		this.worldSeed = worldSeed;
+	public YearningCanalChunkGenerator(BiomeSource biomeSource) {
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id("yearning_canal"));
 	}
 
 	@Override
@@ -59,12 +51,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public ChunkGenerator withSeed(long seed) {
-		return new YearningCanalChunkGenerator(this.biomeSource, seed);
-	}
-
-	@Override
-	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> fullChunkConverter, List<Chunk> chunks, Chunk chunk, boolean regenerate) {
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
 		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
@@ -125,8 +112,13 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world) {
-		return world.getTopY();
+	public int getSeaLevel() {
+		return 0;
+	}
+
+	@Override
+	public int getMinimumY() {
+		return 0;
 	}
 
 }

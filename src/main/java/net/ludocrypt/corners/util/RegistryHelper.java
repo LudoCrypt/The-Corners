@@ -17,7 +17,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.painting.PaintingMotive;
+import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -67,8 +67,8 @@ public class RegistryHelper {
 		return Registry.register(Registry.ENTITY_TYPE, TheCorners.id(id), entity);
 	}
 
-	public static <T extends PaintingMotive> T get(String id, T painting) {
-		return Registry.register(Registry.PAINTING_MOTIVE, TheCorners.id(id), painting);
+	public static <T extends PaintingVariant> T get(String id, T painting) {
+		return Registry.register(Registry.PAINTING_VARIANT, TheCorners.id(id), painting);
 	}
 
 	public static SoundEvent get(String id) {
