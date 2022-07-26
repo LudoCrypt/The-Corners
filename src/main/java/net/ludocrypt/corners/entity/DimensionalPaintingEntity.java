@@ -16,7 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	public static DimensionalPaintingEntity create(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
 		if (variant instanceof DimensionalPaintingVariant) {
 			DimensionalPaintingEntity entity = create(world, pos);
-			((PaintingEntityAccessor) entity).callSetVariant(RegistryEntry.of(variant));
+			((PaintingEntityAccessor) entity).callSetVariant(Registry.PAINTING_VARIANT.getEntry(Registry.PAINTING_VARIANT.getKey(variant).get()).get());
 			entity.setFacing(direction);
 			return entity;
 		}
@@ -46,7 +46,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	public static PaintingEntity createRegular(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
 		PaintingEntity entity = new PaintingEntity(EntityType.PAINTING, world);
 		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-		((PaintingEntityAccessor) entity).callSetVariant(RegistryEntry.of(variant));
+		((PaintingEntityAccessor) entity).callSetVariant(Registry.PAINTING_VARIANT.getEntry(Registry.PAINTING_VARIANT.getKey(variant).get()).get());
 		((AbstractDecorationEntityAccessor) entity).callSetFacing(direction);
 		return entity;
 	}

@@ -29,9 +29,9 @@ public class ServerToClientPackets {
 			client.execute(() -> {
 				SoundEvent id = CornerRadioRegistry.getCurrent(client);
 				if (client.world.getBlockState(pos).isOf(CornerBlocks.TUNED_RADIO)) {
-					List<PaintingEntity> closestPaintings = client.world.getEntitiesByClass(PaintingEntity.class, Box.from(Vec3d.of(pos)).expand(16.0D), (entity) -> entity.getVariant() instanceof DimensionalPaintingVariant).stream().sorted(Comparator.comparing((entity) -> entity.squaredDistanceTo(Vec3d.of(pos)))).toList();
+					List<PaintingEntity> closestPaintings = client.world.getEntitiesByClass(PaintingEntity.class, Box.from(Vec3d.of(pos)).expand(16.0D), (entity) -> entity.getVariant().value() instanceof DimensionalPaintingVariant).stream().sorted(Comparator.comparing((entity) -> entity.squaredDistanceTo(Vec3d.of(pos)))).toList();
 					if (!closestPaintings.isEmpty()) {
-						id = CornerRadioRegistry.getCurrent(((DimensionalPaintingVariant) closestPaintings.get(0).getVariant()).radioRedirect);
+						id = CornerRadioRegistry.getCurrent(((DimensionalPaintingVariant) closestPaintings.get(0).getVariant().value()).radioRedirect);
 					}
 				}
 
