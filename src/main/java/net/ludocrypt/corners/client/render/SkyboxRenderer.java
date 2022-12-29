@@ -34,7 +34,7 @@ public class SkyboxRenderer extends SpecialModelRenderer {
 		Matrix4f matrix = new MatrixStack().peek().getPosition();
 
 		matrix.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
-		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
+		matrix.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
 
 		if (shader.getUniform("RotMat") != null) {
 			shader.getUniform("RotMat").setMat4x4(matrix);
