@@ -17,6 +17,8 @@ uniform vec4 FogColor;
 uniform mat4 ProjMat;
 uniform mat4 ModelViewMat;
 
+uniform mat4 RotMat;
+
 in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
@@ -51,7 +53,7 @@ void main() {
 	float near = 0.05;
 	float far = (ProjMat[2][2]-1.)/(ProjMat[2][2]+1.) * near;
 	int faceIndex = 0;
-	vec4 texPos = vec4(sampleCube(normalize((inverse(ProjMat * ModelViewMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz), faceIndex), 1.0, 1.0);
+	vec4 texPos = vec4(sampleCube(normalize((inverse(ProjMat * RotMat) * vec4(glPos.xy / glPos.w * (far - near), far + near, far - near)).xyz), faceIndex), 1.0, 1.0);
 	texPos = vec4(-texPos.x, texPos.y, texPos.z, texPos.w);
 
 	vec4 color = textureProj(Sampler0, texPos);
