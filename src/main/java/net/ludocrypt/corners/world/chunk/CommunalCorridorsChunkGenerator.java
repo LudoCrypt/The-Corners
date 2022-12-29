@@ -13,19 +13,24 @@ import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
+import net.ludocrypt.corners.block.RadioBlock;
+import net.ludocrypt.corners.init.CornerBlocks;
+import net.ludocrypt.corners.init.CornerWorlds;
+import net.ludocrypt.limlib.world.chunk.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.loot.LootTables;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
@@ -33,17 +38,18 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.structure.StructureSet;
 
 public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public static final Codec<CommunalCorridorsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
-			return chunkGenerator.biomeSource;
+			return chunkGenerator.populationSource;
 		})).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
 	});
 
 	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id("communal_corridors"));
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_WORLDGEN, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id(CornerWorlds.COMMUNAL_CORRIDORS));
 	}
 
 	@Override
@@ -88,13 +94,32 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public int chunkRadius() {
+	public int getChunkDistance() {
 		return 1;
 	}
 
 	@Override
 	protected Identifier getBarrelLootTable() {
 		return LootTables.SPAWN_BONUS_CHEST;
+	}
+
+	@Override
+	protected void modifyStructure(ChunkRegion region, BlockPos pos, BlockState state, NbtCompound nbt) {
+		super.modifyStructure(region, pos, state, nbt);
+		if (state.isOf(CornerBlocks.WOODEN_RADIO)) {
+			int i = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos)).nextInt(3);
+			switch (i) {
+			case 1:
+				region.setBlockState(pos, CornerBlocks.TUNED_RADIO.getDefaultState().with(RadioBlock.FACING, state.get(RadioBlock.FACING)), Block.NOTIFY_ALL, 1);
+				break;
+			case 2:
+				region.setBlockState(pos, CornerBlocks.BROKEN_RADIO.getDefaultState().with(RadioBlock.FACING, state.get(RadioBlock.FACING)), Block.NOTIFY_ALL, 1);
+				break;
+			case 0:
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override

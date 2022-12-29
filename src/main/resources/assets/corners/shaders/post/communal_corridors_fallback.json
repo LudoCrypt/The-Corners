@@ -1,0 +1,25 @@
+{
+	"targets": [
+		"swap"
+	],
+	"passes": [
+		{
+			"name": "chromastort_fallback",
+			"intarget": "minecraft:main",
+			"outtarget": "swap",
+			"uniforms": [
+				{
+					"name": "dispFactor",
+					"values": [
+						0.375
+					]
+				}
+			]
+		},
+		{
+			"name": "blit",
+			"intarget": "swap",
+			"outtarget": "minecraft:main"
+		}
+	]
+}

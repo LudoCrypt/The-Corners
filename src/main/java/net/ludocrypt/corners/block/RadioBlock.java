@@ -1,11 +1,10 @@
 package net.ludocrypt.corners.block;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.ludocrypt.corners.TheCorners;
+import org.quiltmc.qsl.networking.api.PacketByteBufs;
+import org.quiltmc.qsl.networking.api.PlayerLookup;
+import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
+
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.limlib.api.LiminalUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -42,9 +41,6 @@ public class RadioBlock extends HorizontalFacingBlock {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (world.isReceivingRedstonePower(pos)) {
 			sendOut(world, pos, !state.get(POWERED));
-			if (state.get(POWERED)) {
-				LiminalUtil.grantAdvancement(player, TheCorners.id("nevermind_radio"));
-			}
 			world.setBlockState(pos, state.cycle(POWERED));
 			return ActionResult.SUCCESS;
 		}

@@ -4,10 +4,7 @@ import java.util.function.BiFunction;
 
 import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.TeleportTarget;
@@ -18,16 +15,6 @@ public class DimensionalPaintingVariant extends PaintingVariant {
 	public final RegistryKey<World> radioRedirect;
 	public final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, RegistryKey<World>> dimension;
 	public final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget;
-
-	public static final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, Vec3d> overworldPaintingTarget = (player, painting) -> {
-		BlockPos pos = player.getSpawnPointPosition();
-		if (pos != null) {
-			ServerWorld serverWorld = player.getServer().getOverworld();
-			return PlayerEntity.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnForced(), true).orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
-		} else {
-			return Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos());
-		}
-	};
 
 	public DimensionalPaintingVariant(int width, int height, RegistryKey<World> radioRedirect, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, RegistryKey<World>> dimension, BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, TeleportTarget> teleportTarget) {
 		super(width, height);

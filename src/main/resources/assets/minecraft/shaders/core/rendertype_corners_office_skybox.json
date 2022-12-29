@@ -7,6 +7,12 @@
 	"vertex": "rendertype_corners_skybox",
 	"fragment": "rendertype_corners_skybox",
 	"attributes": [
+		"Position",
+		"Color",
+		"UV0",
+		"UV1",
+		"UV2",
+		"Normal"
 	],
 	"samplers": [
 		{
@@ -76,6 +82,22 @@
 			]
 		},
 		{
+			"name": "IViewRotMat",
+			"type": "matrix3x3",
+			"count": 9,
+			"values": [
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0,
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			]
+		},
+		{
 			"name": "ChunkOffset",
 			"type": "float",
 			"count": 3,
@@ -109,6 +131,22 @@
 				0.0,
 				0.0,
 				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "FogShape",
+			"type": "int",
+			"count": 1,
+			"values": [
+				0
+			]
+		},
+		{
+			"name": "renderAsEntity",
+			"type": "float",
+			"count": 1,
+			"values": [
 				0.0
 			]
 		}

@@ -5,12 +5,12 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.Holder;
 
 @Mixin(PaintingEntity.class)
 public interface PaintingEntityAccessor {
 
 	@Invoker
-	void callSetVariant(RegistryEntry<PaintingVariant> variant);
+	void callSetVariant(Holder<PaintingVariant> variant);
 
 }

@@ -3,8 +3,8 @@ package net.ludocrypt.corners.init;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.ludocrypt.corners.TheCorners;
+import net.ludocrypt.corners.util.RadioSoundTable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
@@ -12,23 +12,31 @@ import net.minecraft.world.World;
 
 public class CornerRadioRegistry {
 
-	public static final SimpleRegistry<SoundEvent> RADIO_REGISTRY = FabricRegistryBuilder.createDefaulted(SoundEvent.class, TheCorners.id("radio_registry"), TheCorners.id("default_radio")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
-	public static final SoundEvent DEFAULT = CornerSoundEvents.RADIO_DEFAULT_STATIC;
+	public static final SimpleRegistry<RadioSoundTable> RADIO_REGISTRY = FabricRegistryBuilder.createDefaulted(RadioSoundTable.class, TheCorners.id("radio_registry"), TheCorners.id("default_radio")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+	public static final RadioSoundTable DEFAULT = new RadioSoundTable(CornerSoundEvents.RADIO_DEFAULT_STATIC, CornerSoundEvents.RADIO_DEFAULT_STATIC, CornerSoundEvents.RADIO_DEFAULT_STATIC);
 
 	public static void init() {
 		Registry.register(RADIO_REGISTRY, TheCorners.id("default_radio"), DEFAULT);
+
+		getRadio("yearning_canal", new RadioSoundTable(CornerSoundEvents.RADIO_YEARNING_CANAL_MUSIC, CornerSoundEvents.RADIO_YEARNING_CANAL_STATIC, CornerSoundEvents.RADIO_YEARNING_CANAL));
+		getRadio("communal_corridors", new RadioSoundTable(CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS));
+		getRadio("hoary_crossroads", new RadioSoundTable(CornerSoundEvents.RADIO_HOARY_CROSSROADS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_HOARY_CROSSROADS));
 	}
 
-	public static SoundEvent register(RegistryKey<World> world, SoundEvent sound) {
+	public static RadioSoundTable register(RegistryKey<World> world, RadioSoundTable sound) {
 		return Registry.register(RADIO_REGISTRY, world.getValue(), sound);
 	}
 
-	public static SoundEvent getCurrent(MinecraftClient client) {
+	public static RadioSoundTable getCurrent(MinecraftClient client) {
 		return getCurrent(client.world.getRegistryKey());
 	}
 
-	public static SoundEvent getCurrent(RegistryKey<World> key) {
+	public static RadioSoundTable getCurrent(RegistryKey<World> key) {
 		return RADIO_REGISTRY.getOrEmpty(key.getValue()).orElse(DEFAULT);
+	}
+
+	public static <T extends RadioSoundTable> T getRadio(String id, T radio) {
+		return Registry.register(CornerRadioRegistry.RADIO_REGISTRY, TheCorners.id(id), radio);
 	}
 
 }

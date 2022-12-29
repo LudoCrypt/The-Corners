@@ -2,17 +2,22 @@ package net.ludocrypt.corners;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
-import net.fabricmc.api.ModInitializer;
-import net.ludocrypt.corners.client.render.StrongLiminalShader;
+import eu.midnightdust.lib.config.MidnightConfig;
+import net.ludocrypt.corners.client.render.StrongPostEffect;
+import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBiomes;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.init.CornerItems;
+import net.ludocrypt.corners.init.CornerModelRenderers;
 import net.ludocrypt.corners.init.CornerPaintings;
+import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.limlib.impl.LimlibRegistries;
+import net.ludocrypt.limlib.effects.render.post.PostEffect;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -21,15 +26,18 @@ public class TheCorners implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger("The Corners");
 
 	@Override
-	public void onInitialize() {
+	public void onInitialize(ModContainer mod) {
+		MidnightConfig.init("the_corners", CornerConfig.class);
 		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerItems.init();
 		CornerBiomes.init();
 		CornerEntities.init();
 		CornerSoundEvents.init();
+		CornerRadioRegistry.init();
+		CornerModelRenderers.init();
 		ClientToServerPackets.manageClientToServerPackets();
-		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
+		Registry.register(PostEffect.POST_EFFECT_CODEC, id("strong_shader"), StrongPostEffect.CODEC);
 	}
 
 	public static Identifier id(String id) {

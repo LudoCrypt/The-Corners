@@ -1,6 +1,6 @@
 {
 	"parent": "corners:block/snowy_glass",
 	"limlib_extra": {
-		"corners:skybox": "corners:shader/snowy_glass"
+		"corners:snowy_skybox": "corners:shader/snowy_glass"
 	}
 }

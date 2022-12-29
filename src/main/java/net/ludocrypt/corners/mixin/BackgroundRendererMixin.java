@@ -23,7 +23,7 @@ public abstract class BackgroundRendererMixin {
 		float fogStart = RenderSystem.getShaderFogStart();
 		float fogEnd = RenderSystem.getShaderFogEnd();
 
-		if (client.world.getRegistryKey().equals(CornerWorlds.HOARY_CROSSROADS.getWorldKey())) {
+		if (client.world.getRegistryKey().equals(CornerWorlds.HOARY_CROSSROADS_KEY)) {
 			fogStart = fogStart / 2;
 			fogEnd = fogEnd / 2;
 			float cameraHeight = (float) (camera.getPos().getY() - client.world.getBottomY());

@@ -3,6 +3,7 @@
 	"values": [
 		"corners:wooden_radio",
 		"corners:tuned_radio",
+		"corners:broken_radio",
 		"corners:drywall"
 	]
 }

@@ -5,6 +5,6 @@
 		"edge": "minecraft:block/glass_pane_top"
 	},
 	"limlib_extra": {
-		"corners:skybox": "corners:shader/snowy_glass_pane_side"
+		"corners:snowy_skybox": "corners:shader/snowy_glass_pane_side"
 	}
 }

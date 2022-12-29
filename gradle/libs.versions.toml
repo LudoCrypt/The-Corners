@@ -1,0 +1,35 @@
+[versions]
+minecraft = "1.19.2"
+quilt_mappings = "1.19.2+build.3"
+quilt_loader = "0.17.1"
+
+quilted_fabric_api = "4.0.0-beta.7+0.59.0-1.19.2"
+ladysnake_satin = "1.9.0"
+terraformersmc_modmenu = "4.0.6"
+limlib_base = "7.2.0"
+
+midnight_lib = "1.0.0-quilt"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
+quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
+
+quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
+quilted_fabric_api_deprecated = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api-deprecated", version.ref = "quilted_fabric_api" }
+
+ladysnake_satin = { module = "io.github.ladysnake:satin", version.ref = "ladysnake_satin" }
+terraformersmc_modmenu = { module = "com.terraformersmc:modmenu", version.ref = "terraformersmc_modmenu" }
+
+ludocrypt_limlib_effects = { module = "com.github.LudoCrypt.Liminal-Library:limlib_effects", version.ref = "limlib_base" }
+ludocrypt_limlib_registry = { module = "com.github.LudoCrypt.Liminal-Library:limlib_registry", version.ref = "limlib_base" }
+ludocrypt_limlib_render = { module = "com.github.LudoCrypt.Liminal-Library:limlib_render", version.ref = "limlib_base" }
+ludocrypt_limlib_world = { module = "com.github.LudoCrypt.Liminal-Library:limlib_world", version.ref = "limlib_base" }
+
+midnight_lib = { module = "maven.modrinth:midnightlib", version.ref = "midnight_lib" }
+
+[bundles]
+quilted_fabric_api = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]
+
+[plugins]
+quilt_loom = { id = "org.quiltmc.loom", version = "0.12.+" }

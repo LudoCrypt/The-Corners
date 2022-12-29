@@ -18,7 +18,7 @@
 	"music.yearning_canal": {
 		"sounds": [
 			{
-				"name": "corners:music/yearning_canal/elivbit",
+				"name": "corners:music/yearning_canal/elevated",
 				"weight": 3,
 				"stream": true
 			},
@@ -29,41 +29,6 @@
 			},
 			{
 				"name": "corners:music/yearning_canal/yearn",
-				"stream": true
-			}
-		]
-	},
-	"radio.default.static": {
-		"sounds": [
-			{
-				"name": "corners:radio/default_static",
-				"stream": true
-			}
-		]
-	},
-	"radio.yearning_canal": {
-		"sounds": [
-			{
-				"name": "corners:radio/voice_static_1",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/voice_static_2",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/voice_static_3",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/music/reception",
-				"stream": true
-			},
-			{
-				"name": "corners:radio/music/tsuki",
 				"stream": true
 			}
 		]
@@ -82,37 +47,6 @@
 			},
 			{
 				"name": "corners:music/communal_corridors/the_colds",
-				"stream": true
-			}
-		]
-	},
-	"radio.communal_corridors": {
-		"sounds": [
-			{
-				"name": "corners:radio/podcast_static_1",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/podcast_static_2",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/podcast_static_3",
-				"stream": true,
-				"weight": 2
-			},
-			{
-				"name": "corners:radio/music/poly",
-				"stream": true
-			},
-			{
-				"name": "corners:radio/music/partial",
-				"stream": true
-			},
-			{
-				"name": "corners:radio/music/petrify",
 				"stream": true
 			}
 		]
@@ -143,7 +77,61 @@
 			}
 		]
 	},
-	"radio.hoary_crossroads": {
+	"biome.hoary_crossroads.loop": {
+		"sounds": [
+			{
+				"name": "corners:ambient/hoary_crossroads/loop",
+				"stream": true
+			}
+		]
+	},
+	"radio.default.static": {
+		"sounds": [
+			{
+				"name": "corners:radio/default_static",
+				"stream": true
+			}
+		]
+	},
+	"radio.yearning_canal.static": {
+		"sounds": [
+			{
+				"name": "corners:radio/voice_static_1",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/voice_static_2",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/voice_static_3",
+				"stream": true,
+				"weight": 2
+			}
+		]
+	},
+	"radio.communal_corridors.static": {
+		"sounds": [
+			{
+				"name": "corners:radio/podcast_static_1",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_2",
+				"stream": true,
+				"weight": 2
+			},
+			{
+				"name": "corners:radio/podcast_static_3",
+				"stream": true,
+				"weight": 2
+			}
+		]
+	},
+	"radio.hoary_crossroads.static": {
 		"sounds": [
 			{
 				"name": "corners:radio/wind_static_1",
@@ -164,7 +152,39 @@
 				"name": "corners:radio/wind_static_4",
 				"stream": true,
 				"weight": 2
+			}
+		]
+	},
+	"radio.yearning_canal.music": {
+		"sounds": [
+			{
+				"name": "corners:radio/music/reception",
+				"stream": true
 			},
+			{
+				"name": "corners:radio/music/tsuki",
+				"stream": true
+			}
+		]
+	},
+	"radio.communal_corridors.music": {
+		"sounds": [
+			{
+				"name": "corners:radio/music/poly",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/partial",
+				"stream": true
+			},
+			{
+				"name": "corners:radio/music/petrify",
+				"stream": true
+			}
+		]
+	},
+	"radio.hoary_crossroads.music": {
+		"sounds": [
 			{
 				"name": "corners:radio/music/trickle",
 				"stream": true
@@ -175,11 +195,39 @@
 			}
 		]
 	},
-	"biome.hoary_crossroads.loop": {
+	"radio.yearning_canal": {
 		"sounds": [
 			{
-				"name": "corners:ambient/hoary_crossroads/loop",
-				"stream": true
+				"name": "corners:radio.yearning_canal.static",
+				"type": "event"
+			},
+			{
+				"name": "corners:radio.yearning_canal.music",
+				"type": "event"
+			}
+		]
+	},
+	"radio.communal_corridors": {
+		"sounds": [
+			{
+				"name": "corners:radio.communal_corridors.static",
+				"type": "event"
+			},
+			{
+				"name": "corners:radio.communal_corridors.music",
+				"type": "event"
+			}
+		]
+	},
+	"radio.hoary_crossroads": {
+		"sounds": [
+			{
+				"name": "corners:radio.hoary_crossroads.static",
+				"type": "event"
+			},
+			{
+				"name": "corners:radio.hoary_crossroads.music",
+				"type": "event"
 			}
 		]
 	}

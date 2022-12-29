@@ -4,6 +4,6 @@
 		"pane": "minecraft:block/glass"
 	},
 	"limlib_extra": {
-		"corners:skybox": "corners:shader/snowy_glass_pane_noside_alt"
+		"corners:snowy_skybox": "corners:shader/snowy_glass_pane_noside_alt"
 	}
 }

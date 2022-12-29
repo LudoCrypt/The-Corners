@@ -13,12 +13,11 @@ import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
+import net.ludocrypt.corners.init.CornerWorlds;
+import net.ludocrypt.limlib.world.chunk.AbstractNbtChunkGenerator;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -32,17 +31,18 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.structure.StructureSet;
 
 public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 
 	public static final Codec<YearningCanalChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
-			return chunkGenerator.biomeSource;
+			return chunkGenerator.populationSource;
 		})).apply(instance, instance.stable(YearningCanalChunkGenerator::new));
 	});
 
 	public YearningCanalChunkGenerator(BiomeSource biomeSource) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id("yearning_canal"));
+		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_WORLDGEN, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id(CornerWorlds.YEARNING_CANAL));
 	}
 
 	@Override
@@ -102,13 +102,13 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public int chunkRadius() {
+	public int getChunkDistance() {
 		return 1;
 	}
 
 	@Override
 	public int getWorldHeight() {
-		return CornerConfig.getInstance().condensedDimensions ? 432 : 2032;
+		return 2032;
 	}
 
 	@Override

@@ -2,6 +2,7 @@
 	"block.corners.stone_pillar": "Stone Pillar",
 	"block.corners.wooden_radio": "Wooden Radio",
 	"block.corners.tuned_radio": "Tuned Radio",
+	"block.corners.broken_radio": "Broken Radio",
 	"block.corners.drywall": "Drywall",
 	"block.corners.nylon_fiber_slab": "Nylon Fiber Slab",
 	"block.corners.nylon_fiber_stairs": "Nylon Fiber Stairs",
@@ -24,17 +25,14 @@
 	"advancements.hoary_crossroads.root.title": "Unabridged Road",
 	"advancements.hoary_crossroads.root.description": "Enter the Hoary Crossroads",
 	// Config
-	"text.autoconfig.the_corners.title": "The Corners",
-	"text.autoconfig.the_corners.option.condensedDimensions": "Condensed Dimensions",
-	"text.autoconfig.the_corners.option.condensedDimensions.@Tooltip": "Caps dimension height for lag reduction in extreme cases",
-	"text.autoconfig.the_corners.option.delayMusicWithRadio": "Delay Music With Radio",
-	"text.autoconfig.the_corners.option.delayMusicWithRadio.@Tooltip": "Prevents ambient music to play while a radio is on",
-	"text.autoconfig.the_corners.option.disableStrongShaders": "Disable Strong Shaders",
-	"text.autoconfig.the_corners.option.disableStrongShaders.@Tooltip": "Disables potentially harmful shaders",
+	"the_corners.midnightconfig.title": "The Corners",
+	"the_corners.midnightconfig.delayMusicWithRadio": "Prevent ambient music to play while radio is on",
+	"the_corners.midnightconfig.disableStrongShaders": "Disable potentially harmful shaders",
 	// Credits
 	"credits.the_corners.ludocrypt.youtube": "LudoCrypt's Youtube",
 	"credits.the_corners.ludocrypt.bandcamp": "LudoCrypt's Bandcamp",
 	"credits.the_corners.racoon_syndrome.youtube": "Racoon Syndrome's Youtube",
 	"credits.the_corners.racoon_syndrome.bandcamp": "Racoon Syndrome's Bandcamp",
-	"credits.the_corners.slice.instagram": "Slice's Instagram"
+	"credits.the_corners.shai.instagram": "Shai's Instagram",
+	"credits.the_corners.shai.twitter": "Shai's Twitter"
 }

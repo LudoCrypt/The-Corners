@@ -3,21 +3,23 @@ package net.ludocrypt.corners.packet;
 import java.util.Comparator;
 import java.util.List;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import net.ludocrypt.corners.access.MusicTrackerAccess;
 import net.ludocrypt.corners.client.sound.LoopingPositionedSoundInstance;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.mixin.SoundManagerAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingVariant;
-import net.ludocrypt.limlib.access.SoundSystemAccess;
+import net.ludocrypt.corners.util.RadioSoundTable;
+import net.ludocrypt.limlib.effects.access.SoundSystemAccess;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 
 public class ServerToClientPackets {
 
@@ -27,19 +29,29 @@ public class ServerToClientPackets {
 			boolean start = buf.readBoolean();
 
 			client.execute(() -> {
-				SoundEvent id = CornerRadioRegistry.getCurrent(client);
-				if (client.world.getBlockState(pos).isOf(CornerBlocks.TUNED_RADIO)) {
-					List<PaintingEntity> closestPaintings = client.world.getEntitiesByClass(PaintingEntity.class, Box.from(Vec3d.of(pos)).expand(16.0D), (entity) -> entity.getVariant().value() instanceof DimensionalPaintingVariant).stream().sorted(Comparator.comparing((entity) -> entity.squaredDistanceTo(Vec3d.of(pos)))).toList();
-					if (!closestPaintings.isEmpty()) {
-						id = CornerRadioRegistry.getCurrent(((DimensionalPaintingVariant) closestPaintings.get(0).getVariant().value()).radioRedirect);
-					}
+				RadioSoundTable id = CornerRadioRegistry.getCurrent(client);
+
+				List<PaintingEntity> closestPaintings = client.world.getEntitiesByClass(PaintingEntity.class, Box.from(Vec3d.of(pos)).expand(16.0D), (entity) -> entity.getVariant().value() instanceof DimensionalPaintingVariant).stream().sorted(Comparator.comparing((entity) -> entity.squaredDistanceTo(Vec3d.of(pos)))).toList();
+				if (!closestPaintings.isEmpty()) {
+					id = CornerRadioRegistry.getCurrent(((DimensionalPaintingVariant) closestPaintings.get(0).getVariant().value()).radioRedirect);
 				}
 
 				SoundSystemAccess.get(((SoundManagerAccessor) client.getSoundManager()).getSoundSystem()).stopSoundsAtPosition(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, null, SoundCategory.RECORDS);
 				((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().remove(pos);
 				if (start) {
 					((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().add(pos);
-					LoopingPositionedSoundInstance.play(client.world, pos, id, SoundCategory.RECORDS, 1.0F, 1.0F, Random.create(), pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
+
+					SoundEvent soundEvent = id.getRadioSound();
+
+					if (client.world.getBlockState(pos).isOf(CornerBlocks.WOODEN_RADIO)) {
+						soundEvent = id.getRadioSound();
+					} else if (client.world.getBlockState(pos).isOf(CornerBlocks.TUNED_RADIO)) {
+						soundEvent = id.getMusicSound();
+					} else if (client.world.getBlockState(pos).isOf(CornerBlocks.BROKEN_RADIO)) {
+						soundEvent = id.getStaticSound();
+					}
+
+					LoopingPositionedSoundInstance.play(client.world, pos, soundEvent, SoundCategory.RECORDS, 1.0F, 1.0F, RandomGenerator.createLegacy(), pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
 				}
 			});
 		});
