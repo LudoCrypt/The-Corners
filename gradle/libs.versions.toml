@@ -6,7 +6,7 @@ quilt_loader = "0.17.1"
 quilted_fabric_api = "4.0.0-beta.7+0.59.0-1.19.2"
 ladysnake_satin = "1.9.0"
 terraformersmc_modmenu = "4.0.6"
-limlib_base = "7.2.0"
+limlib_base = "7.2.2"
 
 midnight_lib = "1.0.0-quilt"
 

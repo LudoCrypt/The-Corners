@@ -40,10 +40,12 @@
 				"id": "minecraft",
 				"versions": ">=1.19.2"
 			},
-			{
-				"id": "satin",
-				"versions": "*"
-			}
+			"satin",
+			"limlib_effects",
+			"limlib_registry",
+			"limlib_render",
+			"limlib_world",
+			"midnightlib"
 		]
 	},
 	"mixin": "corners.mixins.json",

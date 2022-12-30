@@ -5,12 +5,11 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.limlib.effects.render.post.PostEffect;
+import net.ludocrypt.limlib.effects.render.post.holder.ShaderHolder;
 import net.minecraft.util.Identifier;
 
 public class StrongPostEffect extends PostEffect {
@@ -27,10 +26,10 @@ public class StrongPostEffect extends PostEffect {
 	private final Identifier fallbackShaderName;
 
 	@Environment(EnvType.CLIENT)
-	private final Supplier<ManagedShaderEffect> memoizedShaderEffect = Suppliers.memoize(() -> ShaderEffectManager.getInstance().manage(this.getStrongShaderLocation()));
+	private final Supplier<ShaderHolder> memoizedShaderEffect = Suppliers.memoize(() -> new ShaderHolder(this.getStrongShaderLocation()));
 
 	@Environment(EnvType.CLIENT)
-	private final Supplier<ManagedShaderEffect> memoizedFallbackShaderEffect = Suppliers.memoize(() -> ShaderEffectManager.getInstance().manage(this.getFallbackShaderLocation()));
+	private final Supplier<ShaderHolder> memoizedFallbackShaderEffect = Suppliers.memoize(() -> new ShaderHolder(this.getFallbackShaderLocation()));
 
 	public StrongPostEffect(Identifier shaderName, Identifier fallbackShaderName) {
 		this.shaderName = shaderName;
@@ -67,7 +66,7 @@ public class StrongPostEffect extends PostEffect {
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public Supplier<ManagedShaderEffect> getMemoizedShaderEffect() {
+	public Supplier<ShaderHolder> getMemoizedShaderEffect() {
 		return CornerConfig.disableStrongShaders ? memoizedFallbackShaderEffect : memoizedShaderEffect;
 	}
 
