@@ -1,7 +1,6 @@
 package net.ludocrypt.corners.world.chunk;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
@@ -10,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
@@ -39,14 +37,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.structure.StructureSet;
 
 public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 
@@ -71,7 +66,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	private long mazeSeedModifier;
 
 	public HoaryCrossroadsChunkGenerator(BiomeSource biomeSource, int mazeWidth, int mazeHeight, int mazeDilation, long mazeSeedModifier) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_WORLDGEN, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id(CornerWorlds.HOARY_CROSSROADS));
+		super(biomeSource, TheCorners.id(CornerWorlds.HOARY_CROSSROADS));
 		this.mazeWidth = mazeWidth;
 		this.mazeHeight = mazeHeight;
 		this.mazeDilation = mazeDilation;
@@ -92,9 +87,21 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		return CompletableFuture.completedFuture(chunk);
 	}
 
+	/**
+	 * Create a new solved maze, with the starting and ending points based on a
+	 * bigger maze called grandMaze.
+	 * 
+	 * @param mazePos the position of the maze
+	 * @param width   width of the maze
+	 * @param height  height of the maze
+	 * @param random  generator
+	 * @return MazeComponent
+	 */
 	public MazeComponent newMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
+		// Find the position of the grandMaze that contains the current maze
 		BlockPos grandMazePos = new BlockPos(mazePos.getX() - mazeGenerator.mod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thickness)), 0, mazePos.getZ() - mazeGenerator.mod(mazePos.getZ(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thickness)));
 
+		// Check if the grandMaze was already generated, if not generate it
 		MazeComponent grandMaze;
 		if (mazeGenerator.grandMazeMap.containsKey(grandMazePos)) {
 			grandMaze = mazeGenerator.grandMazeMap.get(grandMazePos);
@@ -104,17 +111,24 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 			mazeGenerator.grandMazeMap.put(grandMazePos, grandMaze);
 		}
 
+		// Get the cell of the grandMaze that corresponds to the current maze
 		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / mazeGenerator.thickness) / mazeGenerator.width) / mazeGenerator.dilation, (((mazePos.getZ() - grandMazePos.getZ()) / mazeGenerator.thickness) / height) / mazeGenerator.dilation);
 
 		Vec2i start = null;
 		List<Vec2i> endings = Lists.newArrayList();
 
+		// Check if the origin cell has an opening in the south or it's on the edge of
+		// the grandMaze, if so set the starting point to the middle of that side, if it
+		// has not been set.
 		if (originCell.isSouth() || originCell.getPosition().getX() == 0) {
 			if (start == null) {
 				start = new Vec2i(0, (mazeGenerator.height / mazeGenerator.dilation) / 2);
 			}
 		}
 
+		// Check if the origin cell has an opening in the west or it's on the edge of
+		// the grandMaze, if so set the starting point to the middle of that side, if it
+		// has not been set.
 		if (originCell.isWest() || originCell.getPosition().getY() == 0) {
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, 0);
@@ -123,6 +137,9 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 			}
 		}
 
+		// Check if the origin cell has an opening in the north or it's on the edge of
+		// the grandMaze, if so set the starting point to the middle of that side, if it
+		// has not been set. Else add an ending point to the middle of that side.
 		if (originCell.isNorth() || originCell.getPosition().getX() == (mazeGenerator.width / mazeGenerator.dilation) - 1) {
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) - 1, (mazeGenerator.height / mazeGenerator.dilation) / 2);
@@ -131,6 +148,9 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 			}
 		}
 
+		// Check if the origin cell has an opening in the east or it's on the edge of
+		// the grandMaze, if so set the starting point to the middle of that side, if it
+		// has not been set. Else add an ending point to the middle of that side.
 		if (originCell.isEast() || originCell.getPosition().getY() == (mazeGenerator.height / mazeGenerator.dilation) - 1) {
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, (mazeGenerator.height / mazeGenerator.dilation) - 1);
@@ -139,16 +159,22 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 			}
 		}
 
-		// Allow Grand Nubs
+		// If the origin cell is a dead end, add a random ending point in the middle of
+		// the maze. This ensures there is always somewhere to go in a dead end.
 		if (endings.isEmpty()) {
 			endings.add(new Vec2i(random.nextInt((mazeGenerator.width / mazeGenerator.dilation) - 2) + 1, random.nextInt((mazeGenerator.height / mazeGenerator.dilation) - 2) + 1));
 		}
 
+		// Create a new maze.
 		MazeComponent mazeToSolve = new DepthFirstMaze(mazeGenerator.width / mazeGenerator.dilation, mazeGenerator.height / mazeGenerator.dilation, random);
 		mazeToSolve.generateMaze();
+
+		// Create a maze solver and solve the maze using the starting point and ending
+		// points.
 		DepthFirstMazeSolver solvedMaze = new DepthFirstMazeSolver(mazeToSolve, start, endings, random);
 		solvedMaze.generateMaze();
 
+		// Create a scaled maze using the dilation.
 		MazeComponent maze = new DilateMaze(solvedMaze, mazeGenerator.dilation);
 		maze.generateMaze();
 

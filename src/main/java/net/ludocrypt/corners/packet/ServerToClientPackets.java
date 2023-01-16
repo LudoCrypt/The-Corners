@@ -41,14 +41,14 @@ public class ServerToClientPackets {
 				if (start) {
 					((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().add(pos);
 
-					SoundEvent soundEvent = id.getRadioSound();
+					SoundEvent soundEvent = id.getRadioSound().value();
 
 					if (client.world.getBlockState(pos).isOf(CornerBlocks.WOODEN_RADIO)) {
-						soundEvent = id.getRadioSound();
+						soundEvent = id.getRadioSound().value();
 					} else if (client.world.getBlockState(pos).isOf(CornerBlocks.TUNED_RADIO)) {
-						soundEvent = id.getMusicSound();
+						soundEvent = id.getMusicSound().value();
 					} else if (client.world.getBlockState(pos).isOf(CornerBlocks.BROKEN_RADIO)) {
-						soundEvent = id.getStaticSound();
+						soundEvent = id.getStaticSound().value();
 					}
 
 					LoopingPositionedSoundInstance.play(client.world, pos, soundEvent, SoundCategory.RECORDS, 1.0F, 1.0F, RandomGenerator.createLegacy(), pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);

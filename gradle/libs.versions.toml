@@ -1,14 +1,14 @@
 [versions]
-minecraft = "1.19.2"
-quilt_mappings = "1.19.2+build.3"
-quilt_loader = "0.17.1"
+minecraft = "1.19.3"
+quilt_mappings = "1.19.3+build.16"
+quilt_loader = "0.17.8"
 
-quilted_fabric_api = "4.0.0-beta.7+0.59.0-1.19.2"
-ladysnake_satin = "1.9.0"
-terraformersmc_modmenu = "4.0.6"
-limlib_base = "7.2.2"
+quilted_fabric_api = "5.0.0-alpha.7+0.70.0-1.19.3"
+ladysnake_satin = "1.10.0"
+terraformersmc_modmenu = "5.0.2"
+limlib_base = "7.3.5"
 
-midnight_lib = "1.0.0-quilt"
+midnight_lib = "1.1.0-quilt"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }

@@ -11,12 +11,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	public static DimensionalPaintingEntity create(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
 		if (variant instanceof DimensionalPaintingVariant) {
 			DimensionalPaintingEntity entity = create(world, pos);
-			((PaintingEntityAccessor) entity).callSetVariant(Registry.PAINTING_VARIANT.getHolder(Registry.PAINTING_VARIANT.getKey(variant).get()).get());
+			((PaintingEntityAccessor) entity).callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
 			entity.setFacing(direction);
 			return entity;
 		}
@@ -46,7 +46,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	public static PaintingEntity createRegular(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
 		PaintingEntity entity = new PaintingEntity(EntityType.PAINTING, world);
 		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-		((PaintingEntityAccessor) entity).callSetVariant(Registry.PAINTING_VARIANT.getHolder(Registry.PAINTING_VARIANT.getKey(variant).get()).get());
+		((PaintingEntityAccessor) entity).callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
 		((AbstractDecorationEntityAccessor) entity).callSetFacing(direction);
 		return entity;
 	}
@@ -70,7 +70,7 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 					ServerWorld world = player.getServer().getWorld(variant.dimension.apply(spe, this));
 
 					TeleportTarget teleportTarget = variant.teleportTarget.apply(spe, this);
-					LimlibUtil.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL, 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+					LimlibUtil.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
 				}
 			}
 		}

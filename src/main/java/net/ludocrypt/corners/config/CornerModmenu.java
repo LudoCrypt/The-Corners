@@ -1,13 +1,13 @@
 package net.ludocrypt.corners.config;
 
+import org.quiltmc.loader.api.minecraft.ClientOnly;
+
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import eu.midnightdust.lib.config.MidnightConfig;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class CornerModmenu implements ModMenuApi {
 
 	@Override

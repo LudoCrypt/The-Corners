@@ -11,15 +11,14 @@ import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBiomes;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
-import net.ludocrypt.corners.init.CornerItems;
 import net.ludocrypt.corners.init.CornerModelRenderers;
 import net.ludocrypt.corners.init.CornerPaintings;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.limlib.effects.render.post.PostEffect;
+import net.ludocrypt.limlib.effects.post.PostEffect;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class TheCorners implements ModInitializer {
 
@@ -30,7 +29,6 @@ public class TheCorners implements ModInitializer {
 		MidnightConfig.init("the_corners", CornerConfig.class);
 		CornerPaintings.init();
 		CornerBlocks.init();
-		CornerItems.init();
 		CornerBiomes.init();
 		CornerEntities.init();
 		CornerSoundEvents.init();

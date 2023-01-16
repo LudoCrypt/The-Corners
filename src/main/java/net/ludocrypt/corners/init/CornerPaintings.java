@@ -7,11 +7,12 @@ import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
 import net.ludocrypt.corners.util.DimensionalPaintingVariant;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class CornerPaintings {
@@ -38,7 +39,7 @@ public class CornerPaintings {
 	}
 
 	public static <T extends PaintingVariant> T get(String id, T painting) {
-		return Registry.register(Registry.PAINTING_VARIANT, TheCorners.id(id), painting);
+		return Registry.register(Registries.PAINTING_VARIANT, TheCorners.id(id), painting);
 	}
 
 }

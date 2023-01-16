@@ -3,7 +3,7 @@ package net.ludocrypt.corners.init;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.client.render.SkyboxRenderer;
 import net.ludocrypt.limlib.render.special.SpecialModelRenderer;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class CornerModelRenderers {
 

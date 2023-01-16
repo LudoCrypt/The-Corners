@@ -1,7 +1,6 @@
 package net.ludocrypt.corners.world.chunk;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -9,7 +8,6 @@ import java.util.function.Function;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
@@ -24,14 +22,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.structure.StructureSet;
 
 public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 
@@ -42,7 +37,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	});
 
 	public YearningCanalChunkGenerator(BiomeSource biomeSource) {
-		super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_WORLDGEN, Lifecycle.stable(), null), Optional.empty(), biomeSource, TheCorners.id(CornerWorlds.YEARNING_CANAL));
+		super(biomeSource, TheCorners.id(CornerWorlds.YEARNING_CANAL));
 	}
 
 	@Override

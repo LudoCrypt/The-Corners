@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.util.RadioSoundTable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.world.World;
 
 public class CornerRadioRegistry {

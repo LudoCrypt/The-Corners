@@ -104,15 +104,4 @@ public class RailingBlock extends FenceBlock {
 		return defaultState;
 	}
 
-	@Override
-	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
-		if (state.get(RailingBlock.LAYERS) > 0) {
-			if (stateFrom.getBlock() instanceof RailingBlock) {
-				return stateFrom.get(RailingBlock.LAYERS) >= state.get(RailingBlock.LAYERS);
-			}
-		}
-
-		return false;
-	}
-
 }

@@ -12,11 +12,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @Mixin(Entity.class)
@@ -30,7 +30,7 @@ public abstract class EntityMixin {
 		if (!player.world.isClient) {
 			if (((Entity) (Object) this)instanceof PaintingEntity painting) {
 				if (!(((Entity) (Object) this) instanceof DimensionalPaintingEntity)) {
-					if (Registry.PAINTING_VARIANT.getId(painting.getVariant().value()).getNamespace().equals("corners")) {
+					if (Registries.PAINTING_VARIANT.getId(painting.getVariant().value()).getNamespace().equals("corners")) {
 						if (player.getStackInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
 							DimensionalPaintingEntity dimensional = DimensionalPaintingEntity.create(painting.world, painting.getDecorationBlockPos(), painting.getHorizontalFacing(), painting.getVariant().value());
 							painting.world.spawnEntity(dimensional);
