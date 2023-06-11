@@ -30,6 +30,7 @@ public abstract class BackgroundRendererMixin {
 			float fogScalar = (float) MathHelper.clamp(Math.atan(((cameraHeight - 263.0F) * Math.tan(1)) / 263.0F) + 1, 0.0F, 1.0F);
 			RenderSystem.setShaderFogStart(fogStart * fogScalar);
 			RenderSystem.setShaderFogEnd(fogEnd * fogScalar);
+			RenderSystem.setShaderFogColor(0.625F, 0.625F, 0.625F);
 		}
 	}
 

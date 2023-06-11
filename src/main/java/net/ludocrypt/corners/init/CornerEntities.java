@@ -12,7 +12,8 @@ import net.minecraft.registry.Registry;
 
 public class CornerEntities {
 
-	public static final EntityType<DimensionalPaintingEntity> DIMENSIONAL_PAINTING_ENTITY = get("dimensional_painting", QuiltEntityTypeBuilder.create().entityFactory(DimensionalPaintingEntity::new).setDimensions(new EntityDimensions(0.5F, 0.5F, false)).maxBlockTrackingRange(10).trackingTickInterval(Integer.MAX_VALUE).build());
+	public static final EntityType<DimensionalPaintingEntity> DIMENSIONAL_PAINTING_ENTITY = get("dimensional_painting", QuiltEntityTypeBuilder.create().entityFactory(DimensionalPaintingEntity::new)
+			.setDimensions(new EntityDimensions(0.5F, 0.5F, false)).maxBlockTrackingRange(10).trackingTickInterval(Integer.MAX_VALUE).build());
 
 	public static void init() {
 

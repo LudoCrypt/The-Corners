@@ -15,6 +15,7 @@
 	"client": [
 		"BackgroundRendererMixin",
 		"GameRendererAccessor",
+		"MinecraftClientMixin",
 		"MinecraftClientAccessor",
 		"MusicTrackerMixin",
 		"SoundManagerAccessor"

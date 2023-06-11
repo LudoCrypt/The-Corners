@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.config.CornerConfig;
-import net.ludocrypt.limlib.effects.post.PostEffect;
+import net.ludocrypt.limlib.api.effects.post.PostEffect;
 import net.minecraft.util.Identifier;
 
 public class StrongPostEffect extends PostEffect {
@@ -42,7 +42,7 @@ public class StrongPostEffect extends PostEffect {
 
 	@Override
 	public Identifier getShaderLocation() {
-		return CornerConfig.disableStrongShaders ? this.getFallbackShaderLocation() : this.getStrongShaderLocation();
+		return CornerConfig.get().disableStrongShaders ? this.getFallbackShaderLocation() : this.getStrongShaderLocation();
 	}
 
 	public Identifier getStrongShaderLocation() {

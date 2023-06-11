@@ -42,14 +42,9 @@ dependencies {
 
 	modImplementation libs.terraformersmc.modmenu
 
-	includeMod libs.ludocrypt.limlib.effects
-	includeMod libs.ludocrypt.limlib.registry
-	includeMod libs.ludocrypt.limlib.render
-	includeMod libs.ludocrypt.limlib.world
-
-	includeMod libs.midnight.lib
-
-	includeMod libs.ladysnake.satin
+	includeMod libs.ludocrypt.limlib
+	includeMod libs.ludocrypt.specialmodels
+	includeMod libs.shedaniel.cloth
 }
 
 def includeMod(var dep) {

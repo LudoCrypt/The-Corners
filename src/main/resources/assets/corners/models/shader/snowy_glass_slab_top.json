@@ -1,0 +1,8 @@
+{
+	"parent": "minecraft:block/slab_top",
+	"textures": {
+		"bottom": "corners:block/snowy_glass_pane",
+		"side": "corners:block/snowy_glass_pane",
+		"top": "corners:block/snowy_glass_pane"
+	}
+}

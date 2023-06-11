@@ -4,7 +4,7 @@
 		"pane": "minecraft:block/glass",
 		"edge": "minecraft:block/glass_pane_top"
 	},
-	"limlib_extra": {
+	"specialmodels": {
 		"corners:snowy_skybox": "corners:shader/snowy_glass_pane_side_alt"
 	}
 }

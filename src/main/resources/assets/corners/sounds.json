@@ -51,6 +51,18 @@
 			}
 		]
 	},
+	"music.communal_corridors.christmas": {
+		"sounds": [
+			{
+				"name": "corners:music/communal_corridors/polar_winter",
+				"stream": true
+			},
+			{
+				"name": "corners:music/communal_corridors/snowball_pelt",
+				"stream": true
+			}
+		]
+	},
 	"biome.communal_corridors.loop": {
 		"sounds": [
 			{

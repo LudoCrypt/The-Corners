@@ -16,7 +16,7 @@ public class TheCornersClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient(ModContainer mod) {
 		ServerToClientPackets.manageServerToClientPackets();
-		BlockRenderLayerMap.put(RenderLayer.getCutout(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS);
+		BlockRenderLayerMap.put(RenderLayer.getCutout(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS, CornerBlocks.SNOWY_GLASS_SLAB);
 		EntityRendererRegistryImpl.register(CornerEntities.DIMENSIONAL_PAINTING_ENTITY, PaintingEntityRenderer::new);
 	}
 

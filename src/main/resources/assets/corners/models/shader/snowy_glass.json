@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"all": "corners:sky/snow"
+		"all": "corners:block/snowy_glass_pane"
 	}
 }

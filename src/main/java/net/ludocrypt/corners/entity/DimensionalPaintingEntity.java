@@ -6,7 +6,7 @@ import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.mixin.AbstractDecorationEntityAccessor;
 import net.ludocrypt.corners.mixin.PaintingEntityAccessor;
 import net.ludocrypt.corners.util.DimensionalPaintingVariant;
-import net.ludocrypt.limlib.registry.util.LimlibUtil;
+import net.ludocrypt.limlib.api.LimlibTravelling;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -62,15 +62,15 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	@Override
 	public void onPlayerCollision(PlayerEntity player) {
 		super.onPlayerCollision(player);
-		if (this.getVariant().value()instanceof DimensionalPaintingVariant variant) {
+		if (this.getVariant().value() instanceof DimensionalPaintingVariant variant) {
 			Box box = this.getBoundingBox().expand(0.3D);
 			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
 
-				if (this.world instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
+				if (this.getWorld() instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
 					ServerWorld world = player.getServer().getWorld(variant.dimension.apply(spe, this));
 
 					TeleportTarget teleportTarget = variant.teleportTarget.apply(spe, this);
-					LimlibUtil.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+					LimlibTravelling.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
 				}
 			}
 		}

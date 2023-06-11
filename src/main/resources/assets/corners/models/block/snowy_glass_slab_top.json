@@ -1,0 +1,11 @@
+{
+	"parent": "minecraft:block/slab_top",
+	"textures": {
+		"bottom": "minecraft:block/glass",
+		"side": "corners:block/glass_slab",
+		"top": "minecraft:block/glass"
+	},
+	"specialmodels": {
+		"corners:snowy_skybox": "corners:shader/snowy_glass_slab_top"
+	}
+}

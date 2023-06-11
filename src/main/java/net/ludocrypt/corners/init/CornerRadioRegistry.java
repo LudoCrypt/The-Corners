@@ -12,15 +12,18 @@ import net.minecraft.world.World;
 
 public class CornerRadioRegistry {
 
-	public static final SimpleRegistry<RadioSoundTable> RADIO_REGISTRY = FabricRegistryBuilder.createDefaulted(RadioSoundTable.class, TheCorners.id("radio_registry"), TheCorners.id("default_radio")).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+	public static final RegistryKey<Registry<RadioSoundTable>> RADIO_REGISTRY_KEY = RegistryKey.ofRegistry(TheCorners.id("radio_registry"));
+	public static final SimpleRegistry<RadioSoundTable> RADIO_REGISTRY = FabricRegistryBuilder.createDefaulted(RADIO_REGISTRY_KEY, TheCorners.id("default_radio")).attribute(RegistryAttribute.SYNCED)
+			.buildAndRegister();
 	public static final RadioSoundTable DEFAULT = new RadioSoundTable(CornerSoundEvents.RADIO_DEFAULT_STATIC, CornerSoundEvents.RADIO_DEFAULT_STATIC, CornerSoundEvents.RADIO_DEFAULT_STATIC);
 
 	public static void init() {
 		Registry.register(RADIO_REGISTRY, TheCorners.id("default_radio"), DEFAULT);
 
 		getRadio("yearning_canal", new RadioSoundTable(CornerSoundEvents.RADIO_YEARNING_CANAL_MUSIC, CornerSoundEvents.RADIO_YEARNING_CANAL_STATIC, CornerSoundEvents.RADIO_YEARNING_CANAL));
-		getRadio("communal_corridors", new RadioSoundTable(CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS));
-		getRadio("hoary_crossroads", new RadioSoundTable(CornerSoundEvents.RADIO_HOARY_CROSSROADS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_HOARY_CROSSROADS));
+		getRadio("communal_corridors",
+				new RadioSoundTable(CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS));
+		getRadio("hoary_crossroads", new RadioSoundTable(CornerSoundEvents.RADIO_HOARY_CROSSROADS_MUSIC, CornerSoundEvents.RADIO_HOARY_CROSSROADS_STATIC, CornerSoundEvents.RADIO_HOARY_CROSSROADS));
 	}
 
 	public static RadioSoundTable register(RegistryKey<World> world, RadioSoundTable sound) {

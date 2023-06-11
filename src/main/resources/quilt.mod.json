@@ -25,12 +25,7 @@
 			"init": "net.ludocrypt.corners.TheCorners",
 			"client_init": "net.ludocrypt.corners.client.TheCornersClient",
 			"modmenu": "net.ludocrypt.corners.config.CornerModmenu",
-			"limlib:dimension_bootstrap": "net.ludocrypt.corners.init.CornerWorlds",
-			"limlib:registry_loader_bootstrap": "net.ludocrypt.corners.init.CornerWorlds",
-			"limlib:sound_effects_bootstrap": "net.ludocrypt.corners.init.CornerWorlds",
-			"limlib:skybox_bootstrap": "net.ludocrypt.corners.init.CornerWorlds",
-			"limlib:dimension_effects_bootstrap": "net.ludocrypt.corners.init.CornerWorlds",
-			"limlib:post_effect_bootstrap": "net.ludocrypt.corners.init.CornerWorlds"
+			"limlib:registrar": "net.ludocrypt.corners.init.CornerWorlds"
 		},
 		"depends": [
 			{
@@ -45,12 +40,9 @@
 				"id": "minecraft",
 				"versions": ">=1.19.2"
 			},
-			"satin",
-			"limlib_effects",
-			"limlib_registry",
-			"limlib_render",
-			"limlib_world",
-			"midnightlib"
+			"limlib",
+			"cloth-config",
+			"specialmodels"
 		]
 	},
 	"mixin": "corners.mixins.json",

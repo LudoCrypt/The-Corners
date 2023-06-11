@@ -12,8 +12,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerWorlds;
-import net.ludocrypt.limlib.world.chunk.AbstractNbtChunkGenerator;
-import net.minecraft.server.world.ChunkHolder.Unloaded;
+import net.ludocrypt.limlib.api.world.chunk.AbstractNbtChunkGenerator;
+import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureTemplateManager;
@@ -26,6 +26,7 @@ import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.RandomState;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
@@ -46,7 +47,9 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> fullChunkConverter, List<Chunk> chunks, Chunk chunk, boolean regenerate) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator,
+			StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> fullChunkConverter,
+			List<Chunk> chunks, Chunk chunk) {
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
 		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
@@ -56,8 +59,11 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 			Random yRandom = new Random(region.getSeed() + MathHelper.hashCode(yi * 2, yi * 3, yi));
 			boolean hallwaySpawnsAtHeight = (yRandom.nextDouble() < 0.875D && yRandom.nextBoolean()) && (yi != 0 && yi != max - 1);
 			Direction dir = Direction.fromHorizontal(yRandom.nextInt(4));
-			BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
-			BlockPos offsetPos = pos.add((dir.equals(Direction.NORTH) ? 6 : dir.equals(Direction.EAST) ? 12 : dir.equals(Direction.SOUTH) ? 6 : -10), (dir.equals(Direction.NORTH) ? 13 : dir.equals(Direction.EAST) ? 23 : dir.equals(Direction.SOUTH) ? 22 : 15), (dir.equals(Direction.NORTH) ? -10 : dir.equals(Direction.EAST) ? 6 : dir.equals(Direction.SOUTH) ? 12 : 6));
+			BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90
+					: dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
+			BlockPos offsetPos = pos.add((dir.equals(Direction.NORTH) ? 6 : dir.equals(Direction.EAST) ? 12 : dir.equals(Direction.SOUTH) ? 6 : -10),
+					(dir.equals(Direction.NORTH) ? 13 : dir.equals(Direction.EAST) ? 23 : dir.equals(Direction.SOUTH) ? 22 : 15),
+					(dir.equals(Direction.NORTH) ? -10 : dir.equals(Direction.EAST) ? 6 : dir.equals(Direction.SOUTH) ? 12 : 6));
 			if (pos.getX() == 0 && pos.getZ() == 0) {
 				if (yi == 0) {
 					generateNbt(region, pos, "yearning_canal_bottom");
@@ -75,7 +81,8 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 				}
 			}
 			if (hallwaySpawnsAtHeight) {
-				if ((dir.equals(Direction.NORTH) && chunkPos.x == 0 && chunkPos.z <= 0) || (dir.equals(Direction.WEST) && chunkPos.z == 0 && chunkPos.x <= 0) || (dir.equals(Direction.SOUTH) && chunkPos.x == 0 && chunkPos.z >= 1) || (dir.equals(Direction.EAST) && chunkPos.z == 0 && chunkPos.x >= 1)) {
+				if ((dir.equals(Direction.NORTH) && chunkPos.x == 0 && chunkPos.z <= 0) || (dir.equals(Direction.WEST) && chunkPos.z == 0 && chunkPos.x <= 0)
+						|| (dir.equals(Direction.SOUTH) && chunkPos.x == 0 && chunkPos.z >= 1) || (dir.equals(Direction.EAST) && chunkPos.z == 0 && chunkPos.x >= 1)) {
 					Random hallRandom = new Random(region.getSeed() + MathHelper.hashCode(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ()));
 					generateNbt(region, offsetPos.add(0, 4, 0), "yearning_canal_hallway_" + (hallRandom.nextInt(27) == 0 ? (hallRandom.nextInt(13) + 1) : 1), rotation);
 				}
@@ -114,6 +121,11 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 	@Override
 	public int getMinimumY() {
 		return 0;
+	}
+
+	@Override
+	public void method_40450(List<String> list, RandomState randomState, BlockPos pos) {
+
 	}
 
 }

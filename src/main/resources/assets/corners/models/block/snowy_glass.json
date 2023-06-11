@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/glass",
-	"limlib_extra": {
+	"specialmodels": {
 		"corners:snowy_skybox": "corners:shader/snowy_glass"
 	}
 }

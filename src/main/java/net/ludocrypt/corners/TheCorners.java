@@ -5,7 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
-import eu.midnightdust.lib.config.MidnightConfig;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.ludocrypt.corners.client.render.StrongPostEffect;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.corners.init.CornerBiomes;
@@ -16,7 +17,7 @@ import net.ludocrypt.corners.init.CornerPaintings;
 import net.ludocrypt.corners.init.CornerRadioRegistry;
 import net.ludocrypt.corners.init.CornerSoundEvents;
 import net.ludocrypt.corners.packet.ClientToServerPackets;
-import net.ludocrypt.limlib.effects.post.PostEffect;
+import net.ludocrypt.limlib.api.effects.post.PostEffect;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -26,7 +27,7 @@ public class TheCorners implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
-		MidnightConfig.init("the_corners", CornerConfig.class);
+		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);
 		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerBiomes.init();

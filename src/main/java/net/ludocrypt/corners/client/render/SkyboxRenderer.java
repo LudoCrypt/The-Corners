@@ -6,7 +6,7 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.render.special.SpecialModelRenderer;
+import net.ludocrypt.specialmodels.api.SpecialModelRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;

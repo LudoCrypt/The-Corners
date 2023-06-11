@@ -22,9 +22,6 @@ import net.minecraft.util.math.Vec3d;
 public class MusicTrackerMixin implements MusicTrackerAccess {
 
 	@Shadow
-	private int timeUntilNextSong;
-
-	@Shadow
 	@Final
 	private MinecraftClient client;
 
@@ -34,7 +31,8 @@ public class MusicTrackerMixin implements MusicTrackerAccess {
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I", ordinal = 1))
 	private int corners$tick$preventMusic(int time, int max) {
 		int in = Math.min(time, max);
-		if (CornerConfig.delayMusicWithRadio && !this.getRadioPositions().isEmpty() && !this.getRadioPositions().stream().filter((pos) -> client.player != null && client.player.squaredDistanceTo(Vec3d.ofCenter(pos)) < Math.pow(24.0D, 2.0D)).toList().isEmpty()) {
+		if (CornerConfig.get().delayMusicWithRadio && !this.getRadioPositions().isEmpty()
+				&& !this.getRadioPositions().stream().filter((pos) -> client.player != null && client.player.squaredDistanceTo(Vec3d.ofCenter(pos)) < Math.pow(24.0D, 2.0D)).toList().isEmpty()) {
 			if (client.world == null) {
 				this.getRadioPositions().clear();
 			}

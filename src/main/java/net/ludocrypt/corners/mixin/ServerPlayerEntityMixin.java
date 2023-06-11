@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.authlib.GameProfile;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.limlib.registry.util.LimlibUtil;
+import net.ludocrypt.corners.advancements.AdvancementHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,8 +23,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void corners$tick(CallbackInfo ci) {
-		if (this.world.getRegistryKey().getValue().getNamespace().equals("corners")) {
-			LimlibUtil.grantAdvancement(this, TheCorners.id("root"));
+		if (this.getWorld().getRegistryKey().getValue().getNamespace().equals("corners")) {
+			AdvancementHelper.grantAdvancement(this, TheCorners.id("root"));
 		}
 	}
 

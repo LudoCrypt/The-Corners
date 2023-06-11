@@ -28,8 +28,14 @@ import net.minecraft.world.WorldAccess;
 public class RailingBlock extends FenceBlock {
 
 	public static final IntProperty LAYERS = IntProperty.of("layers", 0, 8);
-	protected static final VoxelShape[] LAYERS_TO_OUTLINE = new VoxelShape[] { VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
-	protected static final VoxelShape[] LAYERS_TO_COLLISION = new VoxelShape[] { VoxelShapes.empty(), VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
+	protected static final VoxelShape[] LAYERS_TO_OUTLINE = new VoxelShape[] { VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
+	protected static final VoxelShape[] LAYERS_TO_COLLISION = new VoxelShape[] { VoxelShapes.empty(), VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
 	protected final VoxelShape[] boundingShapes;
 
 	public RailingBlock(Settings settings) {
@@ -50,7 +56,8 @@ public class RailingBlock extends FenceBlock {
 
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.union(this.boundingShapes[this.getShapeIndex(state)], Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D), LAYERS_TO_OUTLINE[state.get(LAYERS)]);
+		return VoxelShapes.union(this.boundingShapes[this.getShapeIndex(state)], Block.createCuboidShape(6.0D, 14.0D, 6.0D, 10.0D, 16.0D, 10.0D),
+				Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 13.0D, 10.0D), Block.createCuboidShape(7.0D, 13.0D, 7.0D, 9.0D, 14.0D, 9.0D), LAYERS_TO_OUTLINE[state.get(LAYERS)]);
 	}
 
 	@Override

@@ -1,14 +1,14 @@
 [versions]
-minecraft = "1.19.3"
-quilt_mappings = "1.19.3+build.16"
-quilt_loader = "0.17.8"
+minecraft = "1.20"
+quilt_mappings = "1.20+build.1"
+quilt_loader = "0.18.10"
 
-quilted_fabric_api = "5.0.0-alpha.7+0.70.0-1.19.3"
-ladysnake_satin = "1.10.0"
-terraformersmc_modmenu = "5.0.2"
-limlib_base = "7.3.5"
+quilted_fabric_api = "7.0.0+0.83.0-1.20"
+terraformersmc_modmenu = "7.0.0"
+limlib = "8.1.1"
+specialmodels = "1.1.2"
 
-midnight_lib = "1.1.0-quilt"
+cloth = "11.0.99"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -18,15 +18,12 @@ quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loade
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
 quilted_fabric_api_deprecated = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api-deprecated", version.ref = "quilted_fabric_api" }
 
-ladysnake_satin = { module = "io.github.ladysnake:satin", version.ref = "ladysnake_satin" }
 terraformersmc_modmenu = { module = "com.terraformersmc:modmenu", version.ref = "terraformersmc_modmenu" }
 
-ludocrypt_limlib_effects = { module = "com.github.LudoCrypt.Liminal-Library:limlib_effects", version.ref = "limlib_base" }
-ludocrypt_limlib_registry = { module = "com.github.LudoCrypt.Liminal-Library:limlib_registry", version.ref = "limlib_base" }
-ludocrypt_limlib_render = { module = "com.github.LudoCrypt.Liminal-Library:limlib_render", version.ref = "limlib_base" }
-ludocrypt_limlib_world = { module = "com.github.LudoCrypt.Liminal-Library:limlib_world", version.ref = "limlib_base" }
+ludocrypt_limlib = { module = "com.github.LudoCrypt:Liminal-Library", version.ref = "limlib" }
+ludocrypt_specialmodels = { module = "com.github.LudoCrypt:Special-Models", version.ref = "specialmodels" }
 
-midnight_lib = { module = "maven.modrinth:midnightlib", version.ref = "midnight_lib" }
+shedaniel_cloth = { module = "me.shedaniel.cloth:cloth-config-fabric", version.ref = "cloth" }
 
 [bundles]
 quilted_fabric_api = ["quilted_fabric_api", "quilted_fabric_api_deprecated"]

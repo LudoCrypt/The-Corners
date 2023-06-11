@@ -4,8 +4,8 @@
 		"srcrgb": "srcalpha",
 		"dstrgb": "1-srcalpha"
 	},
-	"vertex": "rendertype_corners_skybox",
-	"fragment": "rendertype_corners_skybox",
+	"vertex": "rendertype_corners_christmas",
+	"fragment": "rendertype_corners_christmas",
 	"attributes": [
 		"Position",
 		"Color",
@@ -19,19 +19,31 @@
 			"name": "Sampler0"
 		},
 		{
-			"name": "Sampler1"
+			"name": "Twinkle0"
 		},
 		{
-			"name": "Sampler2"
+			"name": "Twinkle1"
 		},
 		{
-			"name": "Sampler3"
+			"name": "Twinkle2"
 		},
 		{
-			"name": "Sampler4"
+			"name": "Light0"
 		},
 		{
-			"name": "Sampler5"
+			"name": "Light1"
+		},
+		{
+			"name": "Light2"
+		},
+		{
+			"name": "Light3"
+		},
+		{
+			"name": "Light4"
+		},
+		{
+			"name": "Light5"
 		}
 	],
 	"uniforms": [
@@ -166,7 +178,172 @@
 			]
 		},
 		{
+			"name": "ScreenSize",
+			"type": "float",
+			"count": 2,
+			"values": [
+				1.0,
+				1.0
+			]
+		},
+		{
 			"name": "renderAsEntity",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "christmas",
+			"type": "int",
+			"count": 1,
+			"values": [
+				0
+			]
+		},
+		{
+			"name": "leftTint0",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint0",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "leftTint1",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint1",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "leftTint2",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint2",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "leftTint3",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint3",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "leftTint4",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint4",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "leftTint5",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "rightTint5",
+			"type": "float",
+			"count": 4,
+			"values": [
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			]
+		},
+		{
+			"name": "gaze",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
+			]
+		},
+		{
+			"name": "GameTime",
 			"type": "float",
 			"count": 1,
 			"values": [

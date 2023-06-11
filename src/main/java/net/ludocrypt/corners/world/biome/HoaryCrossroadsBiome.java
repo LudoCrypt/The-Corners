@@ -22,7 +22,7 @@ public class HoaryCrossroadsBiome {
 		biomeEffects.skyColor(16777215);
 		biomeEffects.waterColor(9681663);
 		biomeEffects.waterFogColor(7243242);
-		biomeEffects.fogColor(16777215);
+		biomeEffects.fogColor(13224908);
 		biomeEffects.grassColor(6796479);
 		biomeEffects.loopSound(CornerSoundEvents.BIOME_LOOP_HOARY_CROSSROADS);
 		BiomeEffects effects = biomeEffects.build();
@@ -31,7 +31,7 @@ public class HoaryCrossroadsBiome {
 		biome.generationSettings(generationSettings.build());
 		biome.effects(effects);
 
-		biome.precipitation(Biome.Precipitation.SNOW);
+		biome.hasPrecipitation(true);
 
 		biome.temperature(-1.0F);
 		biome.downfall(1.0F);

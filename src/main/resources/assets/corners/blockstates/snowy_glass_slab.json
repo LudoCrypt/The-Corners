@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"type=bottom": {
+			"model": "corners:block/snowy_glass_slab"
+		},
+		"type=double": {
+			"model": "corners:block/snowy_glass"
+		},
+		"type=top": {
+			"model": "corners:block/snowy_glass_slab_top"
+		}
+	}
+}
