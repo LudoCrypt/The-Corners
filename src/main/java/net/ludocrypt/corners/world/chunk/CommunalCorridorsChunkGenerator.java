@@ -82,31 +82,6 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		return CODEC;
 	}
 
-//	@Override
-//	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator,
-//			StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> fullChunkConverter,
-//			List<Chunk> chunks, Chunk chunk) {
-//		ChunkPos chunkPos = chunk.getPos();
-//		Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
-//
-//		if (!(fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
-//			for (int x = 0; x < 2; x++) {
-//				for (int z = 0; z < 2; z++) {
-//					Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
-//					if (random.nextDouble() < 0.2375625D) {
-//						generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_" + (random.nextInt(5) + 1));
-//					} else {
-//						generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_decorated_" + (random.nextInt(22) + 1));
-//					}
-//				}
-//			}
-//		} else {
-//			generateNbt(region, chunkPos.getStartPos().add(0, 1, 0), "communal_corridors_decorated_big_" + (fullChunkRandom.nextInt(3) + 1));
-//		}
-//
-//		return CompletableFuture.completedFuture(chunk);
-//	}
-
 	/**
 	 * Create a new solved maze, with the starting and ending points based on a
 	 * bigger maze called grandMaze.
@@ -272,8 +247,8 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 			RandomGenerator fullChunkRandom = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - (pos.getX() % 16), pos.getZ() - (pos.getZ() % 16), -69420));
 
 			if ((fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
-				if (fits(state.getPosition().getX() + 1, state.getPosition().getY(), maze) && fits(state.getPosition().getX(), state.getPosition().getY() + 1, maze)
-						&& fits(state.getPosition().getX() + 1, state.getPosition().getY() + 1, maze)) {
+				if (maze.fits(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY())) && maze.fits(new Vec2i(state.getPosition().getX(), state.getPosition().getY() + 1))
+						&& maze.fits(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY() + 1))) {
 					if (!(maze.hasNeighbors(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY()))
 							|| maze.hasNeighbors(new Vec2i(state.getPosition().getX(), state.getPosition().getY() + 1))
 							|| maze.hasNeighbors(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY() + 1)))) {
@@ -290,10 +265,6 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 			}
 		}
 
-	}
-
-	public boolean fits(int x, int y, MazeComponent maze) {
-		return x >= 0 && x < maze.width && y >= 0 && y < maze.height;
 	}
 
 	@Override

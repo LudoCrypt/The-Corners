@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
@@ -52,11 +53,13 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 			List<Chunk> chunks, Chunk chunk) {
 		ChunkPos chunkPos = chunk.getPos();
 		int max = Math.floorDiv(chunk.getTopY(), 54);
-		Random random = new Random(region.getSeed() + Math.floorDiv(chunkPos.getStartX(), 19) + Math.floorDiv(chunkPos.getStartZ(), 19) + 1);
+		RandomGenerator random = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(Math.floorDiv(chunkPos.getStartX(), 19), Math.floorDiv(chunkPos.getStartZ(), 19), 50));
+
+		boolean generateExtraTower = random.nextDouble() < 0.01 && random.nextDouble() < 0.4;
 		for (int yi = 0; yi < max; yi++) {
 			BlockPos pos = chunkPos.getStartPos().add(0, yi * 54, 0);
 
-			Random yRandom = new Random(region.getSeed() + MathHelper.hashCode(yi * 2, yi * 3, yi));
+			RandomGenerator yRandom = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(yi * 2, yi * 3, yi));
 			boolean hallwaySpawnsAtHeight = (yRandom.nextDouble() < 0.875D && yRandom.nextBoolean()) && (yi != 0 && yi != max - 1);
 			Direction dir = Direction.fromHorizontal(yRandom.nextInt(4));
 			BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90
@@ -64,7 +67,8 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 			BlockPos offsetPos = pos.add((dir.equals(Direction.NORTH) ? 6 : dir.equals(Direction.EAST) ? 12 : dir.equals(Direction.SOUTH) ? 6 : -10),
 					(dir.equals(Direction.NORTH) ? 13 : dir.equals(Direction.EAST) ? 23 : dir.equals(Direction.SOUTH) ? 22 : 15),
 					(dir.equals(Direction.NORTH) ? -10 : dir.equals(Direction.EAST) ? 6 : dir.equals(Direction.SOUTH) ? 12 : 6));
-			if (pos.getX() == 0 && pos.getZ() == 0) {
+
+			if ((pos.getX() == 0 && pos.getZ() == 0) || generateExtraTower) {
 				if (yi == 0) {
 					generateNbt(region, pos, "yearning_canal_bottom");
 					continue;
@@ -72,7 +76,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 					generateNbt(region, pos, "yearning_canal_top");
 					continue;
 				} else {
-					if (hallwaySpawnsAtHeight) {
+					if (hallwaySpawnsAtHeight && !generateExtraTower) {
 						generateNbt(region, pos, "yearning_canal_4");
 						generateNbt(region, offsetPos, "yearning_canal_hallway_connected", rotation);
 					} else {
@@ -80,6 +84,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 					}
 				}
 			}
+
 			if (hallwaySpawnsAtHeight) {
 				if ((dir.equals(Direction.NORTH) && chunkPos.x == 0 && chunkPos.z <= 0) || (dir.equals(Direction.WEST) && chunkPos.z == 0 && chunkPos.x <= 0)
 						|| (dir.equals(Direction.SOUTH) && chunkPos.x == 0 && chunkPos.z >= 1) || (dir.equals(Direction.EAST) && chunkPos.z == 0 && chunkPos.x >= 1)) {

@@ -147,7 +147,9 @@ void main() {
 	float stretchedLatitude = pow(abs(latitude) / HALF_PI, 1.0 / 1.7) * sign(latitude) * HALF_PI;
 	float q = ((stretchedLatitude) + HALF_PI) / PI;
 
-	vec2 bloatedTex = vec2(u, q);
+	vec2 twinkleTex0 = vec2((longitude + (GameTime * 8) + PI) / (2.0 * PI), q);
+	vec2 twinkleTex1 = vec2((longitude - (GameTime * 8) + PI) / (2.0 * PI), q);
+	vec2 twinkleTex2 = vec2((longitude + (GameTime * 8) + PI) / (2.0 * PI), q);
 
 	vec4 color = texture(Sampler0, tex);
 
@@ -189,15 +191,15 @@ void main() {
 	ntex2 = vec2(projected.x, projected.z + GameTime * 150) * 2;
 	float twinkeOpacity2 = clamp(cnoise(vec3(ntex, (GameTime + 27) * 300)) - (cnoise(vec3(ntex2, GameTime * 400) / 4)), 0.0, 1.0) * gaze;
 	
-	vec4 twinkleColor = texture(Twinkle0, bloatedTex);
+	vec4 twinkleColor = texture(Twinkle0, twinkleTex0);
 	vec4 twinkleTint = vec4(0.78, 0.698, 0.6, twinkeOpacity0);
 	color.rgb += (twinkleColor.rgb * twinkleTint.rgb) * (twinkleTint.a) * (twinkleColor.a);
 
-	twinkleColor = texture(Twinkle1, bloatedTex);
+	twinkleColor = texture(Twinkle1, twinkleTex1);
 	twinkleTint = vec4(0.874, 0.8, 0.651, twinkeOpacity1);
 	color.rgb += (twinkleColor.rgb * twinkleTint.rgb) * (twinkleTint.a) * (twinkleColor.a);
 	
-	twinkleColor = texture(Twinkle2, bloatedTex);
+	twinkleColor = texture(Twinkle2, twinkleTex2);
 	twinkleTint = vec4(0.788, 0.698, 0.494, twinkeOpacity2);
 	color.rgb += (twinkleColor.rgb * twinkleTint.rgb) * (twinkleTint.a) * (twinkleColor.a);
 

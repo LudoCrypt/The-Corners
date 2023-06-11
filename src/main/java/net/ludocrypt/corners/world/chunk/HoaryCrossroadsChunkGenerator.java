@@ -211,7 +211,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		RandomGenerator random = RandomGenerator.createLegacy(mazeGenerator.blockSeed(pos.getX(), mazeGenerator.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
 		Pair<RectangularMazePiece, BlockRotation> mazeSegment = RectangularMazePiece.getFromCell(state, random);
 		if (mazeSegment.getFirst() != RectangularMazePiece.BLANK) {
-			placeNbt(getPiece(mazeSegment.getFirst(), random), getPieceAsBottom(mazeSegment.getFirst(), random), this, region, pos, mazeSegment.getSecond());
+			placeNbt(getPiece(mazeSegment.getFirst(), random), getPieceAsBottom(mazeSegment.getFirst(), random), region, pos, mazeSegment.getSecond());
 		} else if (random.nextInt(67) == 0) {
 			BlockPos offset = pos.add(random.nextInt(7), 0, random.nextInt(7));
 			this.generateNbt(region, offset.add(0, 264, 0), "hoary_crossroads_obelisk_" + random.nextInt(5), BlockRotation.random(random));
@@ -224,10 +224,10 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		}
 	}
 
-	private void placeNbt(String nbt, String bottomNbt, AbstractNbtChunkGenerator chunkGenerator, ChunkRegion region, BlockPos basePos, BlockRotation rotation) {
-		chunkGenerator.generateNbt(region, basePos.up(256), nbt, rotation);
+	private void placeNbt(String nbt, String bottomNbt, ChunkRegion region, BlockPos basePos, BlockRotation rotation) {
+		this.generateNbt(region, basePos.up(256), nbt, rotation);
 		for (int i = 0; i < 256; i++) {
-			chunkGenerator.generateNbt(region, basePos.up(i), bottomNbt, rotation);
+			this.generateNbt(region, basePos.up(i), bottomNbt, rotation);
 		}
 	}
 
@@ -240,7 +240,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		case L_PIECE:
 			return "hoary_crossroads_l_" + ((random.nextInt(8) == 0) ? ((random.nextInt(13) == 0) ? "rare_0" : random.nextInt(10)) : "0");
 		case NUB:
-			return "hoary_crossroads_nub_" + ((random.nextInt(8) == 0) ? random.nextInt(13) : "0");
+			return "hoary_crossroads_nub_" + ((random.nextInt(8) == 0) ? random.nextInt(8) : "0");
 		case T_PIECE:
 			return "hoary_crossroads_t_" + ((random.nextInt(8) == 0) ? ((random.nextInt(13) == 0) ? ("rare_" + random.nextInt(1)) : random.nextInt(8)) : "0");
 		default:
