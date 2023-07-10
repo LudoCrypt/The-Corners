@@ -9,12 +9,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.config.CornerConfig;
 import net.ludocrypt.specialmodels.api.SpecialModelRenderer;
+import net.ludocrypt.specialmodels.impl.render.MutableQuad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 
 public class ChristmasRenderer extends SpecialModelRenderer {
 
@@ -32,7 +34,19 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 
 	@Override
 	@ClientOnly
-	public void setup(MatrixStack matrices, ShaderProgram shader) {
+	public MutableQuad modifyQuad(MutableQuad quad) {
+
+		quad.getV1().setUv(new Vec2f(0.0F, 0.0F));
+		quad.getV2().setUv(new Vec2f(0.0F, 1.0F));
+		quad.getV3().setUv(new Vec2f(1.0F, 1.0F));
+		quad.getV4().setUv(new Vec2f(1.0F, 0.0F));
+
+		return quad;
+	}
+
+	@Override
+	@ClientOnly
+	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader) {
 		if (CornerConfig.get().christmas.christmas) {
 			if (shader.getUniform("christmas") != null) {
 				shader.getUniform("christmas").setInt(1);

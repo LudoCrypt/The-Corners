@@ -28,10 +28,10 @@ public class TheCorners implements ModInitializer {
 	@Override
 	public void onInitialize(ModContainer mod) {
 		AutoConfig.register(CornerConfig.class, GsonConfigSerializer::new);
-		CornerPaintings.init();
 		CornerBlocks.init();
 		CornerBiomes.init();
 		CornerEntities.init();
+		CornerPaintings.init();
 		CornerSoundEvents.init();
 		CornerRadioRegistry.init();
 		CornerModelRenderers.init();

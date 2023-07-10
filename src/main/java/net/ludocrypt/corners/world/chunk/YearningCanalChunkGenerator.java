@@ -68,7 +68,7 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 					(dir.equals(Direction.NORTH) ? 13 : dir.equals(Direction.EAST) ? 23 : dir.equals(Direction.SOUTH) ? 22 : 15),
 					(dir.equals(Direction.NORTH) ? -10 : dir.equals(Direction.EAST) ? 6 : dir.equals(Direction.SOUTH) ? 12 : 6));
 
-			if ((pos.getX() == 0 && pos.getZ() == 0) || generateExtraTower) {
+			if ((pos.getX() == 0 && pos.getZ() == 0) || (generateExtraTower && !(pos.getX() == 0 || pos.getZ() == 0))) {
 				if (yi == 0) {
 					generateNbt(region, pos, "yearning_canal_bottom");
 					continue;

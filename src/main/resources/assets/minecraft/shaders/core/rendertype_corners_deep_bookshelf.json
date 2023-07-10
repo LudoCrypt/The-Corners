@@ -4,8 +4,8 @@
 		"srcrgb": "srcalpha",
 		"dstrgb": "1-srcalpha"
 	},
-	"vertex": "rendertype_corners_skybox",
-	"fragment": "rendertype_corners_skybox",
+	"vertex": "rendertype_corners_deep_bookshelf",
+	"fragment": "rendertype_corners_deep_bookshelf",
 	"attributes": [
 		"Position",
 		"Color",
@@ -19,19 +19,7 @@
 			"name": "Sampler0"
 		},
 		{
-			"name": "Sampler1"
-		},
-		{
 			"name": "Sampler2"
-		},
-		{
-			"name": "Sampler3"
-		},
-		{
-			"name": "Sampler4"
-		},
-		{
-			"name": "Sampler5"
 		}
 	],
 	"uniforms": [
@@ -82,7 +70,7 @@
 			]
 		},
 		{
-			"name": "RotMat",
+			"name": "BobMat",
 			"type": "matrix4x4",
 			"count": 16,
 			"values": [
@@ -118,6 +106,16 @@
 				0.0,
 				0.0,
 				1.0
+			]
+		},
+		{
+			"name": "cameraPos",
+			"type": "float",
+			"count": 3,
+			"values": [
+				0.0,
+				0.0,
+				0.0
 			]
 		},
 		{
@@ -163,6 +161,23 @@
 			"count": 1,
 			"values": [
 				0
+			]
+		},
+		{
+			"name": "ScreenSize",
+			"type": "float",
+			"count": 2,
+			"values": [
+				1.0,
+				1.0
+			]
+		},
+		{
+			"name": "GameTime",
+			"type": "float",
+			"count": 1,
+			"values": [
+				0.0
 			]
 		}
 	]

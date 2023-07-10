@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:block/air",
+	"textures": {
+		"particle": "corners:block/drywall"
+	},
+	"specialmodels": {
+		"corners:deep_bookshelf": "corners:shader/deep_bookshelf"
+	}
+}

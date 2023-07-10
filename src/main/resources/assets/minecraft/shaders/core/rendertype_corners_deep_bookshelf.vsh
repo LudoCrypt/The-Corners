@@ -15,27 +15,37 @@ uniform sampler2D Sampler2;
 
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
+uniform mat4 BobMat;
+
 uniform vec3 ChunkOffset;
 uniform int FogShape;
 
-out float vertexDistance;
-out vec4 vertexColor;
-out vec2 texCoord0;
-out vec4 normal;
+uniform vec3 cameraPos;
 
-out vec4 lightMapColor;
-out vec4 texProj0;
+out vec4 vertexColor;
+out vec3 vertexPos;
+out vec2 texCoord0;
+out float vertexDistance;
+
 out vec4 glPos;
+
+out mat4 BoblessMat;
+
+out vec4 normal;
 
 void main() {
 	vec3 pos = Position + ChunkOffset;
-	gl_Position = ProjMat * ModelViewMat * vec4(pos, 1.0);
 	vertexDistance = fog_distance(ModelViewMat, pos, FogShape);
 	vertexColor = Color * minecraft_sample_lightmap(Sampler2, UV2);
+	vertexPos = pos;
 
+	BoblessMat = inverse(((BobMat * inverse(BobMat) * ProjMat) * inverse(BobMat)) * ModelViewMat) * (BobMat * inverse(BobMat) * ProjMat * ModelViewMat);
+
+
+
+	gl_Position = ProjMat * ModelViewMat * vec4(pos, 1.0);
 	glPos = gl_Position;
-	texProj0 = projection_from_position(gl_Position);
-
+	
 	texCoord0 = UV0;
-	normal = ProjMat * ModelViewMat * vec4(Normal, 0.0);
+	normal = vec4(Normal, 1.0);
 }

@@ -56,6 +56,8 @@ public class CornerBlocks {
 
 	public static final Block DARK_RAILING = get("dark_railing", new RailingBlock(QuiltBlockSettings.copyOf(Blocks.STONE)), ItemGroups.BUILDING_BLOCKS);
 
+	public static final Block DEEP_BOOKSHELF = get("deep_bookshelf", new Block(QuiltBlockSettings.copyOf(Blocks.OAK_WOOD)), ItemGroups.BUILDING_BLOCKS);
+
 	public static void init() {
 
 		BlockContentRegistries.FLAMMABLE.put(NYLON_FIBER_BLOCK, new FlammableBlockEntry(30, 60));

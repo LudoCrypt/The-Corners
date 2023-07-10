@@ -14,11 +14,13 @@
 	],
 	"client": [
 		"BackgroundRendererMixin",
+		"FrustumAccessor",
 		"GameRendererAccessor",
-		"MinecraftClientMixin",
 		"MinecraftClientAccessor",
+		"MinecraftClientMixin",
 		"MusicTrackerMixin",
-		"SoundManagerAccessor"
+		"SoundManagerAccessor",
+		"WorldRendererAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
