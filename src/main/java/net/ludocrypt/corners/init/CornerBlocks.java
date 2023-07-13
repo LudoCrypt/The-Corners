@@ -24,6 +24,7 @@ import net.ludocrypt.corners.block.SkyboxGlassSlabBlock;
 import net.ludocrypt.corners.block.ThinPillarBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ChiseledBookshelfBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -56,7 +57,7 @@ public class CornerBlocks {
 
 	public static final Block DARK_RAILING = get("dark_railing", new RailingBlock(QuiltBlockSettings.copyOf(Blocks.STONE)), ItemGroups.BUILDING_BLOCKS);
 
-	public static final Block DEEP_BOOKSHELF = get("deep_bookshelf", new Block(QuiltBlockSettings.copyOf(Blocks.OAK_WOOD)), ItemGroups.BUILDING_BLOCKS);
+	public static final Block DEEP_BOOKSHELF = get("deep_bookshelf", new ChiseledBookshelfBlock(QuiltBlockSettings.copyOf(Blocks.OAK_WOOD)), ItemGroups.BUILDING_BLOCKS);
 
 	public static void init() {
 

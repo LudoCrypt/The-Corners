@@ -1,6 +1,25 @@
 {
-	"parent": "minecraft:block/cube_all",
+	"parent": "block/block",
 	"textures": {
-		"all": "corners:block/snowy_glass_pane"
-	}
+		"particle": "block/chiseled_bookshelf_empty",
+		"side": "block/chiseled_bookshelf_empty"
+	},
+	"elements": [
+		{
+			"name": "chiseled_bookshelf_bottom",
+			"from": [1, 1, 0],
+			"to": [15, 7, 16],
+			"faces": {
+				"north": {"uv": [1, 9, 15, 15], "texture": "#side", "cullface": "north"}
+			}
+		},
+		{
+			"name": "chiseled_bookshelf_top",
+			"from": [1, 9, 0],
+			"to": [15, 15, 16],
+			"faces": {
+				"north": {"uv": [1, 9, 15, 15], "texture": "#side", "cullface": "north"}
+			}
+		}
+	]
 }

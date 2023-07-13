@@ -1,8 +1,5 @@
 {
-	"parent": "minecraft:block/air",
-	"textures": {
-		"particle": "corners:block/drywall"
-	},
+	"parent": "minecraft:block/chiseled_bookshelf",
 	"specialmodels": {
 		"corners:deep_bookshelf": "corners:shader/deep_bookshelf"
 	}

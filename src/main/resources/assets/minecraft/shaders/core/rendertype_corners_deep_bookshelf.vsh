@@ -31,7 +31,7 @@ out vec4 glPos;
 
 out mat4 BoblessMat;
 
-out vec4 normal;
+out vec3 normal;
 
 void main() {
 	vec3 pos = Position + ChunkOffset;
@@ -41,11 +41,9 @@ void main() {
 
 	BoblessMat = inverse(((BobMat * inverse(BobMat) * ProjMat) * inverse(BobMat)) * ModelViewMat) * (BobMat * inverse(BobMat) * ProjMat * ModelViewMat);
 
-
-
 	gl_Position = ProjMat * ModelViewMat * vec4(pos, 1.0);
 	glPos = gl_Position;
-	
+
 	texCoord0 = UV0;
-	normal = vec4(Normal, 1.0);
+	normal = vec3(Normal);
 }
