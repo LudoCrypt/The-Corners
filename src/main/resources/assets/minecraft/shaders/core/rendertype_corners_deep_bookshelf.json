@@ -23,6 +23,9 @@
 		},
 		{
 			"name": "Sampler2"
+		},
+		{
+			"name": "Sampler3"
 		}
 	],
 	"uniforms": [

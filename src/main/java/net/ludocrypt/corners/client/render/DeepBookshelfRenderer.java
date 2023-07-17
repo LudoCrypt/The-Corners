@@ -12,6 +12,7 @@ import net.ludocrypt.specialmodels.impl.render.MutableQuad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.PlayerScreenHandler;
 
@@ -22,7 +23,13 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader) {
 		RenderSystem.polygonOffset(-3.0F, -3.0F);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
-		RenderSystem.setShaderTexture(1, TheCorners.id("textures/block/deep_bookshelf_interior.png"));
+
+		TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
+		textureManager.getTexture(TheCorners.id("textures/block/deep_bookshelf_interior_side.png")).setFilter(false, true);
+		textureManager.getTexture(TheCorners.id("textures/block/deep_bookshelf_interior_top.png")).setFilter(false, true);
+
+		RenderSystem.setShaderTexture(1, TheCorners.id("textures/block/deep_bookshelf_interior_side.png"));
+		RenderSystem.setShaderTexture(3, TheCorners.id("textures/block/deep_bookshelf_interior_top.png"));
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		Camera camera = client.gameRenderer.getCamera();
