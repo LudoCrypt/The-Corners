@@ -84,7 +84,7 @@ public class CornerWorlds implements LimlibRegistrar {
 							new YearningCanalChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.YEARNING_CANAL_BIOME).get())))));
 	public static final LimlibWorld COMMUNAL_CORRIDORS_WORLD = get(COMMUNAL_CORRIDORS,
 			new LimlibWorld(
-					() -> new DimensionType(OptionalLong.of(23500), true, false, false, true, 1.0, true, false, 0, 128, 128, TagKey.of(RegistryKeys.BLOCK, TheCorners.id(COMMUNAL_CORRIDORS)),
+					() -> new DimensionType(OptionalLong.of(23500), true, false, false, true, 1.0, true, false, 0, 256, 256, TagKey.of(RegistryKeys.BLOCK, TheCorners.id(COMMUNAL_CORRIDORS)),
 							TheCorners.id(COMMUNAL_CORRIDORS), 0.075F, new MonsterSettings(false, false, ConstantIntProvider.ZERO, 0)),
 					(registry) -> new DimensionOptions(registry.get(RegistryKeys.DIMENSION_TYPE).getHolder(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, TheCorners.id(COMMUNAL_CORRIDORS))).get(),
 							new CommunalCorridorsChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.COMMUNAL_CORRIDORS_BIOME).get()), 16, 16, 8, 0))));

@@ -31,6 +31,8 @@ public abstract class BackgroundRendererMixin {
 			RenderSystem.setShaderFogStart(fogStart * fogScalar);
 			RenderSystem.setShaderFogEnd(fogEnd * fogScalar);
 			RenderSystem.setShaderFogColor(0.625F, 0.625F, 0.625F);
+		} else if (client.world.getRegistryKey().equals(CornerWorlds.COMMUNAL_CORRIDORS_KEY)) {
+			RenderSystem.setShaderFogColor(0.244F, 0.244F, 0.244F);
 		}
 	}
 

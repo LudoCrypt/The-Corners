@@ -14,6 +14,7 @@
 	],
 	"client": [
 		"BackgroundRendererMixin",
+		"BakedModelManagerMixin",
 		"FrustumAccessor",
 		"GameRendererAccessor",
 		"MinecraftClientAccessor",

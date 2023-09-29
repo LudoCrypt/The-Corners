@@ -4,7 +4,6 @@
 
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
-uniform sampler2D Sampler3;
 
 uniform float FogStart;
 uniform float FogEnd;
@@ -89,7 +88,7 @@ vec4 toScreen(vec3 vertex) {
 }
 
 bool isInTriangle(vec3 bary) {
-	return bary.x > 0 && bary.y > 0 && bary.z > 0;
+	return bary.x >= 0 && bary.y >= 0 && bary.z >= 0;
 }
 
 vec4 unbob(vec4 pos) {
@@ -120,7 +119,12 @@ vec4 drawTriangle(vec4 base, Vertex v1, Vertex v2, Vertex v3) {
 			return base;
 		}
 
-		return linear_fog(texture(v1.isTop ? Sampler3 : Sampler1, -uv) * quadColor, dist, FogStart, FogEnd, FogColor);
+		vec2 texCoord = mod(uv / 2.0, vec2(0.5)) + (v1.isTop ? vec2(0.5, 0.0) : vec2(0.0));
+		vec2 lod = textureQueryLod(Sampler1, texCoord);
+		vec4 color = textureGrad(Sampler1, texCoord, dFdx(texCoord), dFdy(texCoord)) * quadColor;
+//		color = vec4(max(dFdx(texCoord), dFdy(texCoord)), 0.0, 1.0);
+
+		return linear_fog(color, dist, FogStart, FogEnd, FogColor);
 	}
 	return base;
 }
@@ -228,6 +232,94 @@ void main() {
 			v2 = vertice(vec3(1.0 / 16.0, 7.0 / 16.0 + off, FogEnd) + worldPos, vertexColor, vec2(1.0 / 16.0, 6.0 / 16.0), false);
 			v3 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, FogEnd) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 1.0 / 16.0), false);
 			v4 = vertice(vec3(1.0 - (1.0 / 16.0), 7.0 / 16.0 + off, FogEnd) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 6.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+		}
+	} else if (basicallyIs(normal, vec3(1.0, 0.0, 0.0))) {
+		for (int i = 1; i >= 0; i--) {
+			float off = i * 0.5;
+
+			// Left
+			Vertex v1 = vertice(vec3(0.0, 1.0 / 16.0 + off, (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), false);
+			Vertex v2 = vertice(vec3(0.0, 0.5 - (1.0 / 16.0) + off, (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 7.0 / 16.0), false);
+			Vertex v3 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), false);
+			Vertex v4 = vertice(vec3(-FogEnd, 0.5 - (1.0 / 16.0) + off, (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 7.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Right
+			v1 = vertice(vec3(-FogEnd, 0.5 - (1.0 / 16.0) + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 7.0 / 16.0), false);
+			v2 = vertice(vec3(0.0, 0.5 - (1.0 / 16.0) + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 7.0 / 16.0), false);
+			v3 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), false);
+			v4 = vertice(vec3(0.0, 1.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Top
+			v1 = vertice(vec3(-FogEnd, 7.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 15.0 / 16.0), true);
+			v2 = vertice(vec3(-FogEnd, 7.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), true);
+			v3 = vertice(vec3(0.0, 7.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 15.0 / 16.0), true);
+			v4 = vertice(vec3(0.0, 7.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), true);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Bottom
+			v1 = vertice(vec3(0.0, 1.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), true);
+			v2 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), true);
+			v3 = vertice(vec3(0.0, 1.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(0.0, 15.0 / 16.0), true);
+			v4 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(FogEnd, 15.0 / 16.0), true);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Back
+			v1 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(1.0 / 16.0, 1.0 / 16.0), false);
+			v2 = vertice(vec3(-FogEnd, 7.0 / 16.0 + off, 1.0 / 16.0) + worldPos, vertexColor, vec2(1.0 / 16.0, 6.0 / 16.0), false);
+			v3 = vertice(vec3(-FogEnd, 1.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 1.0 / 16.0), false);
+			v4 = vertice(vec3(-FogEnd, 7.0 / 16.0 + off, 1.0 - (1.0 / 16.0)) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 6.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+		}
+	} else if (basicallyIs(normal, vec3(0.0, 0.0, 1.0))) {
+		for (int i = 1; i >= 0; i--) {
+			float off = i * 0.5;
+
+			// Left
+			Vertex v1 = vertice(vec3((1.0 / 16.0), 0.5 - (1.0 / 16.0) + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 7.0 / 16.0), false);
+			Vertex v2 = vertice(vec3((1.0 / 16.0), 0.5 - (1.0 / 16.0) + off, 0.0) + worldPos, vertexColor, vec2(0.0, 7.0 / 16.0), false);
+			Vertex v3 = vertice(vec3((1.0 / 16.0), 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), false);
+			Vertex v4 = vertice(vec3((1.0 / 16.0), 1.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Right
+			v1 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), false);
+			v2 = vertice(vec3(1.0 - (1.0 / 16.0), 0.5 - (1.0 / 16.0) + off, 0.0) + worldPos, vertexColor, vec2(0.0, 7.0 / 16.0), false);
+			v3 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), false);
+			v4 = vertice(vec3(1.0 - (1.0 / 16.0), 0.5 - (1.0 / 16.0) + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 7.0 / 16.0), false);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Top
+			v1 = vertice(vec3(1.0 / 16.0, 7.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), true);
+			v2 = vertice(vec3(1.0 / 16.0, 7.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), true);
+			v3 = vertice(vec3(1.0 - (1.0 / 16.0), 7.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 15.0 / 16.0), true);
+			v4 = vertice(vec3(1.0 - (1.0 / 16.0), 7.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 15.0 / 16.0), true);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Bottom
+			v1 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 15.0 / 16.0), true);
+			v2 = vertice(vec3(1.0 / 16.0, 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(FogEnd, 1.0 / 16.0), true);
+			v3 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 15.0 / 16.0), true);
+			v4 = vertice(vec3(1.0 / 16.0, 1.0 / 16.0 + off, 0.0) + worldPos, vertexColor, vec2(0.0, 1.0 / 16.0), true);
+
+			color = drawQuad(color, v1, v2, v3, v4);
+
+			// Back
+			v1 = vertice(vec3(1.0 - (1.0 / 16.0), 7.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 6.0 / 16.0), false);
+			v2 = vertice(vec3(1.0 / 16.0, 7.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(1.0 / 16.0, 6.0 / 16.0), false);
+			v3 = vertice(vec3(1.0 - (1.0 / 16.0), 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(1.0 - (1.0 / 16.0), 1.0 / 16.0), false);
+			v4 = vertice(vec3(1.0 / 16.0, 1.0 / 16.0 + off, -FogEnd) + worldPos, vertexColor, vec2(1.0 / 16.0, 1.0 / 16.0), false);
 
 			color = drawQuad(color, v1, v2, v3, v4);
 		}

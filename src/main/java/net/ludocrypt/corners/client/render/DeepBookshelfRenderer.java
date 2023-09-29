@@ -12,11 +12,13 @@ import net.ludocrypt.specialmodels.impl.render.MutableQuad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.Identifier;
 
 public class DeepBookshelfRenderer extends SpecialModelRenderer {
+
+	public static final Identifier DEEP_BOOKSHELF_ATLAS_TEXTURE = TheCorners.id("textures/atlas/deep.png");
 
 	@Override
 	@ClientOnly
@@ -24,12 +26,7 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 		RenderSystem.polygonOffset(-3.0F, -3.0F);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 
-		TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
-		textureManager.getTexture(TheCorners.id("textures/block/deep_bookshelf_interior_side.png")).setFilter(false, true);
-		textureManager.getTexture(TheCorners.id("textures/block/deep_bookshelf_interior_top.png")).setFilter(false, true);
-
-		RenderSystem.setShaderTexture(1, TheCorners.id("textures/block/deep_bookshelf_interior_side.png"));
-		RenderSystem.setShaderTexture(3, TheCorners.id("textures/block/deep_bookshelf_interior_top.png"));
+		RenderSystem.setShaderTexture(1, DEEP_BOOKSHELF_ATLAS_TEXTURE);
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		Camera camera = client.gameRenderer.getCamera();

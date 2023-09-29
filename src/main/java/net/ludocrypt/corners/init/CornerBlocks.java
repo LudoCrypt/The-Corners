@@ -1,14 +1,15 @@
 package net.ludocrypt.corners.init;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.quiltmc.qsl.block.content.registry.api.FlammableBlockEntry;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
@@ -36,7 +37,12 @@ import net.minecraft.registry.RegistryKey;
 
 public class CornerBlocks {
 
-	private static final Map<RegistryKey<ItemGroup>, Set<Item>> CORNERS_ITEM_GROUP_ENTRIES = Maps.newHashMap();
+	private static final Map<RegistryKey<ItemGroup>, Set<Item>> CORNERS_ITEM_GROUP_ENTRIES = new TreeMap<>(new Comparator<RegistryKey<ItemGroup>>() {
+		@Override
+		public int compare(RegistryKey<ItemGroup> r1, RegistryKey<ItemGroup> r2) {
+			return r1.getValue().compareTo(r2.getValue());
+		}
+	});
 
 	public static final Block STONE_PILLAR = get("stone_pillar", new ThinPillarBlock(QuiltBlockSettings.copyOf(Blocks.STONE_BRICKS)), ItemGroups.NATURAL_BLOCKS);
 
@@ -51,9 +57,9 @@ public class CornerBlocks {
 			ItemGroups.BUILDING_BLOCKS);
 	public static final Block NYLON_FIBER_SLAB = get("nylon_fiber_slab", new SlabBlock(QuiltBlockSettings.copyOf(Blocks.WHITE_WOOL)), ItemGroups.BUILDING_BLOCKS);
 
-	public static final Block SNOWY_GLASS = get("snowy_glass", new SkyboxGlassBlock(QuiltBlockSettings.copyOf(Blocks.GLASS)), ItemGroups.BUILDING_BLOCKS);
-	public static final Block SNOWY_GLASS_PANE = get("snowy_glass_pane", new SkyboxGlassPaneBlock(QuiltBlockSettings.copyOf(Blocks.GLASS_PANE)), ItemGroups.BUILDING_BLOCKS);
-	public static final Block SNOWY_GLASS_SLAB = get("snowy_glass_slab", new SkyboxGlassSlabBlock(QuiltBlockSettings.copyOf(Blocks.GLASS)), ItemGroups.BUILDING_BLOCKS);
+	public static final Block SNOWY_GLASS = get("snowy_glass", new SkyboxGlassBlock(QuiltBlockSettings.copyOf(Blocks.GLASS).luminance(3)), ItemGroups.BUILDING_BLOCKS);
+	public static final Block SNOWY_GLASS_PANE = get("snowy_glass_pane", new SkyboxGlassPaneBlock(QuiltBlockSettings.copyOf(Blocks.GLASS_PANE).luminance(3)), ItemGroups.BUILDING_BLOCKS);
+	public static final Block SNOWY_GLASS_SLAB = get("snowy_glass_slab", new SkyboxGlassSlabBlock(QuiltBlockSettings.copyOf(Blocks.GLASS).luminance(3)), ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block DARK_RAILING = get("dark_railing", new RailingBlock(QuiltBlockSettings.copyOf(Blocks.STONE)), ItemGroups.BUILDING_BLOCKS);
 

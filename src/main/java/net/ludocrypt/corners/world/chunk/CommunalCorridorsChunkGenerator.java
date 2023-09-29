@@ -24,9 +24,11 @@ import net.ludocrypt.limlib.api.world.maze.DilateMaze;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent.CellState;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent.Vec2i;
+import net.ludocrypt.limlib.api.world.maze.RectangularMazeGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder;
@@ -62,7 +64,8 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		})).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
 	});
 
-	private GrandMazeGenerator mazeGenerator;
+	private GrandMazeGenerator grandMazeGenerator;
+	private RectangularMazeGenerator<MazeComponent> level2mazeGenerator;
 	private int mazeWidth;
 	private int mazeHeight;
 	private int mazeDilation;
@@ -74,7 +77,10 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		this.mazeHeight = mazeHeight;
 		this.mazeDilation = mazeDilation;
 		this.mazeSeedModifier = mazeSeedModifier;
-		this.mazeGenerator = new GrandMazeGenerator(this.mazeWidth, this.mazeHeight, this.mazeDilation, this.mazeSeedModifier);
+		this.grandMazeGenerator = new GrandMazeGenerator(this.mazeWidth, this.mazeHeight, this.mazeDilation, this.mazeSeedModifier);
+		this.level2mazeGenerator = new RectangularMazeGenerator<MazeComponent>(this.mazeWidth * this.mazeDilation, this.mazeHeight * this.mazeDilation, this.mazeDilation, true,
+				this.mazeSeedModifier) {
+		};
 	}
 
 	@Override
@@ -92,25 +98,25 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	 * @param random  generator
 	 * @return MazeComponent
 	 */
-	public MazeComponent newMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
+	public MazeComponent newGrandMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
 		// Find the position of the grandMaze that contains the current maze
-		BlockPos grandMazePos = new BlockPos(mazePos.getX() - mazeGenerator.mod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thickness)), 0,
-				mazePos.getZ() - mazeGenerator.mod(mazePos.getZ(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thickness)));
+		BlockPos grandMazePos = new BlockPos(mazePos.getX() - Math.floorMod(mazePos.getX(), (grandMazeGenerator.width * grandMazeGenerator.width * grandMazeGenerator.thickness)), 0,
+				mazePos.getZ() - Math.floorMod(mazePos.getZ(), (grandMazeGenerator.height * grandMazeGenerator.height * grandMazeGenerator.thickness)));
 
 		// Check if the grandMaze was already generated, if not generate it
 		MazeComponent grandMaze;
-		if (mazeGenerator.grandMazeMap.containsKey(grandMazePos)) {
-			grandMaze = mazeGenerator.grandMazeMap.get(grandMazePos);
+		if (grandMazeGenerator.grandMazeMap.containsKey(grandMazePos)) {
+			grandMaze = grandMazeGenerator.grandMazeMap.get(grandMazePos);
 		} else {
-			grandMaze = new DepthFirstMaze(mazeGenerator.width / mazeGenerator.dilation, mazeGenerator.height / mazeGenerator.dilation,
-					RandomGenerator.createLegacy(mazeGenerator.blockSeed(grandMazePos.getX(), mazeGenerator.seedModifier, grandMazePos.getZ())));
+			grandMaze = new DepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation, grandMazeGenerator.height / grandMazeGenerator.dilation,
+					RandomGenerator.createLegacy(grandMazeGenerator.blockSeed(grandMazePos.getX(), grandMazeGenerator.seedModifier, grandMazePos.getZ())));
 			grandMaze.generateMaze();
-			mazeGenerator.grandMazeMap.put(grandMazePos, grandMaze);
+			grandMazeGenerator.grandMazeMap.put(grandMazePos, grandMaze);
 		}
 
 		// Get the cell of the grandMaze that corresponds to the current maze
-		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / mazeGenerator.thickness) / mazeGenerator.width) / mazeGenerator.dilation,
-				(((mazePos.getZ() - grandMazePos.getZ()) / mazeGenerator.thickness) / height) / mazeGenerator.dilation);
+		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / grandMazeGenerator.thickness) / grandMazeGenerator.width) / grandMazeGenerator.dilation,
+				(((mazePos.getZ() - grandMazePos.getZ()) / grandMazeGenerator.thickness) / height) / grandMazeGenerator.dilation);
 
 		Vec2i start = null;
 		List<Vec2i> endings = Lists.newArrayList();
@@ -120,7 +126,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// has not been set.
 		if (originCell.isSouth() || originCell.getPosition().getX() == 0) {
 			if (start == null) {
-				start = new Vec2i(0, (mazeGenerator.height / mazeGenerator.dilation) / 2);
+				start = new Vec2i(0, (grandMazeGenerator.height / grandMazeGenerator.dilation) / 2);
 			}
 		}
 
@@ -129,42 +135,42 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// has not been set.
 		if (originCell.isWest() || originCell.getPosition().getY() == 0) {
 			if (start == null) {
-				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, 0);
+				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, 0);
 			} else {
-				endings.add(new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, 0));
+				endings.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, 0));
 			}
 		}
 
 		// Check if the origin cell has an opening in the north or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isNorth() || originCell.getPosition().getX() == (mazeGenerator.width / mazeGenerator.dilation) - 1) {
+		if (originCell.isNorth() || originCell.getPosition().getX() == (grandMazeGenerator.width / grandMazeGenerator.dilation) - 1) {
 			if (start == null) {
-				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) - 1, (mazeGenerator.height / mazeGenerator.dilation) / 2);
+				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1, (grandMazeGenerator.height / grandMazeGenerator.dilation) / 2);
 			} else {
-				endings.add(new Vec2i((mazeGenerator.width / mazeGenerator.dilation) - 1, (mazeGenerator.height / mazeGenerator.dilation) / 2));
+				endings.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1, (grandMazeGenerator.height / grandMazeGenerator.dilation) / 2));
 			}
 		}
 
 		// Check if the origin cell has an opening in the east or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isEast() || originCell.getPosition().getY() == (mazeGenerator.height / mazeGenerator.dilation) - 1) {
+		if (originCell.isEast() || originCell.getPosition().getY() == (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1) {
 			if (start == null) {
-				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, (mazeGenerator.height / mazeGenerator.dilation) - 1);
+				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1);
 			} else {
-				endings.add(new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, (mazeGenerator.height / mazeGenerator.dilation) - 1));
+				endings.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1));
 			}
 		}
 
 		// If the origin cell is a dead end, add a random ending point in the middle of
 		// the maze. This ensures there is always somewhere to go in a dead end.
 		if (endings.isEmpty()) {
-			endings.add(new Vec2i(random.nextInt((mazeGenerator.width / mazeGenerator.dilation) - 2) + 1, random.nextInt((mazeGenerator.height / mazeGenerator.dilation) - 2) + 1));
+			endings.add(new Vec2i(random.nextInt((grandMazeGenerator.width / grandMazeGenerator.dilation) - 2) + 1, random.nextInt((grandMazeGenerator.height / grandMazeGenerator.dilation) - 2) + 1));
 		}
 
 		// Create a new maze.
-		MazeComponent mazeToSolve = new StraightDepthFirstMaze(mazeGenerator.width / mazeGenerator.dilation, mazeGenerator.height / mazeGenerator.dilation, random, 0.45D);
+		MazeComponent mazeToSolve = new StraightDepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation, grandMazeGenerator.height / grandMazeGenerator.dilation, random, 0.45D);
 		mazeToSolve.generateMaze();
 
 		// Create a maze solver and solve the maze using the starting point and ending
@@ -173,7 +179,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		solvedMaze.generateMaze();
 
 		// Create a scaled maze using the dilation.
-		MazeComponent dilatedMaze = new DilateMaze(solvedMaze, mazeGenerator.dilation);
+		MazeComponent dilatedMaze = new DilateMaze(solvedMaze, grandMazeGenerator.dilation);
 		dilatedMaze.generateMaze();
 
 		Vec2i starting = new Vec2i(random.nextInt((dilatedMaze.width / 2) - 2) + 1, random.nextInt((dilatedMaze.height / 2) - 2) + 1);
@@ -198,28 +204,79 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		return combinedMaze;
 	}
 
+	public MazeComponent newMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
+		MazeComponent maze = new DepthFirstMaze(width, height, random);
+		maze.generateMaze();
+		return maze;
+	}
+
 	@Override
 	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator,
 			StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> fullChunkConverter,
 			List<Chunk> chunks, Chunk chunk) {
 		BlockPos startPos = chunk.getPos().getStartPos();
-		this.mazeGenerator.generateMaze(startPos, region.getSeed(), this::newMaze, (pos, mazePos, maze, cellState, thickness) -> decorateCell(pos, mazePos, maze, cellState, thickness, region));
-
+		this.grandMazeGenerator.generateMaze(startPos, region.getSeed(), this::newGrandMaze,
+				(pos, mazePos, maze, cellState, thickness) -> decorateGrandCell(pos, mazePos, maze, cellState, thickness, region));
+		this.level2mazeGenerator.generateMaze(startPos, region.getSeed(), this::newMaze, (pos, mazePos, maze, cellState, thickness) -> decorateCell(pos, mazePos, maze, cellState, thickness, region));
 		return CompletableFuture.completedFuture(chunk);
 	}
 
 	public void decorateCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness, ChunkRegion region) {
+		RandomGenerator random = RandomGenerator.createLegacy(grandMazeGenerator.blockSeed(pos.getX(), grandMazeGenerator.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
 
-		for (int x = 0; x < thickness; x++) {
-			for (int z = 0; z < thickness; z++) {
-				region.setBlockState(pos.add(x, 0, z), Blocks.OAK_PLANKS.getDefaultState(), Block.FORCE_STATE, 0);
+		RandomGenerator chunkRandom = RandomGenerator
+				.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - Math.floorMod(pos.getX(), 16), pos.getZ() - Math.floorMod(pos.getZ(), 16), -1337));
+		RandomGenerator bigRandom = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - Math.floorMod(pos.getX(), 32), pos.getZ() - Math.floorMod(pos.getZ(), 32), 69420));
+		RandomGenerator hugeRandom = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - Math.floorMod(pos.getX(), 64), pos.getZ() - Math.floorMod(pos.getZ(), 64), 1337));
+
+		if (hugeRandom.nextDouble() < 0.04522689D) {
+			boolean flip = hugeRandom.nextBoolean();
+
+			int xOffset = MathHelper.floor(((double) Math.floorMod(pos.getX(), 64)) / 16.0D) * 16;
+			int zOffset = MathHelper.floor(((double) Math.floorMod(pos.getZ(), 64)) / 16.0D) * 16;
+
+			if (Math.floorMod(pos.getX(), 16) == 0 && Math.floorMod(pos.getZ(), 16) == 0) {
+				generateNbt(region, new BlockPos(xOffset, 0, zOffset), pos.up(17), pos.up(17).add(16, 64, 16), "level2/communal_corridors_level2_decorated_huge_" + (hugeRandom.nextInt(2)),
+						flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE, flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+			}
+			return;
+		} else if (bigRandom.nextDouble() < 0.09888567D) {
+			boolean flip = bigRandom.nextBoolean();
+
+			int xOffset = MathHelper.floor(((double) Math.floorMod(pos.getX(), 32)) / 16.0D) * 16;
+			int zOffset = MathHelper.floor(((double) Math.floorMod(pos.getZ(), 32)) / 16.0D) * 16;
+
+			if (Math.floorMod(pos.getX(), 16) == 0 && Math.floorMod(pos.getZ(), 16) == 0) {
+				int i = bigRandom.nextInt(5);
+				if (i == 4) {
+					generateNbt(region, new BlockPos(xOffset, 0, zOffset), pos.up(15), pos.up(15).add(16, 64, 16), "level2/communal_corridors_level2_decorated_big_dip_0",
+							flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE, flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+				} else {
+					generateNbt(region, new BlockPos(xOffset, 0, zOffset), pos.up(17), pos.up(17).add(16, 64, 16), "level2/communal_corridors_level2_decorated_big_" + i,
+							flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE, flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+				}
+			}
+			return;
+		} else {
+			if (chunkRandom.nextDouble() < 0.07624375D) {
+				boolean flip = chunkRandom.nextBoolean();
+				if (Math.floorMod(pos.getX(), 16) == 0 && Math.floorMod(pos.getZ(), 16) == 0) {
+					if (chunkRandom.nextDouble() < 0.7624375D) {
+						generateNbt(region, pos.up(17), "level2/communal_corridors_level2_decorated_" + (chunkRandom.nextInt(12)), flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE,
+								flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+					} else {
+						if ((chunkRandom.nextDouble() < 0.31275D && chunkRandom.nextInt(8) == 0)) {
+							generateNbt(region, pos.up(17), "level2/communal_corridors_level2_tall_" + (chunkRandom.nextInt(12) + 1), flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE,
+									flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+						} else {
+							generateNbt(region, pos.up(17), "level2/communal_corridors_level2_" + (chunkRandom.nextInt(12) + 1), flip ? BlockRotation.CLOCKWISE_90 : BlockRotation.NONE,
+									flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+						}
+					}
+				}
+				return;
 			}
 		}
-
-		RandomGenerator random = RandomGenerator.createLegacy(mazeGenerator.blockSeed(pos.getX(), mazeGenerator.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
-
-		BlockRotation rotation = BlockRotation.NONE;
-		BlockMirror mirror = BlockMirror.NONE;
 
 		String dir = "nesw";
 
@@ -237,31 +294,85 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		}
 		if (dir != "") {
 
-			if (random.nextDouble() < 0.35) {
-				dir = dir + "_" + (random.nextInt(4) + 1);
+			if (random.nextDouble() > 0.67289445D) {
+				this.generateNbt(region, pos.up(17), "maze/communal_corridors_" + dir + "_" + (random.nextInt(10)));
+			} else {
+				this.generateNbt(region, pos.up(17), "maze/communal_corridors_" + dir + "_decorated_" + (random.nextInt(10)));
 			}
 
-			this.generateNbt(region, pos.up(1), "maze/communal_corridors_" + dir, rotation, mirror);
+		}
+	}
+
+	public void decorateGrandCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness, ChunkRegion region) {
+
+		for (int x = 0; x < thickness; x++) {
+			for (int z = 0; z < thickness; z++) {
+				region.setBlockState(pos.add(x, 0, z), Blocks.OAK_PLANKS.getDefaultState(), Block.FORCE_STATE, 0);
+				region.setBlockState(pos.add(x, 16, z), Blocks.OAK_PLANKS.getDefaultState(), Block.FORCE_STATE, 0);
+			}
+		}
+
+		RandomGenerator random = RandomGenerator.createLegacy(grandMazeGenerator.blockSeed(pos.getX(), grandMazeGenerator.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
+
+		String dir = "nesw";
+
+		if (!state.isWest()) {
+			dir = dir.replace("n", "");
+		}
+		if (!state.isNorth()) {
+			dir = dir.replace("e", "");
+		}
+		if (!state.isEast()) {
+			dir = dir.replace("s", "");
+		}
+		if (!state.isSouth()) {
+			dir = dir.replace("w", "");
+		}
+		if (dir != "") {
+
+			if (random.nextDouble() > 0.67289445D) {
+				this.generateNbt(region, pos.up(1), "maze/communal_corridors_" + dir + "_" + (random.nextInt(10)));
+			} else {
+				this.generateNbt(region, pos.up(1), "maze/communal_corridors_" + dir + "_decorated_" + (random.nextInt(10)));
+			}
+
 		} else {
 
-			RandomGenerator fullChunkRandom = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - (pos.getX() % 16), pos.getZ() - (pos.getZ() % 16), -69420));
-
-			if ((fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
-				if (maze.fits(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY())) && maze.fits(new Vec2i(state.getPosition().getX(), state.getPosition().getY() + 1))
-						&& maze.fits(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY() + 1))) {
-					if (!(maze.hasNeighbors(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY()))
-							|| maze.hasNeighbors(new Vec2i(state.getPosition().getX(), state.getPosition().getY() + 1))
-							|| maze.hasNeighbors(new Vec2i(state.getPosition().getX() + 1, state.getPosition().getY() + 1)))) {
-						generateNbt(region, pos.up(), "communal_corridors_decorated_big_" + (fullChunkRandom.nextInt(3) + 1));
-						return;
+			for (int x = 0; x < thickness; x++) {
+				for (int z = 0; z < thickness; z++) {
+					for (int y = 0; y < 8; y++) {
+						region.setBlockState(pos.add(x, 6 + y, z), CornerBlocks.DRYWALL.getDefaultState(), Block.FORCE_STATE, 0);
 					}
 				}
 			}
 
-			if (random.nextDouble() < 0.2375625D) {
-				generateNbt(region, pos.up(), "communal_corridors_" + (random.nextInt(5) + 1));
-			} else {
-				generateNbt(region, pos.up(), "communal_corridors_decorated_" + (random.nextInt(22) + 1));
+			RandomGenerator fullChunkRandom = RandomGenerator
+					.createLegacy(region.getSeed() + MathHelper.hashCode(pos.getX() - Math.floorMod(pos.getX(), 16), pos.getZ() - Math.floorMod(pos.getZ(), 16), -69420));
+
+			boolean flip = random.nextBoolean();
+			boolean shouldGenerateSmall = true;
+
+			Vec2i fullChunkPos = new Vec2i(state.getPosition().getX() - Math.floorMod(state.getPosition().getX(), 2), state.getPosition().getY() - Math.floorMod(state.getPosition().getY(), 2));
+
+			if ((fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
+				if (!(maze.cellState(fullChunkPos).isWest() || maze.cellState(fullChunkPos).isNorth() || maze.cellState(fullChunkPos).isEast() || maze.cellState(fullChunkPos).isSouth())) {
+					if (Math.floorMod(state.getPosition().getX(), 2) == 0 && Math.floorMod(state.getPosition().getY(), 2) == 0) {
+						generateNbt(region, pos.up(), "communal_corridors_decorated_big_" + (fullChunkRandom.nextInt(3) + 1), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+								flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+					}
+
+					shouldGenerateSmall = false;
+				}
+			}
+
+			if (shouldGenerateSmall) {
+				if (random.nextDouble() < 0.2375625D) {
+					generateNbt(region, pos.up(), "communal_corridors_" + (random.nextInt(14) + 1), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+				} else {
+					generateNbt(region, pos.up(), "communal_corridors_decorated_" + (random.nextInt(26) + 1), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+				}
 			}
 		}
 
@@ -289,18 +400,26 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 				dir = dir.replace("w", "");
 			}
 
-			store("maze/communal_corridors_" + dir, world);
-			store("maze/communal_corridors_" + dir, world, 1, 4);
+			store("maze/communal_corridors_" + dir, world, 0, 9);
+			store("maze/communal_corridors_" + dir + "_decorated", world, 0, 9);
 		}
 
-		store("communal_corridors", world, 1, 5);
-		store("communal_corridors_decorated", world, 1, 22);
+		store("communal_corridors", world, 1, 14);
+		store("communal_corridors_decorated", world, 1, 26);
 		store("communal_corridors_decorated_big", world, 1, 3);
+
+		store("level2/communal_corridors_level2", world, 1, 12);
+		store("level2/communal_corridors_level2_tall", world, 1, 12);
+
+		store("level2/communal_corridors_level2_decorated", world, 0, 11);
+		store("level2/communal_corridors_level2_decorated_big", world, 0, 3);
+		store("level2/communal_corridors_level2_decorated_big_dip_0", world);
+		store("level2/communal_corridors_level2_decorated_huge", world, 0, 1);
 	}
 
 	@Override
 	public int getChunkDistance() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -323,6 +442,18 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 			case 0:
 			default:
 				break;
+			}
+		} else if (state.isOf(Blocks.RED_STAINED_GLASS)) {
+			RandomGenerator random = RandomGenerator.createLegacy(region.getSeed() + MathHelper.hashCode(pos));
+			if (random.nextDouble() < 0.3765568D) {
+				region.setBlockState(pos, Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL, 1);
+			} else {
+				region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
+			}
+		} else if (state.isOf(Blocks.CHEST)) {
+			region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+			if (region.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
+				lootTable.setLootTable(LootTables.WOODLAND_MANSION_CHEST, region.getSeed() + MathHelper.hashCode(pos));
 			}
 		}
 	}

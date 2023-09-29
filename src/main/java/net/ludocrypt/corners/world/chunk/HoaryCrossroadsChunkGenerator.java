@@ -103,8 +103,8 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	 */
 	public MazeComponent newMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
 		// Find the position of the grandMaze that contains the current maze
-		BlockPos grandMazePos = new BlockPos(mazePos.getX() - mazeGenerator.mod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thickness)), 0,
-				mazePos.getZ() - mazeGenerator.mod(mazePos.getZ(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thickness)));
+		BlockPos grandMazePos = new BlockPos(mazePos.getX() - Math.floorMod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thickness)), 0,
+				mazePos.getZ() - Math.floorMod(mazePos.getZ(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thickness)));
 
 		// Check if the grandMaze was already generated, if not generate it
 		MazeComponent grandMaze;

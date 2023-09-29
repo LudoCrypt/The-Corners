@@ -4,7 +4,10 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.impl.client.rendering.EntityRendererRegistryImpl;
+import net.ludocrypt.corners.client.entity.corvus.CorvusEntityModel;
+import net.ludocrypt.corners.client.entity.corvus.CorvusEntityRenderer;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.packet.ServerToClientPackets;
@@ -18,6 +21,8 @@ public class TheCornersClient implements ClientModInitializer {
 		ServerToClientPackets.manageServerToClientPackets();
 		BlockRenderLayerMap.put(RenderLayer.getCutout(), CornerBlocks.SNOWY_GLASS_PANE, CornerBlocks.SNOWY_GLASS, CornerBlocks.SNOWY_GLASS_SLAB);
 		EntityRendererRegistryImpl.register(CornerEntities.DIMENSIONAL_PAINTING_ENTITY, PaintingEntityRenderer::new);
+		EntityRendererRegistryImpl.register(CornerEntities.CORVUS_ENTITY, CorvusEntityRenderer::new);
+		EntityModelLayerRegistry.registerModelLayer(CorvusEntityModel.LAYER_LOCATION, () -> CorvusEntityModel.createBodyLayer());
 	}
 
 }

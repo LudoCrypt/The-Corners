@@ -17,11 +17,6 @@ public class GrandMazeGenerator extends RectangularMazeGenerator<MazeComponent> 
 	}
 
 	@Override
-	public int mod(int x, int n) {
-		return super.mod(x, n);
-	}
-
-	@Override
 	public long blockSeed(long x, long y, long z) {
 		return super.blockSeed(x, y, z);
 	}
