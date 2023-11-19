@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/cube_column",
+	"textures": {
+		"end": "corners:block/stripped_gaia_log",
+		"side": "corners:block/stripped_gaia_log"
+	}
+}

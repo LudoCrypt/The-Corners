@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/cube_column_uv_locked_x",
+	"textures": {
+		"end": "corners:block/stripped_gaia_log_top",
+		"side": "corners:block/stripped_gaia_log"
+	}
+}

@@ -1,2 +1,5 @@
 accessWidener v1 named
 extendable method net/minecraft/block/FenceBlock canConnectToFence (Lnet/minecraft/block/BlockState;)Z
+extendable method net/minecraft/item/BoatItem createBoatEntity (Lnet/minecraft/world/World;Lnet/minecraft/util/hit/HitResult;)Lnet/minecraft/entity/vehicle/BoatEntity;
+accessible field net/minecraft/client/render/entity/BoatEntityRenderer texturesAndModels Ljava/util/Map;
+mutable field net/minecraft/client/render/entity/BoatEntityRenderer texturesAndModels Ljava/util/Map;

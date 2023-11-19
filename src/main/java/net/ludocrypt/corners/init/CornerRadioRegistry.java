@@ -19,7 +19,6 @@ public class CornerRadioRegistry {
 
 	public static void init() {
 		Registry.register(RADIO_REGISTRY, TheCorners.id("default_radio"), DEFAULT);
-
 		getRadio("yearning_canal", new RadioSoundTable(CornerSoundEvents.RADIO_YEARNING_CANAL_MUSIC, CornerSoundEvents.RADIO_YEARNING_CANAL_STATIC, CornerSoundEvents.RADIO_YEARNING_CANAL));
 		getRadio("communal_corridors",
 				new RadioSoundTable(CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_MUSIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS_STATIC, CornerSoundEvents.RADIO_COMMUNAL_CORRIDORS));

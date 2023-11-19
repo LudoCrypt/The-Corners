@@ -12,11 +12,8 @@ public class YearningCanalBiome {
 
 	public static Biome create(HolderProvider<PlacedFeature> features, HolderProvider<ConfiguredCarver<?>> carvers) {
 		Biome.Builder biome = new Biome.Builder();
-
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-
 		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder(features, carvers);
-
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(16777215);
 		biomeEffects.waterColor(16777215);
@@ -24,16 +21,12 @@ public class YearningCanalBiome {
 		biomeEffects.fogColor(16777215);
 		biomeEffects.grassColor(13818488);
 		BiomeEffects effects = biomeEffects.build();
-
 		biome.spawnSettings(spawnSettings.build());
 		biome.generationSettings(generationSettings.build());
 		biome.effects(effects);
-
 		biome.hasPrecipitation(false);
-
 		biome.temperature(0.8F);
 		biome.downfall(0.0F);
-
 		return biome.build();
 	}
 

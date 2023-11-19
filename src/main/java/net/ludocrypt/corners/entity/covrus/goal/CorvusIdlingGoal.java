@@ -6,6 +6,7 @@ import net.ludocrypt.corners.entity.covrus.CorvusEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
 public class CorvusIdlingGoal extends Goal {
+
 	private final CorvusEntity mob;
 	private double deltaX;
 	private double deltaZ;
@@ -44,4 +45,5 @@ public class CorvusIdlingGoal extends Goal {
 		--this.lookTime;
 		this.mob.getLookControl().lookAt(this.mob.getX() + this.deltaX, this.mob.getEyeY(), this.mob.getZ() + this.deltaZ);
 	}
+
 }

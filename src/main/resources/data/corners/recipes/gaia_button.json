@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"category": "redstone",
+	"group": "wooden_button",
+	"ingredients": [
+		{
+			"item": "corners:gaia_planks"
+		}
+	],
+	"result": {
+		"item": "corners:gaia_button"
+	}
+}

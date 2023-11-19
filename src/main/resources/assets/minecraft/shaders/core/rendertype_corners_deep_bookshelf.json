@@ -205,6 +205,26 @@
 			"values": [
 				0.0
 			]
+		},
+		{
+			"name": "BooksTopRow",
+			"type": "int",
+			"count": 3,
+			"values": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "BooksBottomRow",
+			"type": "int",
+			"count": 3,
+			"values": [
+				0,
+				0,
+				0
+			]
 		}
 	]
 }

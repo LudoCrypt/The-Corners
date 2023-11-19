@@ -33,12 +33,14 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	}
 
 	public static DimensionalPaintingEntity create(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
+
 		if (variant instanceof DimensionalPaintingVariant) {
 			DimensionalPaintingEntity entity = create(world, pos);
 			((PaintingEntityAccessor) entity).callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
 			entity.setFacing(direction);
 			return entity;
 		}
+
 		TheCorners.LOGGER.warn("PaintingVariant {} is not DimensionalPaintingVariant, has nowhere to go!", variant);
 		throw new UnsupportedOperationException();
 	}
@@ -52,28 +54,38 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	}
 
 	public static PaintingEntity createFromMotive(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
+
 		if (variant instanceof DimensionalPaintingVariant) {
 			return create(world, pos, direction, variant);
 		} else {
 			return createRegular(world, pos, direction, variant);
 		}
+
 	}
 
 	@Override
 	public void onPlayerCollision(PlayerEntity player) {
 		super.onPlayerCollision(player);
+
 		if (this.getVariant().value() instanceof DimensionalPaintingVariant variant) {
 			Box box = this.getBoundingBox().expand(0.3D);
+
 			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
 
-				if (this.getWorld() instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
-					ServerWorld world = player.getServer().getWorld(variant.dimension.apply(spe, this));
+				if (player.getVelocity().length() > 0.05) {
 
-					TeleportTarget teleportTarget = variant.teleportTarget.apply(spe, this);
-					LimlibTravelling.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+					if (this.getWorld() instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
+						ServerWorld world = player.getServer().getWorld(variant.dimension.apply(spe, this));
+						TeleportTarget teleportTarget = variant.teleportTarget.apply(spe, this);
+						LimlibTravelling.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+					}
+
 				}
+
 			}
+
 		}
+
 	}
 
 }

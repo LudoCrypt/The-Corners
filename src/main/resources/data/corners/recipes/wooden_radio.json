@@ -6,13 +6,13 @@
 	],
 	"key": {
 		"#": {
-			"tag": "minecraft:planks"
+			"item": "corners:gaia_planks"
 		},
 		"X": {
-			"item": "minecraft:gold_ingot"
+			"item": "minecraft:redstone"
 		}
 	},
 	"result": {
-		"item": "corners:wooden_radio"
+		"item": "corners:broken_radio"
 	}
 }

@@ -22,25 +22,29 @@ public class MinecraftClientMixin {
 
 	@Shadow
 	public ClientPlayerEntity player;
-
 	@Shadow
 	public ClientWorld world;
-
 	@Final
 	@Shadow
 	private Window window;
 
 	@Inject(method = "getMusic", at = @At("HEAD"), cancellable = true)
 	private void corners$getMusic(CallbackInfoReturnable<MusicSound> ci) {
+
 		if (this.player != null) {
+
 			if (world.getRegistryKey().equals(CornerWorlds.COMMUNAL_CORRIDORS_KEY)) {
-				if (CornerConfig.get().christmas.christmas) {
+
+				if (CornerConfig.get().christmas.isChristmas()) {
 					ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS_CHRISTMAS, 3000, 8000, true));
 				} else {
 					ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS, 3000, 8000, true));
 				}
+
 			}
+
 		}
+
 	}
 
 }

@@ -1,0 +1,8 @@
+{
+	"parent": "minecraft:block/slab",
+	"textures": {
+		"bottom": "corners:block/gaia_planks",
+		"side": "corners:block/gaia_planks",
+		"top": "corners:block/gaia_planks"
+	}
+}

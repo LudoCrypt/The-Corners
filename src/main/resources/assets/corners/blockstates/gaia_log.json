@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"axis=x": {
+			"model": "corners:block/gaia_log_x"
+		},
+		"axis=y": {
+			"model": "corners:block/gaia_log_y"
+		},
+		"axis=z": {
+			"model": "corners:block/gaia_log_z"
+		}
+	}
+}

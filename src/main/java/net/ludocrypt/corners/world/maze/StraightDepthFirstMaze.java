@@ -12,9 +12,7 @@ import net.minecraft.util.random.RandomGenerator;
 public class StraightDepthFirstMaze extends MazeComponent {
 
 	public Stack<NormalVec2i> stack = new Stack<NormalVec2i>();
-
 	public RandomGenerator random;
-
 	public double bias;
 
 	public StraightDepthFirstMaze(int width, int height, RandomGenerator RandomGenerator, double bias) {
@@ -54,11 +52,14 @@ public class StraightDepthFirstMaze extends MazeComponent {
 			// Neighbour check
 			if (!neighbours.isEmpty()) {
 				int nextCellDir;
+
 				if (random.nextDouble() < bias) {
 					nextCellDir = this.stack.peek().getDir();
+
 					if ((!neighbours.contains(nextCellDir)) || (nextCellDir == -1)) {
 						nextCellDir = neighbours.get(random.nextInt(neighbours.size()));
 					}
+
 				} else {
 					nextCellDir = neighbours.get(random.nextInt(neighbours.size()));
 				}
@@ -96,12 +97,13 @@ public class StraightDepthFirstMaze extends MazeComponent {
 
 				// Visit Cell
 				this.visitedCells++;
-
 			} else {
 				// Backtrack
 				this.stack.pop();
 			}
+
 		}
+
 	}
 
 	public static class NormalVec2i extends Vec2i {
@@ -123,9 +125,11 @@ public class StraightDepthFirstMaze extends MazeComponent {
 
 		@Override
 		public boolean equals(Object obj) {
+
 			if (obj instanceof NormalVec2i pos) {
 				return pos.getX() == this.getX() && pos.getY() == this.getY() && pos.dir == this.dir;
 			}
+
 			return super.equals(obj);
 		}
 

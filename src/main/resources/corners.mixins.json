@@ -5,11 +5,15 @@
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
 		"AbstractDecorationEntityAccessor",
+		"BlockEntityTypeMixin",
 		"BlockMixin",
+		"BoatDispenserBehaviorMixin",
+		"BoatEntityMixin",
 		"EntityMixin",
 		"PaintingEntityAccessor",
 		"ServerPlayerEntityMixin",
 		"ServerWorldMixin",
+		"SignTypeAccessor",
 		"SnowBlockMixin"
 	],
 	"client": [

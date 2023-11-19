@@ -20,7 +20,6 @@ public class BakedModelManagerMixin {
 	@Final
 	@Mutable
 	private static Map<Identifier, Identifier> ATLAS_RESOURCES;
-
 	static {
 		Map<Identifier, Identifier> newAtli = new HashMap<Identifier, Identifier>();
 		newAtli.putAll(ATLAS_RESOURCES);

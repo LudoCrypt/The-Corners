@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "corners:block/carved_gaia_top",
+		"up": "corners:block/carved_gaia_top",
+		"down": "corners:block/carved_gaia_top",
+		"north": "corners:block/carved_gaia_front",
+		"east": "corners:block/carved_gaia_side",
+		"south": "corners:block/carved_gaia_front",
+		"west": "corners:block/carved_gaia_side"
+	}
+}

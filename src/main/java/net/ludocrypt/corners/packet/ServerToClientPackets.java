@@ -27,13 +27,12 @@ public class ServerToClientPackets {
 		ClientPlayNetworking.registerGlobalReceiver(ClientToServerPackets.PLAY_RADIO, (client, handler, buf, responseSender) -> {
 			BlockPos pos = buf.readBlockPos();
 			boolean start = buf.readBoolean();
-
 			client.execute(() -> {
 				RadioSoundTable id = CornerRadioRegistry.getCurrent(client);
-
 				List<PaintingEntity> closestPaintings = client.world
 						.getEntitiesByClass(PaintingEntity.class, Box.from(Vec3d.of(pos)).expand(16.0D), (entity) -> entity.getVariant().value() instanceof DimensionalPaintingVariant).stream()
 						.sorted(Comparator.comparing((entity) -> entity.squaredDistanceTo(Vec3d.of(pos)))).toList();
+
 				if (!closestPaintings.isEmpty()) {
 					id = CornerRadioRegistry.getCurrent(((DimensionalPaintingVariant) closestPaintings.get(0).getVariant().value()).radioRedirect);
 				}
@@ -41,9 +40,9 @@ public class ServerToClientPackets {
 				SoundSystemAccess.get(((SoundManagerAccessor) client.getSoundManager()).getSoundSystem()).stopSoundsAtPosition(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, null,
 						SoundCategory.RECORDS);
 				((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().remove(pos);
+
 				if (start) {
 					((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().add(pos);
-
 					SoundEvent soundEvent = id.getRadioSound().value();
 
 					if (client.world.getBlockState(pos).isOf(CornerBlocks.WOODEN_RADIO)) {
@@ -57,6 +56,7 @@ public class ServerToClientPackets {
 					LoopingPositionedSoundInstance.play(client.world, pos, soundEvent, SoundCategory.RECORDS, 1.0F, 1.0F, RandomGenerator.createLegacy(), pos.getX() + 0.5, pos.getY() + 1.0,
 							pos.getZ() + 0.5);
 				}
+
 			});
 		});
 	}

@@ -19,14 +19,15 @@ public class CornerPaintings {
 
 	public static final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, Vec3d> overworldPaintingTarget = (player, painting) -> {
 		BlockPos pos = player.getSpawnPointPosition();
+
 		if (pos != null) {
 			ServerWorld serverWorld = player.getServer().getOverworld();
 			return PlayerEntity.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnPointSet(), true).orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
 		} else {
 			return Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos());
 		}
-	};
 
+	};
 	public static final PaintingVariant OVERWORLD = get("overworld", DimensionalPaintingVariant.create(48, 48, World.OVERWORLD, overworldPaintingTarget));
 	public static final PaintingVariant OVERWORLD_THIN = get("overworld_thin", DimensionalPaintingVariant.create(16, 32, World.OVERWORLD, overworldPaintingTarget));
 	public static final PaintingVariant OVERWORLD_WIDE = get("overworld_wide", DimensionalPaintingVariant.create(64, 32, World.OVERWORLD, overworldPaintingTarget));
@@ -36,9 +37,7 @@ public class CornerPaintings {
 	public static final PaintingVariant HOARY_CROSSROADS = get("hoary_crossroads", DimensionalPaintingVariant.create(32, 48, CornerWorlds.HOARY_CROSSROADS_KEY,
 			(player, painting) -> player.getPos().subtract(new Vec3d(player.getX() % 512.0D, player.getY(), player.getZ() % 512.0D)).add(256.0D, 263.0D, 0.0D).add(4.0D, 0, 4.0D)));
 
-	public static void init() {
-
-	}
+	public static void init() {}
 
 	public static <T extends PaintingVariant> T get(String id, T painting) {
 		return Registry.register(Registries.PAINTING_VARIANT, TheCorners.id(id), painting);

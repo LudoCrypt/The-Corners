@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"type=bottom": {
+			"model": "corners:block/gaia_slab"
+		},
+		"type=double": {
+			"model": "corners:block/gaia_planks"
+		},
+		"type=top": {
+			"model": "corners:block/gaia_slab_top"
+		}
+	}
+}

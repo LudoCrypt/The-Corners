@@ -16,9 +16,4 @@ public class GrandMazeGenerator extends RectangularMazeGenerator<MazeComponent> 
 		this.dilation = dilation;
 	}
 
-	@Override
-	public long blockSeed(long x, long y, long z) {
-		return super.blockSeed(x, y, z);
-	}
-
 }

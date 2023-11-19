@@ -16,6 +16,7 @@ import net.ludocrypt.corners.world.biome.YearningCanalBiome;
 import net.ludocrypt.corners.world.chunk.CommunalCorridorsChunkGenerator;
 import net.ludocrypt.corners.world.chunk.HoaryCrossroadsChunkGenerator;
 import net.ludocrypt.corners.world.chunk.YearningCanalChunkGenerator;
+import net.ludocrypt.corners.world.feature.GaiaTreeFeature;
 import net.ludocrypt.limlib.api.LimlibRegistrar;
 import net.ludocrypt.limlib.api.LimlibRegistryHooks;
 import net.ludocrypt.limlib.api.LimlibWorld;
@@ -33,13 +34,22 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.MusicSound;
 import net.minecraft.util.math.int_provider.ConstantIntProvider;
+import net.minecraft.util.math.int_provider.UniformIntProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.source.FixedBiomeSource;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionType.MonsterSettings;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
+import net.minecraft.world.gen.foliage.MegaPineFoliagePlacer;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.gen.trunk.GiantTrunkPlacer;
 
 public class CornerWorlds implements LimlibRegistrar {
 
@@ -48,53 +58,50 @@ public class CornerWorlds implements LimlibRegistrar {
 	private static final List<Pair<RegistryKey<Skybox>, Skybox>> SKYBOXES = Lists.newArrayList();
 	private static final List<Pair<RegistryKey<DimensionEffects>, DimensionEffects>> DIMENSION_EFFECTS = Lists.newArrayList();
 	private static final List<Pair<RegistryKey<PostEffect>, PostEffect>> POST_EFFECTS = Lists.newArrayList();
-
 	public static final String YEARNING_CANAL = "yearning_canal";
 	public static final String COMMUNAL_CORRIDORS = "communal_corridors";
 	public static final String HOARY_CROSSROADS = "hoary_crossroads";
-
 	public static final RegistryKey<World> YEARNING_CANAL_KEY = RegistryKey.of(RegistryKeys.WORLD, TheCorners.id(YEARNING_CANAL));
 	public static final RegistryKey<World> COMMUNAL_CORRIDORS_KEY = RegistryKey.of(RegistryKeys.WORLD, TheCorners.id(COMMUNAL_CORRIDORS));
 	public static final RegistryKey<World> HOARY_CROSSROADS_KEY = RegistryKey.of(RegistryKeys.WORLD, TheCorners.id(HOARY_CROSSROADS));
-
 	public static final SoundEffects YEARNING_CANAL_SOUND_EFFECTS = get(YEARNING_CANAL, new SoundEffects(Optional.of(new StaticReverbEffect.Builder().setDecayTime(20.0F).build()), Optional.empty(),
 			Optional.of(new MusicSound(CornerSoundEvents.MUSIC_YEARNING_CANAL, 3000, 8000, true))));
 	public static final SoundEffects COMMUNAL_CORRIDORS_SOUND_EFFECTS = get(COMMUNAL_CORRIDORS,
 			new SoundEffects(Optional.of(new StaticReverbEffect.Builder().setDecayTime(2.15F).setDensity(0.0725F).build()), Optional.empty(), Optional.empty()));
 	public static final SoundEffects HOARY_CROSSROADS_SOUND_EFFECTS = get(HOARY_CROSSROADS, new SoundEffects(Optional.of(new StaticReverbEffect.Builder().setDecayTime(15.0F).setDensity(1.0F).build()),
 			Optional.empty(), Optional.of(new MusicSound(CornerSoundEvents.MUSIC_HOARY_CROSSROADS, 3000, 8000, true))));
-
 	public static final Skybox YEARNING_CANAL_SKYBOX = get(YEARNING_CANAL, new TexturedSkybox(TheCorners.id("textures/sky/yearning_canal")));
 	public static final Skybox COMMUNAL_CORRIDORS_SKYBOX = get(COMMUNAL_CORRIDORS, new TexturedSkybox(TheCorners.id("textures/sky/snow")));
 	public static final Skybox HOARY_CROSSROADS_SKYBOX = get(HOARY_CROSSROADS, new TexturedSkybox(TheCorners.id("textures/sky/hoary_crossroads")));
-
 	public static final DimensionEffects YEARNING_CANAL_SKY_EFFECTS = get(YEARNING_CANAL, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, false, 1.0F));
 	public static final DimensionEffects COMMUNAL_CORRIDORS_SKY_EFFECTS = get(COMMUNAL_CORRIDORS, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, false, 1.0F));
 	public static final DimensionEffects HOARY_CROSSROADS_SKY_EFFECTS = get(HOARY_CROSSROADS, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, true, 1.0F));
-
 	public static final PostEffect YEARNING_CANAL_POST_EFFECT = get(YEARNING_CANAL, new StaticPostEffect(TheCorners.id(YEARNING_CANAL)));
 	public static final PostEffect COMMUNAL_CORRIDORS_POST_EFFECT = get(COMMUNAL_CORRIDORS, new StrongPostEffect(TheCorners.id(COMMUNAL_CORRIDORS), TheCorners.id(COMMUNAL_CORRIDORS + "_fallback")));
 	public static final PostEffect HOARY_CROSSROADS_POST_EFFECT = get(HOARY_CROSSROADS, new StaticPostEffect(TheCorners.id(HOARY_CROSSROADS)));
-
 	public static final LimlibWorld YEARNING_CANAL_WORLD = get(YEARNING_CANAL,
 			new LimlibWorld(
 					() -> new DimensionType(OptionalLong.of(1200), true, false, false, true, 1.0, true, false, 0, 2032, 2032, TagKey.of(RegistryKeys.BLOCK, TheCorners.id(YEARNING_CANAL)),
 							TheCorners.id(YEARNING_CANAL), 1.0F, new MonsterSettings(false, false, ConstantIntProvider.ZERO, 0)),
 					(registry) -> new DimensionOptions(registry.get(RegistryKeys.DIMENSION_TYPE).getHolder(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, TheCorners.id(YEARNING_CANAL))).get(),
-							new YearningCanalChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.YEARNING_CANAL_BIOME).get())))));
+							new YearningCanalChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.YEARNING_CANAL_BIOME).get()),
+									YearningCanalChunkGenerator.createGroup()))));
 	public static final LimlibWorld COMMUNAL_CORRIDORS_WORLD = get(COMMUNAL_CORRIDORS,
 			new LimlibWorld(
 					() -> new DimensionType(OptionalLong.of(23500), true, false, false, true, 1.0, true, false, 0, 256, 256, TagKey.of(RegistryKeys.BLOCK, TheCorners.id(COMMUNAL_CORRIDORS)),
 							TheCorners.id(COMMUNAL_CORRIDORS), 0.075F, new MonsterSettings(false, false, ConstantIntProvider.ZERO, 0)),
 					(registry) -> new DimensionOptions(registry.get(RegistryKeys.DIMENSION_TYPE).getHolder(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, TheCorners.id(COMMUNAL_CORRIDORS))).get(),
-							new CommunalCorridorsChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.COMMUNAL_CORRIDORS_BIOME).get()), 16, 16, 8, 0))));
+							new CommunalCorridorsChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.COMMUNAL_CORRIDORS_BIOME).get()),
+									CommunalCorridorsChunkGenerator.createGroup(), 16, 16, 8, 0))));
 	public static final LimlibWorld HOARY_CROSSROADS_WORLD = get(HOARY_CROSSROADS,
 			new LimlibWorld(
 					() -> new DimensionType(OptionalLong.of(1200), true, false, false, true, 1.0, true, false, 0, 512, 512, TagKey.of(RegistryKeys.BLOCK, TheCorners.id(HOARY_CROSSROADS)),
 							TheCorners.id(HOARY_CROSSROADS), 0.725F, new MonsterSettings(false, false, ConstantIntProvider.ZERO, 0)),
 					(registry) -> new DimensionOptions(registry.get(RegistryKeys.DIMENSION_TYPE).getHolder(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, TheCorners.id(HOARY_CROSSROADS))).get(),
-							new HoaryCrossroadsChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.HOARY_CROSSROADS_BIOME).get()), 16, 16, 4, 0))));
+							new HoaryCrossroadsChunkGenerator(new FixedBiomeSource(registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.HOARY_CROSSROADS_BIOME).get()),
+									HoaryCrossroadsChunkGenerator.createGroup(), 16, 16, 4, 0))));
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void registerHooks() {
 		WORLDS.forEach((pair) -> LimlibWorld.LIMLIB_WORLD.register(pair.getFirst(), pair.getSecond(), Lifecycle.stable()));
@@ -105,14 +112,23 @@ public class CornerWorlds implements LimlibRegistrar {
 				(infoLookup, registryKey, registry) -> DIMENSION_EFFECTS.forEach((pair) -> registry.register(pair.getFirst(), pair.getSecond(), Lifecycle.stable())));
 		LimlibRegistryHooks.hook(PostEffect.POST_EFFECT_KEY,
 				(infoLookup, registryKey, registry) -> POST_EFFECTS.forEach((pair) -> registry.register(pair.getFirst(), pair.getSecond(), Lifecycle.stable())));
-
 		LimlibRegistryHooks.hook(RegistryKeys.BIOME, (infoLookup, registryKey, registry) -> {
 			HolderProvider<PlacedFeature> features = infoLookup.lookup(RegistryKeys.PLACED_FEATURE).get().getter();
 			HolderProvider<ConfiguredCarver<?>> carvers = infoLookup.lookup(RegistryKeys.CONFIGURED_CARVER).get().getter();
-
 			registry.register(CornerBiomes.YEARNING_CANAL_BIOME, YearningCanalBiome.create(features, carvers), Lifecycle.stable());
 			registry.register(CornerBiomes.COMMUNAL_CORRIDORS_BIOME, CommunalCorridorsBiome.create(features, carvers), Lifecycle.stable());
 			registry.register(CornerBiomes.HOARY_CROSSROADS_BIOME, HoaryCrossroadsBiome.create(features, carvers), Lifecycle.stable());
+		});
+		LimlibRegistryHooks.hook(RegistryKeys.FEATURE, (infoLookup, registryKey, registry) -> {
+			registry.register(CornerBiomes.GAIA_TREE_FEATURE, new GaiaTreeFeature(DefaultFeatureConfig.CODEC), Lifecycle.stable());
+		});
+		LimlibRegistryHooks.hook(RegistryKeys.CONFIGURED_FEATURE, (infoLookup, registryKey, registry) -> {
+			registry.register(CornerBiomes.CONFIGURED_GAIA_TREE_FEATURE,
+					new ConfiguredFeature<DefaultFeatureConfig, GaiaTreeFeature>(new GaiaTreeFeature(DefaultFeatureConfig.CODEC), DefaultFeatureConfig.INSTANCE), Lifecycle.stable());
+			registry.register(CornerBiomes.CONFIGURED_SAPLING_GAIA_TREE_FEATURE, new ConfiguredFeature(Feature.TREE,
+					new TreeFeatureConfig.Builder(BlockStateProvider.of(CornerBlocks.GAIA_LOG), new GiantTrunkPlacer(10, 5, 5), BlockStateProvider.of(CornerBlocks.GAIA_LEAVES),
+							new MegaPineFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0), UniformIntProvider.create(8, 10)), new TwoLayersFeatureSize(1, 1, 2)).build()),
+					Lifecycle.stable());
 		});
 	}
 

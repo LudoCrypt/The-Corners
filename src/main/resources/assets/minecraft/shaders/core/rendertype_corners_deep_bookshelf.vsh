@@ -10,6 +10,7 @@ in vec2 UV0;
 in ivec2 UV1;
 in ivec2 UV2;
 in vec3 Normal;
+in vec4 State;
 
 uniform sampler2D Sampler2;
 
@@ -33,6 +34,9 @@ out mat4 BoblessMat;
 
 out vec3 normal;
 
+out vec3 topRow;
+out vec3 bottomRow;
+
 void main() {
 	vec3 pos = Position + ChunkOffset;
 	vertexDistance = fog_distance(ModelViewMat, pos, FogShape);
@@ -46,4 +50,9 @@ void main() {
 
 	texCoord0 = UV0;
 	normal = vec3(Normal);
+	
+	int top = int(State.x);
+	int bottom = int(State.y);
+	topRow = vec3((top & 1), (top & 2) / 2, (top & 4) / 4);
+	bottomRow = vec3((bottom & 1), (bottom & 2) / 2, (bottom & 4) / 4);
 }

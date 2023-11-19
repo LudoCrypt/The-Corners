@@ -16,7 +16,6 @@ public class CorvusEntity extends MobEntity implements Flutterer {
 
 	public static final TrackedDataHandler<CorvusPose> CORVUS_POSE_DATA_HANDLER = TrackedDataHandler.createEnum(CorvusPose.class);
 	public static final TrackedData<CorvusPose> CORVUS_POSE = DataTracker.registerData(CorvusEntity.class, CORVUS_POSE_DATA_HANDLER);
-
 	public AnimationState restingAnimation = new AnimationState();
 
 	public CorvusEntity(EntityType<? extends CorvusEntity> entityType, World world) {
@@ -50,6 +49,7 @@ public class CorvusEntity extends MobEntity implements Flutterer {
 		if (this.age % 60 == 0) {
 			this.restingAnimation.restart(this.age);
 		}
+
 	}
 
 	static {

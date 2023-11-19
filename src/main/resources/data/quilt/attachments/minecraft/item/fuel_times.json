@@ -1,0 +1,7 @@
+{
+	"replace": false,
+	"values": {
+		"corners:gaia_fence": 300,
+		"corners:gaia_fence_gate": 300
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"variants": {
+		"axis=x": {
+			"model": "corners:block/stripped_gaia_wood",
+			"x": 90,
+			"y": 90
+		},
+		"axis=y": {
+			"model": "corners:block/stripped_gaia_wood"
+		},
+		"axis=z": {
+			"model": "corners:block/stripped_gaia_wood",
+			"x": 90
+		}
+	}
+}

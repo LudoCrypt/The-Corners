@@ -21,8 +21,11 @@ public class SkyboxGlassSlabBlock extends SlabBlock {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
+
 		if (stateFrom.isOf(this)) {
+
 			if (state.get(TYPE).equals(SlabType.TOP)) {
 				return stateFrom.get(TYPE).equals(SlabType.TOP) || stateFrom.get(TYPE).equals(SlabType.DOUBLE);
 			} else if (state.get(TYPE).equals(SlabType.BOTTOM)) {
@@ -32,9 +35,11 @@ public class SkyboxGlassSlabBlock extends SlabBlock {
 			} else {
 				return false;
 			}
+
 		} else {
 			return super.isSideInvisible(state, stateFrom, direction);
 		}
+
 	}
 
 	@Override

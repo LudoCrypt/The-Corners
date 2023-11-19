@@ -23,9 +23,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void corners$tick(CallbackInfo ci) {
+
 		if (this.getWorld().getRegistryKey().getValue().getNamespace().equals("corners")) {
 			AdvancementHelper.grantAdvancement(this, TheCorners.id("root"));
 		}
+
 	}
 
 }

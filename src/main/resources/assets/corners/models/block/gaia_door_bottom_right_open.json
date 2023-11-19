@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/door_bottom_right_open",
+	"textures": {
+		"bottom": "corners:block/gaia_door_bottom",
+		"top": "corners:block/gaia_door_top"
+	}
+}

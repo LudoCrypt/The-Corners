@@ -1,14 +1,14 @@
 [versions]
 minecraft = "1.20.1"
-quilt_mappings = "1.20.1+build.1"
-quilt_loader = "0.19.1"
+quilt_mappings = "1.20.1+build.9"
+quilt_loader = "0.21.0"
 
-quilted_fabric_api = "7.0.3+0.83.1-1.20.1"
-terraformersmc_modmenu = "7.1.0"
-limlib = "8.1.8"
-specialmodels = "1.2.5"
+quilted_fabric_api = "7.4.0+0.90.0-1.20.1"
+terraformersmc_modmenu = "7.2.2"
+limlib = "9.2.0"
+specialmodels = "1.3.0"
 
-cloth = "11.0.99"
+cloth = "11.1.106"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }

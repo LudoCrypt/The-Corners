@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "corners:block/grown_radio_front",
+		"up": "corners:block/grown_radio_top",
+		"down": "corners:block/grown_radio_bottom",
+		"north": "corners:block/grown_radio_front_on",
+		"east": "corners:block/grown_radio_east",
+		"south": "corners:block/grown_radio_south",
+		"west": "corners:block/grown_radio_west"
+	}
+}

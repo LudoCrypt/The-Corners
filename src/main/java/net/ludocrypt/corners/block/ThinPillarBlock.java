@@ -19,6 +19,7 @@ public class ThinPillarBlock extends PillarBlock {
 	}
 
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+
 		switch (state.get(AXIS)) {
 		case X:
 		default:
@@ -28,5 +29,7 @@ public class ThinPillarBlock extends PillarBlock {
 		case Y:
 			return Y_SHAPE;
 		}
+
 	}
+
 }

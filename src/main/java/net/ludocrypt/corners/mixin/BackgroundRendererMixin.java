@@ -34,6 +34,7 @@ public abstract class BackgroundRendererMixin {
 		} else if (client.world.getRegistryKey().equals(CornerWorlds.COMMUNAL_CORRIDORS_KEY)) {
 			RenderSystem.setShaderFogColor(0.244F, 0.244F, 0.244F);
 		}
+
 	}
 
 }

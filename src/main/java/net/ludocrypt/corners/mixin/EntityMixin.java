@@ -23,10 +23,15 @@ public abstract class EntityMixin {
 
 	@Inject(method = "interact", at = @At("HEAD"), cancellable = true)
 	private void corners$interact(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> ci) {
+
 		if (!player.getWorld().isClient) {
+
 			if (((Entity) (Object) this) instanceof PaintingEntity painting) {
+
 				if (!(((Entity) (Object) this) instanceof DimensionalPaintingEntity)) {
+
 					if (Registries.PAINTING_VARIANT.getId(painting.getVariant().value()).getNamespace().equals("corners")) {
+
 						if (player.getStackInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
 							DimensionalPaintingEntity dimensional = DimensionalPaintingEntity.create(painting.getWorld(), painting.getDecorationBlockPos(), painting.getHorizontalFacing(),
 									painting.getVariant().value());
@@ -37,10 +42,15 @@ public abstract class EntityMixin {
 							discard();
 							ci.setReturnValue(ActionResult.SUCCESS);
 						}
+
 					}
+
 				}
+
 			}
+
 		}
+
 	}
 
 	@Shadow

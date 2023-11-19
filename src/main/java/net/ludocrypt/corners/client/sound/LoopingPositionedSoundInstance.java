@@ -38,10 +38,12 @@ public class LoopingPositionedSoundInstance extends PositionedSoundInstance impl
 
 	@Override
 	public void tick() {
+
 		if (!(this.world.getBlockState(pos).getBlock() instanceof RadioBlock)) {
 			this.isDone = true;
 			((MusicTrackerAccess) (MinecraftClient.getInstance().getMusicTracker())).getRadioPositions().remove(pos);
 		}
+
 	}
 
 }

@@ -1,0 +1,57 @@
+{
+	"variants": {
+		"orientation=down_east": {
+			"model": "corners:block/carved_gaia",
+			"x": 90,
+			"y": 90
+		},
+		"orientation=down_north": {
+			"model": "corners:block/carved_gaia",
+			"x": 90
+		},
+		"orientation=down_south": {
+			"model": "corners:block/carved_gaia",
+			"x": 90,
+			"y": 180
+		},
+		"orientation=down_west": {
+			"model": "corners:block/carved_gaia",
+			"x": 90,
+			"y": 270
+		},
+		"orientation=east_up": {
+			"model": "corners:block/carved_gaia",
+			"y": 90
+		},
+		"orientation=north_up": {
+			"model": "corners:block/carved_gaia"
+		},
+		"orientation=south_up": {
+			"model": "corners:block/carved_gaia",
+			"y": 180
+		},
+		"orientation=up_east": {
+			"model": "corners:block/carved_gaia",
+			"x": 270,
+			"y": 270
+		},
+		"orientation=up_north": {
+			"model": "corners:block/carved_gaia",
+			"x": 270,
+			"y": 180
+		},
+		"orientation=up_south": {
+			"model": "corners:block/carved_gaia",
+			"x": 270
+		},
+		"orientation=up_west": {
+			"model": "corners:block/carved_gaia",
+			"x": 270,
+			"y": 90
+		},
+		"orientation=west_up": {
+			"model": "corners:block/carved_gaia",
+			"y": 270
+		}
+	}
+}

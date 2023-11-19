@@ -15,6 +15,7 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Axis;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 
@@ -28,26 +29,25 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 
 	@ClientOnly
 	private double gazeTimer = 0;
-
 	@ClientOnly
 	private double gazeWaiting = 0;
 
 	@Override
 	@ClientOnly
 	public MutableQuad modifyQuad(MutableQuad quad) {
-
 		quad.getV1().setUv(new Vec2f(0.0F, 0.0F));
 		quad.getV2().setUv(new Vec2f(0.0F, 1.0F));
 		quad.getV3().setUv(new Vec2f(1.0F, 1.0F));
 		quad.getV4().setUv(new Vec2f(1.0F, 0.0F));
-
 		return quad;
 	}
 
 	@Override
 	@ClientOnly
-	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader) {
-		if (CornerConfig.get().christmas.christmas) {
+	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader, BlockPos origin) {
+
+		if (CornerConfig.get().christmas.isChristmas()) {
+
 			if (shader.getUniform("christmas") != null) {
 				shader.getUniform("christmas").setInt(1);
 			}
@@ -60,16 +60,20 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 					shader.getUniform("leftTint" + i).setVec4(new Vector4f(hexToRGBA(
 							CornerConfig.get().christmas.leftColors.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig.get().christmas.leftColors.size()))));
 				}
+
 				if (shader.getUniform("rightTint" + i) != null) {
 					shader.getUniform("rightTint" + i).setVec4(new Vector4f(hexToRGBA(
 							CornerConfig.get().christmas.rightColors.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig.get().christmas.rightColors.size()))));
 				}
+
 			}
 
 		} else {
+
 			if (shader.getUniform("christmas") != null) {
 				shader.getUniform("christmas").setInt(0);
 			}
+
 		}
 
 		RenderSystem.setShaderTexture(0, TheCorners.id("textures/sky/" + id + ".png"));
@@ -85,22 +89,23 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		Camera camera = client.gameRenderer.getCamera();
-
 		Matrix4f matrix = new MatrixStack().peek().getModel();
-
 		matrix.rotate(Axis.X_POSITIVE.rotationDegrees(camera.getPitch()));
 		matrix.rotate(Axis.Y_POSITIVE.rotationDegrees(camera.getYaw() + 180.0F));
-
 		double gazeAngle = Math.max(Math.toRadians(camera.getPitch() % 360) / Math.PI * -2, 0);
+
 		if (gazeAngle > 0.4) {
 			gazeWaiting += ((gazeAngle - 0.5) / (0.5)) * (0.004) + 0.001;
+
 			if (gazeWaiting > 0.5) {
 				gazeTimer += ((gazeAngle - 0.5) / (0.5)) * (0.002) + 0.001;
 			}
+
 		} else {
 			gazeTimer -= 0.01D;
 			gazeWaiting = 0.0D;
 		}
+
 		gazeTimer = MathHelper.clamp(gazeTimer, 0, 1);
 
 		if (shader.getUniform("gaze") != null) {
@@ -110,6 +115,7 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 		if (shader.getUniform("RotMat") != null) {
 			shader.getUniform("RotMat").setMat4x4(matrix);
 		}
+
 	}
 
 	public static float[] hexToRGBA(String hex) {

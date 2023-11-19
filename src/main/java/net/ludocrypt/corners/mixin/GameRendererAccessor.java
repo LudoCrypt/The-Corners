@@ -18,4 +18,5 @@ public interface GameRendererAccessor {
 
 	@Invoker
 	void callBobView(MatrixStack matrices, float tickDelta);
+
 }

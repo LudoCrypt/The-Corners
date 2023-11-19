@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"group": "boat",
+	"key": {
+		"#": {
+			"item": "corners:gaia_planks"
+		}
+	},
+	"pattern": [
+		"# #",
+		"###"
+	],
+	"result": {
+		"item": "corners:gaia_boat"
+	},
+	"show_notification": true
+}

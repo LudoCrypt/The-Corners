@@ -69,22 +69,28 @@ public class RailingBlock extends FenceBlock {
 	@SuppressWarnings("deprecation")
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack itemStack = player.getStackInHand(hand);
+
 		if (itemStack.getItem() == Items.SNOW) {
+
 			if (state.get(LAYERS) < 8 && Blocks.SNOW.canPlaceAt(Blocks.SNOW.getDefaultState(), world, pos)) {
 				world.setBlockState(pos, state.cycle(LAYERS));
 				world.playSound(null, pos, SoundEvents.BLOCK_SNOW_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return ActionResult.SUCCESS;
 			}
+
 		}
+
 		return super.onUse(state, world, pos, player, hand, hit);
 	}
 
 	@Override
 	public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
 		super.onBroken(world, pos, state);
+
 		if (state.get(LAYERS) > 0) {
 			world.setBlockState(pos, Blocks.SNOW.getDefaultState().with(SnowBlock.LAYERS, state.get(LAYERS)), Block.NOTIFY_ALL);
 		}
+
 	}
 
 	@Override
