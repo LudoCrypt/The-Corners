@@ -6,12 +6,13 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "The Corners",
-			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nRacoon Syndrome, for creating the amazingly chilling OST!\nShai, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life with her own OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!",
+			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nRacoon Syndrome, for creating the amazingly chilling OST!\nShai, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life with her own OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!\nHuge thank you to ImXR24 for the Gaia woodset textures!",
 			"contributors": {
 				"LudoCrypt": "Author, Developer, Musician",
 				"Shai": "Author, Artist, Designer",
 				"Racoon Syndrome": "Musician",
-				"Basement Spider": "Artist"
+				"Basement Spider": "Artist",
+				"ImXR24": "Artist"
 			},
 			"contact": {
 				"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-corners",

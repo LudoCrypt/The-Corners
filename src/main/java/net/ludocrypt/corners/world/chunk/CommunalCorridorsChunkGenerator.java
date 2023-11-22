@@ -74,22 +74,34 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	private int mazeDilation;
 	private long mazeSeedModifier;
 
-	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, NbtGroup group, int mazeWidth, int mazeHeight, int mazeDilation, long mazeSeedModifier) {
+	public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, NbtGroup group, int mazeWidth, int mazeHeight,
+			int mazeDilation, long mazeSeedModifier) {
 		super(biomeSource, group);
 		this.mazeWidth = mazeWidth;
 		this.mazeHeight = mazeHeight;
 		this.mazeDilation = mazeDilation;
 		this.mazeSeedModifier = mazeSeedModifier;
-		this.grandMazeGenerator = new GrandMazeGenerator(this.mazeWidth, this.mazeHeight, this.mazeDilation, this.mazeSeedModifier);
-		this.level2mazeGenerator = new RectangularMazeGenerator<MazeComponent>(this.mazeWidth * this.mazeDilation, this.mazeHeight * this.mazeDilation, this.mazeDilation, true,
-				this.mazeSeedModifier) {};
+		this.grandMazeGenerator = new GrandMazeGenerator(this.mazeWidth, this.mazeHeight, this.mazeDilation,
+			this.mazeSeedModifier);
+		this.level2mazeGenerator = new RectangularMazeGenerator<MazeComponent>(this.mazeWidth * this.mazeDilation,
+			this.mazeHeight * this.mazeDilation, this.mazeDilation, true, this.mazeSeedModifier) {
+		};
 	}
 
 	public static NbtGroup createGroup() {
-		NbtGroup.Builder builder = NbtGroup.Builder.create(TheCorners.id(CornerWorlds.COMMUNAL_CORRIDORS)).with("communal_corridors", 1, 14).with("communal_corridors_decorated", 1, 22)
-				.with("communal_corridors_decorated_big", 1, 3).with("communal_corridors_level_transition").with("communal_corridors_level2", 1, 12).with("communal_corridors_level2_decorated", 0, 11)
-				.with("communal_corridors_level2_decorated_big", 0, 3).with("communal_corridors_level2_decorated_big_dip").with("communal_corridors_level2_decorated_huge", 0, 1)
-				.with("communal_corridors_level2_tall", 1, 12).with("communal_corridors_two_stories", 1, 5);
+		NbtGroup.Builder builder = NbtGroup.Builder
+			.create(TheCorners.id(CornerWorlds.COMMUNAL_CORRIDORS))
+			.with("communal_corridors", 1, 14)
+			.with("communal_corridors_decorated", 1, 22)
+			.with("communal_corridors_decorated_big", 1, 3)
+			.with("communal_corridors_level_transition")
+			.with("communal_corridors_level2", 1, 12)
+			.with("communal_corridors_level2_decorated", 0, 11)
+			.with("communal_corridors_level2_decorated_big", 0, 3)
+			.with("communal_corridors_level2_decorated_big_dip")
+			.with("communal_corridors_level2_decorated_huge", 0, 1)
+			.with("communal_corridors_level2_tall", 1, 12)
+			.with("communal_corridors_two_stories", 1, 5);
 
 		for (int i = 0; i < 15; i++) {
 			String dir = "nesw";
@@ -114,7 +126,9 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 				dir = dir.replace("w", "");
 			}
 
-			builder.with("communal_corridors_maze/communal_corridors_" + dir, "communal_corridors_" + dir, 0, 9).with("communal_corridors_maze/communal_corridors_" + dir + "_decorated",
+			builder
+				.with("communal_corridors_maze/communal_corridors_" + dir, "communal_corridors_" + dir, 0, 9)
+				.with("communal_corridors_maze/communal_corridors_" + dir + "_decorated",
 					"communal_corridors_" + dir + "_decorated", 0, 9);
 		}
 
@@ -138,23 +152,34 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	 */
 	public MazeComponent newGrandMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
 		// Find the position of the grandMaze that contains the current maze
-		BlockPos grandMazePos = new BlockPos(mazePos.getX() - Math.floorMod(mazePos.getX(), (grandMazeGenerator.width * grandMazeGenerator.width * grandMazeGenerator.thickness)), 0,
-				mazePos.getZ() - Math.floorMod(mazePos.getZ(), (grandMazeGenerator.height * grandMazeGenerator.height * grandMazeGenerator.thickness)));
+		BlockPos grandMazePos = new BlockPos(mazePos.getX() - Math
+			.floorMod(mazePos.getX(), (grandMazeGenerator.width * grandMazeGenerator.width * grandMazeGenerator.thickness)),
+			0,
+			mazePos.getZ() - Math
+				.floorMod(mazePos.getZ(),
+					(grandMazeGenerator.height * grandMazeGenerator.height * grandMazeGenerator.thickness)));
 		// Check if the grandMaze was already generated, if not generate it
 		MazeComponent grandMaze;
 
 		if (grandMazeGenerator.grandMazeMap.containsKey(grandMazePos)) {
 			grandMaze = grandMazeGenerator.grandMazeMap.get(grandMazePos);
 		} else {
-			grandMaze = new DepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation, grandMazeGenerator.height / grandMazeGenerator.dilation,
-					RandomGenerator.createLegacy(LimlibHelper.blockSeed(grandMazePos.getX(), grandMazeGenerator.seedModifier, grandMazePos.getZ())));
+			grandMaze = new DepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation,
+				grandMazeGenerator.height / grandMazeGenerator.dilation,
+				RandomGenerator
+					.createLegacy(
+						LimlibHelper.blockSeed(grandMazePos.getX(), grandMazeGenerator.seedModifier, grandMazePos.getZ())));
 			grandMaze.generateMaze();
 			grandMazeGenerator.grandMazeMap.put(grandMazePos, grandMaze);
 		}
 
 		// Get the cell of the grandMaze that corresponds to the current maze
-		CellState originCell = grandMaze.cellState((((mazePos.getX() - grandMazePos.getX()) / grandMazeGenerator.thickness) / grandMazeGenerator.width) / grandMazeGenerator.dilation,
-				(((mazePos.getZ() - grandMazePos.getZ()) / grandMazeGenerator.thickness) / height) / grandMazeGenerator.dilation);
+		CellState originCell = grandMaze
+			.cellState(
+				(((mazePos.getX() - grandMazePos
+					.getX()) / grandMazeGenerator.thickness) / grandMazeGenerator.width) / grandMazeGenerator.dilation,
+				(((mazePos.getZ() - grandMazePos
+					.getZ()) / grandMazeGenerator.thickness) / height) / grandMazeGenerator.dilation);
 		Vec2i start = null;
 		List<Vec2i> endings = Lists.newArrayList();
 
@@ -185,12 +210,16 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Check if the origin cell has an opening in the north or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isNorth() || originCell.getPosition().getX() == (grandMazeGenerator.width / grandMazeGenerator.dilation) - 1) {
+		if (originCell
+			.isNorth() || originCell.getPosition().getX() == (grandMazeGenerator.width / grandMazeGenerator.dilation) - 1) {
 
 			if (start == null) {
-				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1, (grandMazeGenerator.height / grandMazeGenerator.dilation) / 2);
+				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1,
+					(grandMazeGenerator.height / grandMazeGenerator.dilation) / 2);
 			} else {
-				endings.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1, (grandMazeGenerator.height / grandMazeGenerator.dilation) / 2));
+				endings
+					.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) - 1,
+						(grandMazeGenerator.height / grandMazeGenerator.dilation) / 2));
 			}
 
 		}
@@ -198,12 +227,16 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Check if the origin cell has an opening in the east or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isEast() || originCell.getPosition().getY() == (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1) {
+		if (originCell
+			.isEast() || originCell.getPosition().getY() == (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1) {
 
 			if (start == null) {
-				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1);
+				start = new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2,
+					(grandMazeGenerator.height / grandMazeGenerator.dilation) - 1);
 			} else {
-				endings.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2, (grandMazeGenerator.height / grandMazeGenerator.dilation) - 1));
+				endings
+					.add(new Vec2i((grandMazeGenerator.width / grandMazeGenerator.dilation) / 2,
+						(grandMazeGenerator.height / grandMazeGenerator.dilation) - 1));
 			}
 
 		}
@@ -211,11 +244,14 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// If the origin cell is a dead end, add a random ending point in the middle of
 		// the maze. This ensures there is always somewhere to go in a dead end.
 		if (endings.isEmpty()) {
-			endings.add(new Vec2i(random.nextInt((grandMazeGenerator.width / grandMazeGenerator.dilation) - 2) + 1, random.nextInt((grandMazeGenerator.height / grandMazeGenerator.dilation) - 2) + 1));
+			endings
+				.add(new Vec2i(random.nextInt((grandMazeGenerator.width / grandMazeGenerator.dilation) - 2) + 1,
+					random.nextInt((grandMazeGenerator.height / grandMazeGenerator.dilation) - 2) + 1));
 		}
 
 		// Create a new maze.
-		MazeComponent mazeToSolve = new StraightDepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation, grandMazeGenerator.height / grandMazeGenerator.dilation, random, 0.45D);
+		MazeComponent mazeToSolve = new StraightDepthFirstMaze(grandMazeGenerator.width / grandMazeGenerator.dilation,
+			grandMazeGenerator.height / grandMazeGenerator.dilation, random, 0.45D);
 		mazeToSolve.generateMaze();
 		// Create a maze solver and solve the maze using the starting point and ending
 		// points.
@@ -224,8 +260,10 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Create a scaled maze using the dilation.
 		MazeComponent dilatedMaze = new DilateMaze(solvedMaze, grandMazeGenerator.dilation);
 		dilatedMaze.generateMaze();
-		Vec2i starting = new Vec2i(random.nextInt((dilatedMaze.width / 2) - 2) + 1, random.nextInt((dilatedMaze.height / 2) - 2) + 1);
-		Vec2i ending = new Vec2i(random.nextInt((dilatedMaze.width / 2) - 2) + 1, random.nextInt((dilatedMaze.height / 2) - 2) + 1);
+		Vec2i starting = new Vec2i(random.nextInt((dilatedMaze.width / 2) - 2) + 1,
+			random.nextInt((dilatedMaze.height / 2) - 2) + 1);
+		Vec2i ending = new Vec2i(random.nextInt((dilatedMaze.width / 2) - 2) + 1,
+			random.nextInt((dilatedMaze.height / 2) - 2) + 1);
 		// Make a new maze
 		MazeComponent overlayMaze = new StraightDepthFirstMaze(dilatedMaze.width / 2, dilatedMaze.height / 2, random, 0.7D);
 		overlayMaze.generateMaze();
@@ -248,18 +286,27 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator,
-			StructureTemplateManager structureTemplateManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> fullChunkConverter,
-			List<Chunk> chunks, Chunk chunk) {
+	public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor,
+			ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureTemplateManager,
+			ServerLightingProvider lightingProvider,
+			Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> fullChunkConverter, List<Chunk> chunks,
+			Chunk chunk) {
 		BlockPos startPos = chunk.getPos().getStartPos();
-		this.grandMazeGenerator.generateMaze(startPos, region.getSeed(), this::newGrandMaze,
-				(pos, mazePos, maze, cellState, thickness) -> decorateGrandCell(pos, mazePos, maze, cellState, thickness, region));
-		this.level2mazeGenerator.generateMaze(startPos, region.getSeed(), this::newMaze, (pos, mazePos, maze, cellState, thickness) -> decorateCell(pos, mazePos, maze, cellState, thickness, region));
+		this.grandMazeGenerator
+			.generateMaze(startPos, region.getSeed(), this::newGrandMaze, (pos, mazePos, maze, cellState,
+					thickness) -> decorateGrandCell(pos, mazePos, maze, cellState, thickness, region));
+		this.level2mazeGenerator
+			.generateMaze(startPos, region.getSeed(), this::newMaze, (pos, mazePos, maze, cellState,
+					thickness) -> decorateCell(pos, mazePos, maze, cellState, thickness, region));
 		return CompletableFuture.completedFuture(chunk);
 	}
 
-	public void decorateCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness, ChunkRegion region) {
-		RandomGenerator random = RandomGenerator.createLegacy(LimlibHelper.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
+	public void decorateCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness,
+			ChunkRegion region) {
+		RandomGenerator random = RandomGenerator
+			.createLegacy(LimlibHelper
+				.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()),
+					pos.getZ()));
 //		RandomGenerator chunkRandom = RandomGenerator
 //				.createLegacy(region.getSeed() + LimlibHelper.blockSeed(pos.getX() - Math.floorMod(pos.getX(), 16), pos.getZ() - Math.floorMod(pos.getZ(), 16), -1337));
 //		RandomGenerator bigRandom = RandomGenerator
@@ -352,16 +399,21 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		if (dir != "") {
 
 			if (random.nextDouble() > 0.67289445D) {
-				this.generateNbt(region, pos.up(17), nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir, random));
+				this
+					.generateNbt(region, pos.up(17),
+						nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir, random));
 			} else {
-				this.generateNbt(region, pos.up(17), nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir + "_decorated", random));
+				this
+					.generateNbt(region, pos.up(17),
+						nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir + "_decorated", random));
 			}
 
 		}
 
 	}
 
-	public void decorateGrandCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness, ChunkRegion region) {
+	public void decorateGrandCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness,
+			ChunkRegion region) {
 
 		for (int x = 0; x < thickness; x++) {
 
@@ -372,7 +424,10 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 		}
 
-		RandomGenerator random = RandomGenerator.createLegacy(LimlibHelper.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()), pos.getZ()));
+		RandomGenerator random = RandomGenerator
+			.createLegacy(LimlibHelper
+				.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()),
+					pos.getZ()));
 		String dir = "nesw";
 
 		if (!state.isWest()) {
@@ -394,16 +449,23 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 		if (dir != "") {
 
 			if (random.nextDouble() > 0.67289445D) {
-				this.generateNbt(region, pos.up(1), nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir, random));
+				this
+					.generateNbt(region, pos.up(1),
+						nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir, random));
 			} else {
-				this.generateNbt(region, pos.up(1), nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir + "_decorated", random));
+				this
+					.generateNbt(region, pos.up(1),
+						nbtGroup.pick("communal_corridors_maze/communal_corridors_" + dir + "_decorated", random));
 			}
 
 		} else {
 			RandomGenerator fullChunkRandom = RandomGenerator
-					.createLegacy(region.getSeed() + LimlibHelper.blockSeed(pos.getX() - Math.floorMod(pos.getX(), 16), pos.getZ() - Math.floorMod(pos.getZ(), 16), -69420));
+				.createLegacy(region.getSeed() + LimlibHelper
+					.blockSeed(pos.getX() - Math.floorMod(pos.getX(), 16), pos.getZ() - Math.floorMod(pos.getZ(), 16),
+						-69420));
 			boolean flip = random.nextBoolean();
-			Vec2i fullChunkPos = new Vec2i(state.getPosition().getX() - Math.floorMod(state.getPosition().getX(), 2), state.getPosition().getY() - Math.floorMod(state.getPosition().getY(), 2));
+			Vec2i fullChunkPos = new Vec2i(state.getPosition().getX() - Math.floorMod(state.getPosition().getX(), 2),
+				state.getPosition().getY() - Math.floorMod(state.getPosition().getY(), 2));
 			boolean skipSecondFloor = false;
 			boolean skipSmallRooms = false;
 //			if (RandomGenerator.createLegacy(region.getSeed() + LimlibHelper.blockSeed(pos.getX() - Math.floorMod(pos.getX(), 64), pos.getZ() - Math.floorMod(pos.getZ(), 64), 1337))
@@ -442,7 +504,9 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 					for (int z = 0; z < thickness; z++) {
 
 						for (int y = 0; y < 3; y++) {
-							region.setBlockState(pos.add(x, 11 + y, z), CornerBlocks.DRYWALL.getDefaultState(), Block.FORCE_STATE, 0);
+							region
+								.setBlockState(pos.add(x, 11 + y, z), CornerBlocks.DRYWALL.getDefaultState(),
+									Block.FORCE_STATE, 0);
 						}
 
 					}
@@ -453,11 +517,15 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 			if ((fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
 
-				if (!(maze.cellState(fullChunkPos).isWest() || maze.cellState(fullChunkPos).isNorth() || maze.cellState(fullChunkPos).isEast() || maze.cellState(fullChunkPos).isSouth())) {
+				if (!(maze.cellState(fullChunkPos).isWest() || maze.cellState(fullChunkPos).isNorth() || maze
+					.cellState(fullChunkPos)
+					.isEast() || maze.cellState(fullChunkPos).isSouth())) {
 
-					if (Math.floorMod(state.getPosition().getX(), 2) == 0 && Math.floorMod(state.getPosition().getY(), 2) == 0) {
-						generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors_decorated_big", random), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
-								flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+					if (Math.floorMod(state.getPosition().getX(), 2) == 0 && Math
+						.floorMod(state.getPosition().getY(), 2) == 0) {
+						generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors_decorated_big", random),
+							flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
 					}
 
 					skipSmallRooms = true;
@@ -468,17 +536,22 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 			if (!skipSmallRooms) {
 
 				if (random.nextDouble() < 0.2375625D) {
-					generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors", random), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
-							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+					generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors", random),
+						flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+						flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
 				} else {
 
 					if (skipSecondFloor) {
-						generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors_decorated", random), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
-								flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+						generateNbt(region, pos.up(), nbtGroup.pick("communal_corridors_decorated", random),
+							flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
 						return;
 					} else {
-						String group = nbtGroup.chooseGroup(random, "communal_corridors_decorated", "communal_corridors_two_stories");
-						generateNbt(region, pos.up(), nbtGroup.pick(group, random), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE, flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+						String group = nbtGroup
+							.chooseGroup(random, "communal_corridors_decorated", "communal_corridors_two_stories");
+						generateNbt(region, pos.up(), nbtGroup.pick(group, random),
+							flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+							flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
 
 						if (group.equals("communal_corridors_two_stories")) {
 							return;
@@ -491,8 +564,9 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 			}
 
 			if (!skipSecondFloor) {
-				generateNbt(region, pos.up(6), nbtGroup.pick("communal_corridors_decorated", random), flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
-						flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
+				generateNbt(region, pos.up(6), nbtGroup.pick("communal_corridors_decorated", random),
+					flip ? BlockRotation.COUNTERCLOCKWISE_90 : BlockRotation.NONE,
+					flip ? BlockMirror.LEFT_RIGHT : BlockMirror.NONE);
 			}
 
 		}
@@ -506,7 +580,8 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 	@Override
 	protected Identifier getContainerLootTable(LootableContainerBlockEntity container) {
-		return container.getCachedState().isOf(Blocks.CHEST) ? LootTables.WOODLAND_MANSION_CHEST : LootTables.SPAWN_BONUS_CHEST;
+		return container.getCachedState().isOf(Blocks.CHEST) ? LootTables.WOODLAND_MANSION_CHEST
+				: LootTables.SPAWN_BONUS_CHEST;
 	}
 
 	@Override
@@ -518,10 +593,18 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
 			switch (i) {
 				case 1:
-					region.setBlockState(pos, CornerBlocks.TUNED_RADIO.getDefaultState().with(RadioBlock.FACING, state.get(RadioBlock.FACING)), Block.NOTIFY_ALL, 1);
+					region
+						.setBlockState(pos,
+							CornerBlocks.TUNED_RADIO.getDefaultState().with(RadioBlock.FACING, state.get(RadioBlock.FACING)),
+							Block.NOTIFY_ALL, 1);
 					break;
 				case 2:
-					region.setBlockState(pos, CornerBlocks.BROKEN_RADIO.getDefaultState().with(RadioBlock.FACING, state.get(RadioBlock.FACING)), Block.NOTIFY_ALL, 1);
+					region
+						.setBlockState(pos,
+							CornerBlocks.BROKEN_RADIO
+								.getDefaultState()
+								.with(RadioBlock.FACING, state.get(RadioBlock.FACING)),
+							Block.NOTIFY_ALL, 1);
 					break;
 				case 0:
 				default:
@@ -557,6 +640,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public void method_40450(List<String> list, RandomState randomState, BlockPos pos) {}
+	public void method_40450(List<String> list, RandomState randomState, BlockPos pos) {
+	}
 
 }

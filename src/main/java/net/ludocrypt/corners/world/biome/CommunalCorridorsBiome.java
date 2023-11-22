@@ -13,8 +13,10 @@ public class CommunalCorridorsBiome {
 
 	public static Biome create(HolderProvider<PlacedFeature> features, HolderProvider<ConfiguredCarver<?>> carvers) {
 		Biome.Builder biome = new Biome.Builder();
+
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder(features, carvers);
+
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(13548960);
 		biomeEffects.waterColor(13548960);
@@ -22,13 +24,16 @@ public class CommunalCorridorsBiome {
 		biomeEffects.fogColor(13548960);
 		biomeEffects.grassColor(13818488);
 		biomeEffects.loopSound(CornerSoundEvents.BIOME_LOOP_COMMUNAL_CORRIDORS);
+
 		BiomeEffects effects = biomeEffects.build();
+
 		biome.spawnSettings(spawnSettings.build());
 		biome.generationSettings(generationSettings.build());
 		biome.effects(effects);
 		biome.hasPrecipitation(false);
 		biome.temperature(0.8F);
 		biome.downfall(0.0F);
+
 		return biome.build();
 	}
 

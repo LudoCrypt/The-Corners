@@ -35,7 +35,8 @@ public class StrongPostEffect extends PostEffect {
 	}
 
 	@Override
-	public void beforeRender() {}
+	public void beforeRender() {
+	}
 
 	@Override
 	public Identifier getShaderLocation() {

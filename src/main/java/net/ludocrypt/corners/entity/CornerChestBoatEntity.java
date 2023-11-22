@@ -10,7 +10,8 @@ public final class CornerChestBoatEntity extends ChestBoatEntity implements Corn
 
 	private final CornerBoatEntity.CornerBoat boatData;
 
-	public CornerChestBoatEntity(EntityType<? extends BoatEntity> entityType, World world, CornerBoatEntity.CornerBoat boatData) {
+	public CornerChestBoatEntity(EntityType<? extends BoatEntity> entityType, World world,
+			CornerBoatEntity.CornerBoat boatData) {
 		super(entityType, world);
 		this.boatData = boatData;
 	}
@@ -26,7 +27,8 @@ public final class CornerChestBoatEntity extends ChestBoatEntity implements Corn
 	}
 
 	@Override
-	public void setVariant(BoatEntity.Variant type) {}
+	public void setVariant(BoatEntity.Variant type) {
+	}
 
 	@Override
 	public Item asItem() {

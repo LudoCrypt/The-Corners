@@ -61,7 +61,9 @@ public class GaiaTreeFeature extends Feature<DefaultFeatureConfig> {
 
 								if (!dir.equals(Direction.DOWN)) {
 
-									if (world.getBlockState(op.offset(dir)).isSideSolidFullSquare(world, op.offset(dir), dir.getOpposite())) {
+									if (world
+										.getBlockState(op.offset(dir))
+										.isSideSolidFullSquare(world, op.offset(dir), dir.getOpposite())) {
 
 										if (random.nextDouble() > op.getSquaredDistance(pos) / (double) range / 2.0) {
 											BlockState defaultState = Blocks.VINE.getDefaultState();
@@ -70,7 +72,9 @@ public class GaiaTreeFeature extends Feature<DefaultFeatureConfig> {
 												defaultState = world.getBlockState(op);
 											}
 
-											world.setBlockState(op, defaultState.with(VineBlock.getFacingProperty(dir), true), Block.NOTIFY_ALL);
+											world
+												.setBlockState(op, defaultState.with(VineBlock.getFacingProperty(dir), true),
+													Block.NOTIFY_ALL);
 										}
 
 									}

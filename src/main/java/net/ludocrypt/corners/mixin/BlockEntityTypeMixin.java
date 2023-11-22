@@ -19,10 +19,11 @@ public class BlockEntityTypeMixin<T extends BlockEntity> {
 	private void corners$supports(BlockState state, CallbackInfoReturnable<Boolean> ci) {
 		Identifier id = BlockEntityType.getId((BlockEntityType<T>) ((Object) this));
 
-		if (id.equals(BlockEntityType.getId(BlockEntityType.SIGN)) || id.equals(BlockEntityType.getId(BlockEntityType.HANGING_SIGN))) {
+		if (id.equals(BlockEntityType.getId(BlockEntityType.SIGN)) || id
+			.equals(BlockEntityType.getId(BlockEntityType.HANGING_SIGN))) {
 
-			if (state.getBlock() == CornerBlocks.GAIA_SIGN || state.getBlock() == CornerBlocks.GAIA_HANGING_SIGN || state.getBlock() == CornerBlocks.GAIA_WALL_HANGING_SIGN
-					|| state.getBlock() == CornerBlocks.GAIA_WALL_SIGN) {
+			if (state.getBlock() == CornerBlocks.GAIA_SIGN || state.getBlock() == CornerBlocks.GAIA_HANGING_SIGN || state
+				.getBlock() == CornerBlocks.GAIA_WALL_HANGING_SIGN || state.getBlock() == CornerBlocks.GAIA_WALL_SIGN) {
 				ci.setReturnValue(true);
 			}
 

@@ -19,8 +19,13 @@ public class GaiaSaplingGenerator extends SaplingGenerator {
 		return CornerBiomes.CONFIGURED_SAPLING_GAIA_TREE_FEATURE;
 	}
 
-	public boolean generateRadio(ServerWorld world, ChunkGenerator chunkGenerator, BlockPos pos, BlockState state, RandomGenerator random) {
-		Holder<ConfiguredFeature<?, ?>> holder = world.getRegistryManager().get(RegistryKeys.CONFIGURED_FEATURE).getHolder(CornerBiomes.CONFIGURED_GAIA_TREE_FEATURE).orElse(null);
+	public boolean generateRadio(ServerWorld world, ChunkGenerator chunkGenerator, BlockPos pos, BlockState state,
+			RandomGenerator random) {
+		Holder<ConfiguredFeature<?, ?>> holder = world
+			.getRegistryManager()
+			.get(RegistryKeys.CONFIGURED_FEATURE)
+			.getHolder(CornerBiomes.CONFIGURED_GAIA_TREE_FEATURE)
+			.orElse(null);
 
 		if (holder == null) {
 			return false;

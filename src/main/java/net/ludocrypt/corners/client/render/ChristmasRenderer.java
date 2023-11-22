@@ -44,7 +44,8 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 
 	@Override
 	@ClientOnly
-	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader, BlockPos origin) {
+	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta,
+			ShaderProgram shader, BlockPos origin) {
 
 		if (CornerConfig.get().christmas.isChristmas()) {
 
@@ -57,13 +58,19 @@ public class ChristmasRenderer extends SpecialModelRenderer {
 				shader.addSampler("Light" + i, RenderSystem.getShaderTexture(i + 4));
 
 				if (shader.getUniform("leftTint" + i) != null) {
-					shader.getUniform("leftTint" + i).setVec4(new Vector4f(hexToRGBA(
-							CornerConfig.get().christmas.leftColors.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig.get().christmas.leftColors.size()))));
+					shader
+						.getUniform("leftTint" + i)
+						.setVec4(new Vector4f(hexToRGBA(CornerConfig.get().christmas.leftColors
+							.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig
+								.get().christmas.leftColors.size()))));
 				}
 
 				if (shader.getUniform("rightTint" + i) != null) {
-					shader.getUniform("rightTint" + i).setVec4(new Vector4f(hexToRGBA(
-							CornerConfig.get().christmas.rightColors.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig.get().christmas.rightColors.size()))));
+					shader
+						.getUniform("rightTint" + i)
+						.setVec4(new Vector4f(hexToRGBA(CornerConfig.get().christmas.rightColors
+							.get((((int) Math.floor(RenderSystem.getShaderGameTime() * 1000)) + i) % CornerConfig
+								.get().christmas.rightColors.size()))));
 				}
 
 			}

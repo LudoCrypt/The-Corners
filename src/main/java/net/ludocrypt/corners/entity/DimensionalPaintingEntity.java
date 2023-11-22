@@ -36,7 +36,9 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 
 		if (variant instanceof DimensionalPaintingVariant) {
 			DimensionalPaintingEntity entity = create(world, pos);
-			((PaintingEntityAccessor) entity).callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
+			((PaintingEntityAccessor) entity)
+				.callSetVariant(
+					Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
 			entity.setFacing(direction);
 			return entity;
 		}
@@ -48,7 +50,8 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 	public static PaintingEntity createRegular(World world, BlockPos pos, Direction direction, PaintingVariant variant) {
 		PaintingEntity entity = new PaintingEntity(EntityType.PAINTING, world);
 		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
-		((PaintingEntityAccessor) entity).callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
+		((PaintingEntityAccessor) entity)
+			.callSetVariant(Registries.PAINTING_VARIANT.getHolder(Registries.PAINTING_VARIANT.getKey(variant).get()).get());
 		((AbstractDecorationEntityAccessor) entity).callSetFacing(direction);
 		return entity;
 	}
@@ -70,14 +73,17 @@ public class DimensionalPaintingEntity extends PaintingEntity {
 		if (this.getVariant().value() instanceof DimensionalPaintingVariant variant) {
 			Box box = this.getBoundingBox().expand(0.3D);
 
-			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
+			if (box.contains(player.getEyePos()) && box.contains(player.getPos()) && box
+				.contains(player.getPos().add(0.0D, player.getHeight(), 0.0D))) {
 
 				if (player.getVelocity().length() > 0.05) {
 
 					if (this.getWorld() instanceof ServerWorld && player instanceof ServerPlayerEntity spe) {
 						ServerWorld world = player.getServer().getWorld(variant.dimension.apply(spe, this));
 						TeleportTarget teleportTarget = variant.teleportTarget.apply(spe, this);
-						LimlibTravelling.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+						LimlibTravelling
+							.travelTo(spe, world, teleportTarget, CornerSoundEvents.PAINTING_PORTAL_TRAVEL.value(), 0.25F,
+								world.getRandom().nextFloat() * 0.4F + 0.8F);
 					}
 
 				}

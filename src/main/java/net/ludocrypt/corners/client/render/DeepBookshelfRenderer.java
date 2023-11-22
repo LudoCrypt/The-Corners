@@ -28,7 +28,8 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 
 	@Override
 	@ClientOnly
-	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta, ShaderProgram shader, BlockPos origin) {
+	public void setup(MatrixStack matrices, Matrix4f viewMatrix, Matrix4f positionMatrix, float tickDelta,
+			ShaderProgram shader, BlockPos origin) {
 		RenderSystem.enablePolygonOffset();
 		RenderSystem.polygonOffset(-3.0F, -3.0F);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
@@ -43,7 +44,9 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 		}
 
 		MatrixStack basicStack = new MatrixStack();
-		basicStack.multiplyMatrix(client.gameRenderer.getBasicProjectionMatrix(((GameRendererAccessor) client.gameRenderer).callGetFov(camera, tickDelta, true)));
+		basicStack
+			.multiplyMatrix(client.gameRenderer
+				.getBasicProjectionMatrix(((GameRendererAccessor) client.gameRenderer).callGetFov(camera, tickDelta, true)));
 
 		if (shader.getUniform("BasicMat") != null) {
 			shader.getUniform("BasicMat").setMat4x4(basicStack.peek().getModel());
@@ -54,7 +57,9 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 		}
 
 		if (shader.getUniform("cameraPos") != null) {
-			shader.getUniform("cameraPos").setVec3((float) camera.getPos().getX(), (float) camera.getPos().getY(), (float) camera.getPos().getZ());
+			shader
+				.getUniform("cameraPos")
+				.setVec3((float) camera.getPos().getX(), (float) camera.getPos().getY(), (float) camera.getPos().getZ());
 		}
 
 	}

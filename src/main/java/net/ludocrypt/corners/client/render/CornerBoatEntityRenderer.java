@@ -15,18 +15,24 @@ import net.minecraft.util.Identifier;
 
 public final class CornerBoatEntityRenderer extends BoatEntityRenderer {
 
-	public CornerBoatEntityRenderer(EntityRendererFactory.Context context, boolean chest, CornerBoatEntity.CornerBoat boatData) {
+	public CornerBoatEntityRenderer(EntityRendererFactory.Context context, boolean chest,
+			CornerBoatEntity.CornerBoat boatData) {
 		super(context, chest);
 		var id = boatData.id();
-		var texture = new Identifier(id.getNamespace(), "textures/entity/" + (chest ? "chest_boat/" : "boat/") + id.getPath() + ".png");
+		var texture = new Identifier(id.getNamespace(),
+			"textures/entity/" + (chest ? "chest_boat/" : "boat/") + id.getPath() + ".png");
 		var rootPart = context.getPart(getModelLayer(boatData, chest));
 		var model = chest ? new ChestBoatEntityModel(rootPart) : new BoatEntityModel(rootPart);
-		this.texturesAndModels = this.texturesAndModels.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> Pair.of(texture, model)));
+		this.texturesAndModels = this.texturesAndModels
+			.entrySet()
+			.stream()
+			.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> Pair.of(texture, model)));
 	}
 
 	public static EntityModelLayer getModelLayer(CornerBoatEntity.CornerBoat boat, boolean chest) {
 		var id = boat.id();
-		return new EntityModelLayer(new Identifier(id.getNamespace(), (chest ? "chest_boat/" : "boat/") + id.getPath()), "main");
+		return new EntityModelLayer(new Identifier(id.getNamespace(), (chest ? "chest_boat/" : "boat/") + id.getPath()),
+			"main");
 	}
 
 }

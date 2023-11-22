@@ -13,8 +13,10 @@ public class HoaryCrossroadsBiome {
 
 	public static Biome create(HolderProvider<PlacedFeature> features, HolderProvider<ConfiguredCarver<?>> carvers) {
 		Biome.Builder biome = new Biome.Builder();
+
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder(features, carvers);
+
 		BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
 		biomeEffects.skyColor(16777215);
 		biomeEffects.waterColor(9681663);
@@ -22,13 +24,16 @@ public class HoaryCrossroadsBiome {
 		biomeEffects.fogColor(13224908);
 		biomeEffects.grassColor(6796479);
 		biomeEffects.loopSound(CornerSoundEvents.BIOME_LOOP_HOARY_CROSSROADS);
+
 		BiomeEffects effects = biomeEffects.build();
+
 		biome.spawnSettings(spawnSettings.build());
 		biome.generationSettings(generationSettings.build());
 		biome.effects(effects);
 		biome.hasPrecipitation(true);
 		biome.temperature(-1.0F);
 		biome.downfall(1.0F);
+
 		return biome.build();
 	}
 

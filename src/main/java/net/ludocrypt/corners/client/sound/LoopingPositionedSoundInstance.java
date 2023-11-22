@@ -17,15 +17,18 @@ public class LoopingPositionedSoundInstance extends PositionedSoundInstance impl
 	private final BlockPos pos;
 	private boolean isDone = false;
 
-	public LoopingPositionedSoundInstance(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch, RandomGenerator random, double x, double y, double z) {
+	public LoopingPositionedSoundInstance(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume,
+			float pitch, RandomGenerator random, double x, double y, double z) {
 		super(sound, category, volume, pitch, random, x, y, z);
 		this.world = world;
 		this.pos = pos;
 	}
 
-	public static void play(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch, RandomGenerator random, double x, double y, double z) {
+	public static void play(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch,
+			RandomGenerator random, double x, double y, double z) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		LoopingPositionedSoundInstance soundInstance = new LoopingPositionedSoundInstance(world, pos, sound, category, volume, pitch, random, x, y, z);
+		LoopingPositionedSoundInstance soundInstance = new LoopingPositionedSoundInstance(world, pos, sound, category,
+			volume, pitch, random, x, y, z);
 		soundInstance.repeat = true;
 		soundInstance.repeatDelay = 0;
 		client.getSoundManager().play(soundInstance);

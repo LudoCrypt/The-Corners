@@ -61,7 +61,8 @@ public class RadioBlock extends HorizontalFacingBlock {
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+			BlockHitResult hit) {
 
 		if (world.isReceivingRedstonePower(pos)) {
 			sendOut(world, pos, !state.get(POWERED));
@@ -82,7 +83,8 @@ public class RadioBlock extends HorizontalFacingBlock {
 					} else {
 
 						if (world instanceof ServerWorld s) {
-							new GaiaSaplingGenerator().generateRadio(s, s.getChunkManager().getChunkGenerator(), pos, state, s.getRandom());
+							new GaiaSaplingGenerator()
+								.generateRadio(s, s.getChunkManager().getChunkGenerator(), pos, state, s.getRandom());
 						}
 
 					}

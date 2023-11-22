@@ -33,12 +33,20 @@ public abstract class EntityMixin {
 					if (Registries.PAINTING_VARIANT.getId(painting.getVariant().value()).getNamespace().equals("corners")) {
 
 						if (player.getStackInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
-							DimensionalPaintingEntity dimensional = DimensionalPaintingEntity.create(painting.getWorld(), painting.getDecorationBlockPos(), painting.getHorizontalFacing(),
-									painting.getVariant().value());
+							DimensionalPaintingEntity dimensional = DimensionalPaintingEntity
+								.create(painting.getWorld(), painting.getDecorationBlockPos(),
+									painting.getHorizontalFacing(), painting.getVariant().value());
 							painting.getWorld().spawnEntity(dimensional);
-							painting.getWorld().playSound(null, painting.getBlockPos(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-							player.getStackInHand(hand).damage(1, player,
-									(playerConsumer) -> playerConsumer.sendEquipmentBreakStatus(hand.equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
+							painting
+								.getWorld()
+								.playSound(null, painting.getBlockPos(), SoundEvents.ITEM_FLINTANDSTEEL_USE,
+									SoundCategory.BLOCKS, 1.0F, 1.0F);
+							player
+								.getStackInHand(hand)
+								.damage(1, player,
+									(playerConsumer) -> playerConsumer
+										.sendEquipmentBreakStatus(
+											hand.equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND));
 							discard();
 							ci.setReturnValue(ActionResult.SUCCESS);
 						}

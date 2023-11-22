@@ -18,7 +18,8 @@ import net.minecraft.util.math.MathHelper;
 public abstract class BackgroundRendererMixin {
 
 	@Inject(method = "Lnet/minecraft/client/render/BackgroundRenderer;applyFog(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/BackgroundRenderer$FogType;FZF)V", at = @At("TAIL"))
-	private static void corners$applyFog(Camera camera, FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
+	private static void corners$applyFog(Camera camera, FogType fogType, float viewDistance, boolean thickFog,
+			float tickDelta, CallbackInfo ci) {
 		MinecraftClient client = MinecraftClient.getInstance();
 		float fogStart = RenderSystem.getShaderFogStart();
 		float fogEnd = RenderSystem.getShaderFogEnd();
@@ -27,7 +28,8 @@ public abstract class BackgroundRendererMixin {
 			fogStart = fogStart / 2;
 			fogEnd = fogEnd / 2;
 			float cameraHeight = (float) (camera.getPos().getY() - client.world.getBottomY());
-			float fogScalar = (float) MathHelper.clamp(Math.atan(((cameraHeight - 263.0F) * Math.tan(1)) / 263.0F) + 1, 0.0F, 1.0F);
+			float fogScalar = (float) MathHelper
+				.clamp(Math.atan(((cameraHeight - 263.0F) * Math.tan(1)) / 263.0F) + 1, 0.0F, 1.0F);
 			RenderSystem.setShaderFogStart(fogStart * fogScalar);
 			RenderSystem.setShaderFogEnd(fogEnd * fogScalar);
 			RenderSystem.setShaderFogColor(0.625F, 0.625F, 0.625F);

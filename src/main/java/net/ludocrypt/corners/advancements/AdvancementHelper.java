@@ -15,7 +15,9 @@ public class AdvancementHelper {
 			AdvancementProgress progress = serverPlayerEntity.getAdvancementTracker().getProgress(advancement);
 
 			if (!progress.isDone()) {
-				progress.getUnobtainedCriteria().forEach((criteria) -> serverPlayerEntity.getAdvancementTracker().grantCriterion(advancement, criteria));
+				progress
+					.getUnobtainedCriteria()
+					.forEach((criteria) -> serverPlayerEntity.getAdvancementTracker().grantCriterion(advancement, criteria));
 			}
 
 		}

@@ -28,7 +28,9 @@ public class CornerConfig implements ConfigData {
 		public List<String> rightColors = Lists.newArrayList("#FE515C", "#FFFFFF", "#30FF99");
 
 		public boolean isChristmas() {
-			return christmas || (LocalDate.now().getMonth() == Month.DECEMBER) || (LocalDate.now().getMonth() == Month.JANUARY && LocalDate.now().getDayOfMonth() < 7);
+			return christmas || (LocalDate.now().getMonth() == Month.DECEMBER) || (LocalDate
+				.now()
+				.getMonth() == Month.JANUARY && LocalDate.now().getDayOfMonth() < 7);
 		}
 
 	}

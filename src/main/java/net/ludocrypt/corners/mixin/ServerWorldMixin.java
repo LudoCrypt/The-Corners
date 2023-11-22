@@ -16,7 +16,10 @@ public class ServerWorldMixin {
 	private void corners$tickWeather(CallbackInfo ci) {
 
 		if (((ServerWorld) (Object) this).getRegistryKey().equals(CornerWorlds.HOARY_CROSSROADS_KEY)) {
-			((ServerWorld) (Object) this).getServer().getPlayerManager().sendToDimension(new GameStateUpdateS2CPacket(GameStateUpdateS2CPacket.RAIN_GRADIENT_CHANGED, 2.0F),
+			((ServerWorld) (Object) this)
+				.getServer()
+				.getPlayerManager()
+				.sendToDimension(new GameStateUpdateS2CPacket(GameStateUpdateS2CPacket.RAIN_GRADIENT_CHANGED, 2.0F),
 					((ServerWorld) (Object) this).getRegistryKey());
 		}
 

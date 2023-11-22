@@ -19,7 +19,8 @@ import net.minecraft.world.BlockView;
 public class BlockMixin {
 
 	@Inject(method = "Lnet/minecraft/block/Block;shouldDrawSide(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;Lnet/minecraft/util/math/BlockPos;)Z", at = @At("HEAD"), cancellable = true)
-	private static void corners$shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction side, BlockPos otherPos, CallbackInfoReturnable<Boolean> ci) {
+	private static void corners$shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction side,
+			BlockPos otherPos, CallbackInfoReturnable<Boolean> ci) {
 		BlockState stateFrom = world.getBlockState(otherPos);
 
 		if (side.getAxis() != Axis.Y) {

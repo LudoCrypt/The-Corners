@@ -28,14 +28,17 @@ import net.minecraft.world.WorldAccess;
 public class RailingBlock extends FenceBlock {
 
 	public static final IntProperty LAYERS = IntProperty.of("layers", 0, 8);
-	protected static final VoxelShape[] LAYERS_TO_OUTLINE = new VoxelShape[] { VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
-		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
-		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
-		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
-	protected static final VoxelShape[] LAYERS_TO_COLLISION = new VoxelShape[] { VoxelShapes.empty(), VoxelShapes.empty(), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
-		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
-		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
+	protected static final VoxelShape[] LAYERS_TO_OUTLINE = new VoxelShape[] { VoxelShapes.empty(),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),
 		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
+	protected static final VoxelShape[] LAYERS_TO_COLLISION = new VoxelShape[] { VoxelShapes.empty(), VoxelShapes.empty(),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+		Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0) };
 	protected final VoxelShape[] boundingShapes;
 
 	public RailingBlock(Settings settings) {
@@ -56,18 +59,24 @@ public class RailingBlock extends FenceBlock {
 
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.union(this.boundingShapes[this.getShapeIndex(state)], Block.createCuboidShape(6.0D, 14.0D, 6.0D, 10.0D, 16.0D, 10.0D),
-				Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 13.0D, 10.0D), Block.createCuboidShape(7.0D, 13.0D, 7.0D, 9.0D, 14.0D, 9.0D), LAYERS_TO_OUTLINE[state.get(LAYERS)]);
+		return VoxelShapes
+			.union(this.boundingShapes[this.getShapeIndex(state)],
+				Block.createCuboidShape(6.0D, 14.0D, 6.0D, 10.0D, 16.0D, 10.0D),
+				Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 13.0D, 10.0D),
+				Block.createCuboidShape(7.0D, 13.0D, 7.0D, 9.0D, 14.0D, 9.0D), LAYERS_TO_OUTLINE[state.get(LAYERS)]);
 	}
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.union(this.boundingShapes[this.getShapeIndex(state)], Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D), LAYERS_TO_COLLISION[state.get(LAYERS)]);
+		return VoxelShapes
+			.union(this.boundingShapes[this.getShapeIndex(state)],
+				Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D), LAYERS_TO_COLLISION[state.get(LAYERS)]);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+			BlockHitResult hit) {
 		ItemStack itemStack = player.getStackInHand(hand);
 
 		if (itemStack.getItem() == Items.SNOW) {
@@ -88,7 +97,9 @@ public class RailingBlock extends FenceBlock {
 		super.onBroken(world, pos, state);
 
 		if (state.get(LAYERS) > 0) {
-			world.setBlockState(pos, Blocks.SNOW.getDefaultState().with(SnowBlock.LAYERS, state.get(LAYERS)), Block.NOTIFY_ALL);
+			world
+				.setBlockState(pos, Blocks.SNOW.getDefaultState().with(SnowBlock.LAYERS, state.get(LAYERS)),
+					Block.NOTIFY_ALL);
 		}
 
 	}
@@ -107,7 +118,8 @@ public class RailingBlock extends FenceBlock {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState,
+			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		BlockState defaultState = super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 
 		if (state.get(LAYERS) > 0 && !Blocks.SNOW.canPlaceAt(Blocks.SNOW.getDefaultState(), world, pos)) {

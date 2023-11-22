@@ -8,6 +8,7 @@ public class ClientToServerPackets {
 	// S2C
 	public static final Identifier PLAY_RADIO = TheCorners.id("play_radio");
 
-	public static void manageClientToServerPackets() {}
+	public static void manageClientToServerPackets() {
+	}
 
 }

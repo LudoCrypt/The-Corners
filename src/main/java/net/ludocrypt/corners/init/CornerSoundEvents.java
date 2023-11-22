@@ -13,7 +13,8 @@ public class CornerSoundEvents {
 	// Music
 	public static final Holder.Reference<SoundEvent> MUSIC_YEARNING_CANAL = get("music.yearning_canal");
 	public static final Holder.Reference<SoundEvent> MUSIC_COMMUNAL_CORRIDORS = get("music.communal_corridors");
-	public static final Holder.Reference<SoundEvent> MUSIC_COMMUNAL_CORRIDORS_CHRISTMAS = get("music.communal_corridors.christmas");
+	public static final Holder.Reference<SoundEvent> MUSIC_COMMUNAL_CORRIDORS_CHRISTMAS = get(
+		"music.communal_corridors.christmas");
 	public static final Holder.Reference<SoundEvent> MUSIC_HOARY_CROSSROADS = get("music.hoary_crossroads");
 	// Radio
 	public static final Holder.Reference<SoundEvent> RADIO_DEFAULT_STATIC = get("radio.default.static");
@@ -21,7 +22,8 @@ public class CornerSoundEvents {
 	public static final Holder.Reference<SoundEvent> RADIO_COMMUNAL_CORRIDORS = get("radio.communal_corridors");
 	public static final Holder.Reference<SoundEvent> RADIO_HOARY_CROSSROADS = get("radio.hoary_crossroads");
 	public static final Holder.Reference<SoundEvent> RADIO_YEARNING_CANAL_STATIC = get("radio.yearning_canal.static");
-	public static final Holder.Reference<SoundEvent> RADIO_COMMUNAL_CORRIDORS_STATIC = get("radio.communal_corridors.static");
+	public static final Holder.Reference<SoundEvent> RADIO_COMMUNAL_CORRIDORS_STATIC = get(
+		"radio.communal_corridors.static");
 	public static final Holder.Reference<SoundEvent> RADIO_HOARY_CROSSROADS_STATIC = get("radio.hoary_crossroads.static");
 	public static final Holder.Reference<SoundEvent> RADIO_YEARNING_CANAL_MUSIC = get("radio.yearning_canal.music");
 	public static final Holder.Reference<SoundEvent> RADIO_COMMUNAL_CORRIDORS_MUSIC = get("radio.communal_corridors.music");
@@ -30,10 +32,13 @@ public class CornerSoundEvents {
 	public static final Holder.Reference<SoundEvent> BIOME_LOOP_COMMUNAL_CORRIDORS = get("biome.communal_corridors.loop");
 	public static final Holder.Reference<SoundEvent> BIOME_LOOP_HOARY_CROSSROADS = get("biome.hoary_crossroads.loop");
 
-	public static void init() {}
+	public static void init() {
+	}
 
 	public static Holder.Reference<SoundEvent> get(String id) {
-		return Registry.registerHolder(Registries.SOUND_EVENT, TheCorners.id(id), SoundEvent.createVariableRangeEvent(TheCorners.id(id)));
+		return Registry
+			.registerHolder(Registries.SOUND_EVENT, TheCorners.id(id),
+				SoundEvent.createVariableRangeEvent(TheCorners.id(id)));
 	}
 
 }

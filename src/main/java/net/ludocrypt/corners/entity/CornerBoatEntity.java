@@ -33,7 +33,8 @@ public class CornerBoatEntity extends BoatEntity {
 	}
 
 	@Override
-	public void setVariant(BoatEntity.Variant type) {}
+	public void setVariant(BoatEntity.Variant type) {
+	}
 
 	@Override
 	public Item asItem() {
@@ -50,7 +51,8 @@ public class CornerBoatEntity extends BoatEntity {
 	@SuppressWarnings("deprecation")
 	public enum CornerBoat implements StringIdentifiable {
 
-		GAIA("gaia", () -> CornerBlocks.GAIA_PLANKS, () -> CornerBlocks.GAIA_BOAT, () -> CornerBlocks.GAIA_CHEST_BOAT, () -> CornerEntities.GAIA_BOAT, () -> CornerEntities.GAIA_CHEST_BOAT);
+		GAIA("gaia", () -> CornerBlocks.GAIA_PLANKS, () -> CornerBlocks.GAIA_BOAT, () -> CornerBlocks.GAIA_CHEST_BOAT,
+				() -> CornerEntities.GAIA_BOAT, () -> CornerEntities.GAIA_CHEST_BOAT);
 
 		private final String name;
 		private final Supplier<ItemConvertible> planks;
@@ -58,9 +60,11 @@ public class CornerBoatEntity extends BoatEntity {
 		private final Supplier<ItemConvertible> chestBoat;
 		private final Supplier<EntityType<BoatEntity>> entityType;
 		private final Supplier<EntityType<BoatEntity>> chestEntityType;
-		public static final StringIdentifiable.EnumCodec<CornerBoat> CODEC = StringIdentifiable.createCodec(CornerBoatEntity.CornerBoat::values);
+		public static final StringIdentifiable.EnumCodec<CornerBoat> CODEC = StringIdentifiable
+			.createCodec(CornerBoatEntity.CornerBoat::values);
 
-		CornerBoat(String name, Supplier<ItemConvertible> planks, Supplier<ItemConvertible> boat, Supplier<ItemConvertible> chestBoat, Supplier<EntityType<BoatEntity>> entityType,
+		CornerBoat(String name, Supplier<ItemConvertible> planks, Supplier<ItemConvertible> boat,
+				Supplier<ItemConvertible> chestBoat, Supplier<EntityType<BoatEntity>> entityType,
 				Supplier<EntityType<BoatEntity>> chestEntityType) {
 			this.name = name;
 			this.planks = planks;
@@ -91,7 +95,8 @@ public class CornerBoatEntity extends BoatEntity {
 		}
 
 		public EntityType.EntityFactory<BoatEntity> factory(boolean chest) {
-			return (type, world) -> chest ? new CornerChestBoatEntity(type, world, this) : new CornerBoatEntity(type, world, this);
+			return (type, world) -> chest ? new CornerChestBoatEntity(type, world, this)
+					: new CornerBoatEntity(type, world, this);
 		}
 
 		public Identifier id() {

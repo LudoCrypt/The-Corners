@@ -31,8 +31,13 @@ public class MusicTrackerMixin implements MusicTrackerAccess {
 	private int corners$tick$preventMusic(int time, int max) {
 		int in = Math.min(time, max);
 
-		if (CornerConfig.get().delayMusicWithRadio && !this.getRadioPositions().isEmpty()
-				&& !this.getRadioPositions().stream().filter((pos) -> client.player != null && client.player.squaredDistanceTo(Vec3d.ofCenter(pos)) < Math.pow(24.0D, 2.0D)).toList().isEmpty()) {
+		if (CornerConfig.get().delayMusicWithRadio && !this.getRadioPositions().isEmpty() && !this
+			.getRadioPositions()
+			.stream()
+			.filter((pos) -> client.player != null && client.player.squaredDistanceTo(Vec3d.ofCenter(pos)) < Math
+				.pow(24.0D, 2.0D))
+			.toList()
+			.isEmpty()) {
 
 			if (client.world == null) {
 				this.getRadioPositions().clear();

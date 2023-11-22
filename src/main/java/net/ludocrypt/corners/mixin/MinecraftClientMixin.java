@@ -36,7 +36,9 @@ public class MinecraftClientMixin {
 			if (world.getRegistryKey().equals(CornerWorlds.COMMUNAL_CORRIDORS_KEY)) {
 
 				if (CornerConfig.get().christmas.isChristmas()) {
-					ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS_CHRISTMAS, 3000, 8000, true));
+					ci
+						.setReturnValue(
+							new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS_CHRISTMAS, 3000, 8000, true));
 				} else {
 					ci.setReturnValue(new MusicSound(CornerSoundEvents.MUSIC_COMMUNAL_CORRIDORS, 3000, 8000, true));
 				}

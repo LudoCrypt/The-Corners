@@ -65,30 +65,30 @@ public class StraightDepthFirstMaze extends MazeComponent {
 				}
 
 				switch (nextCellDir) {
-				case 0: // North
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).north();
-					this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).south();
-					this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).visited();
-					this.stack.push(new NormalVec2i(this.stack.peek().getX() + 1, this.stack.peek().getY(), 0));
-					break;
-				case 1: // East
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).east();
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).west();
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).visited();
-					this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() + 1, 1));
-					break;
-				case 2: // South
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).south();
-					this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).north();
-					this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).visited();
-					this.stack.push(new NormalVec2i(this.stack.peek().getX() - 1, this.stack.peek().getY(), 2));
-					break;
-				case 3: // West
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).west();
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).east();
-					this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).visited();
-					this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() - 1, 3));
-					break;
+					case 0: // North
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).north();
+						this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).south();
+						this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).visited();
+						this.stack.push(new NormalVec2i(this.stack.peek().getX() + 1, this.stack.peek().getY(), 0));
+						break;
+					case 1: // East
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).east();
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).west();
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).visited();
+						this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() + 1, 1));
+						break;
+					case 2: // South
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).south();
+						this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).north();
+						this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).visited();
+						this.stack.push(new NormalVec2i(this.stack.peek().getX() - 1, this.stack.peek().getY(), 2));
+						break;
+					case 3: // West
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).west();
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).east();
+						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).visited();
+						this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() - 1, 3));
+						break;
 				}
 
 				if (!this.solvedMaze.contains(new Vec2i(this.stack.peek().getX(), this.stack.peek().getY()))) {

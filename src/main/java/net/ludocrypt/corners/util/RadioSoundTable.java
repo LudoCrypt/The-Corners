@@ -9,7 +9,8 @@ public class RadioSoundTable {
 	private final Holder.Reference<SoundEvent> staticSound;
 	private final Holder.Reference<SoundEvent> radioSound;
 
-	public RadioSoundTable(Holder.Reference<SoundEvent> musicSound, Holder.Reference<SoundEvent> staticSound, Holder.Reference<SoundEvent> radioSound) {
+	public RadioSoundTable(Holder.Reference<SoundEvent> musicSound, Holder.Reference<SoundEvent> staticSound,
+			Holder.Reference<SoundEvent> radioSound) {
 		this.musicSound = musicSound;
 		this.staticSound = staticSound;
 		this.radioSound = radioSound;

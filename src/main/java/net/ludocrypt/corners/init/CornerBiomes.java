@@ -17,12 +17,18 @@ import net.minecraft.world.gen.feature.Feature;
 
 public class CornerBiomes {
 
-	public static final RegistryKey<Biome> YEARNING_CANAL_BIOME = RegistryKey.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.YEARNING_CANAL));
-	public static final RegistryKey<Biome> COMMUNAL_CORRIDORS_BIOME = RegistryKey.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.COMMUNAL_CORRIDORS));
-	public static final RegistryKey<Biome> HOARY_CROSSROADS_BIOME = RegistryKey.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.HOARY_CROSSROADS));
-	public static final RegistryKey<Feature<?>> GAIA_TREE_FEATURE = RegistryKey.of(RegistryKeys.FEATURE, TheCorners.id("gaia_tree"));
-	public static final RegistryKey<ConfiguredFeature<?, ?>> CONFIGURED_GAIA_TREE_FEATURE = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, TheCorners.id("gaia_tree"));
-	public static final RegistryKey<ConfiguredFeature<?, ?>> CONFIGURED_SAPLING_GAIA_TREE_FEATURE = RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, TheCorners.id("gaia_sapling"));
+	public static final RegistryKey<Biome> YEARNING_CANAL_BIOME = RegistryKey
+		.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.YEARNING_CANAL));
+	public static final RegistryKey<Biome> COMMUNAL_CORRIDORS_BIOME = RegistryKey
+		.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.COMMUNAL_CORRIDORS));
+	public static final RegistryKey<Biome> HOARY_CROSSROADS_BIOME = RegistryKey
+		.of(RegistryKeys.BIOME, TheCorners.id(CornerWorlds.HOARY_CROSSROADS));
+	public static final RegistryKey<Feature<?>> GAIA_TREE_FEATURE = RegistryKey
+		.of(RegistryKeys.FEATURE, TheCorners.id("gaia_tree"));
+	public static final RegistryKey<ConfiguredFeature<?, ?>> CONFIGURED_GAIA_TREE_FEATURE = RegistryKey
+		.of(RegistryKeys.CONFIGURED_FEATURE, TheCorners.id("gaia_tree"));
+	public static final RegistryKey<ConfiguredFeature<?, ?>> CONFIGURED_SAPLING_GAIA_TREE_FEATURE = RegistryKey
+		.of(RegistryKeys.CONFIGURED_FEATURE, TheCorners.id("gaia_sapling"));
 
 	public static void init() {
 		get("yearning_canal_chunk_generator", YearningCanalChunkGenerator.CODEC);
