@@ -1,17 +1,15 @@
 package net.ludocrypt.corners.world.maze;
 
 import java.util.List;
-import java.util.Stack;
 
 import com.google.common.collect.Lists;
 
-import net.ludocrypt.limlib.api.world.maze.MazeComponent;
-import net.minecraft.util.math.BlockPos;
+import net.ludocrypt.limlib.api.world.maze.DepthLikeMaze;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.random.RandomGenerator;
 
-public class StraightDepthFirstMaze extends MazeComponent {
+public class StraightDepthFirstMaze extends DepthLikeMaze {
 
-	public Stack<NormalVec2i> stack = new Stack<NormalVec2i>();
 	public RandomGenerator random;
 	public double bias;
 
@@ -22,83 +20,45 @@ public class StraightDepthFirstMaze extends MazeComponent {
 	}
 
 	@Override
-	public void generateMaze() {
-		this.maze[0].visited();
-		this.stack.push(new NormalVec2i(0, 0, -1));
+	public void create() {
+		visit(new Vec2i(0, 0));
+		this.visitedCells++;
+		this.stack.push(new Vec2i(0, 0));
 
 		while (visitedCells < this.width * this.height) {
-			List<Integer> neighbours = Lists.newArrayList();
+			List<Face> neighbours = Lists.newArrayList();
 
-			// North Neighbour
-			if (this.hasNorthNeighbor(this.stack.peek())) {
-				neighbours.add(0);
+			for (Face face : Face.values()) {
+
+				if (this.hasNeighbour(this.stack.peek(), face)) {
+					neighbours.add(face);
+				}
+
 			}
 
-			// East Neighbour
-			if (this.hasEastNeighbor(this.stack.peek())) {
-				neighbours.add(1);
-			}
-
-			// South Neighbour
-			if (this.hasSouthNeighbor(this.stack.peek())) {
-				neighbours.add(2);
-			}
-
-			// West Neighbour
-			if (this.hasWestNeighbor(this.stack.peek())) {
-				neighbours.add(3);
-			}
-
-			// Neighbour check
 			if (!neighbours.isEmpty()) {
-				int nextCellDir;
+				Face nextFace = neighbours.get(random.nextInt(neighbours.size()));
 
-				if (random.nextDouble() < bias) {
-					nextCellDir = this.stack.peek().getDir();
+				if (dir(this.stack.peek()) != null) {
 
-					if ((!neighbours.contains(nextCellDir)) || (nextCellDir == -1)) {
-						nextCellDir = neighbours.get(random.nextInt(neighbours.size()));
+					if (neighbours.contains(dir(this.stack.peek()))) {
+
+						if (random.nextDouble() < bias) {
+							nextFace = dir(this.stack.peek());
+						}
+
 					}
 
-				} else {
-					nextCellDir = neighbours.get(random.nextInt(neighbours.size()));
 				}
 
-				switch (nextCellDir) {
-					case 0: // North
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).north();
-						this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).south();
-						this.cellState(this.stack.peek().getX() + 1, this.stack.peek().getY()).visited();
-						this.stack.push(new NormalVec2i(this.stack.peek().getX() + 1, this.stack.peek().getY(), 0));
-						break;
-					case 1: // East
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).east();
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).west();
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() + 1).visited();
-						this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() + 1, 1));
-						break;
-					case 2: // South
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).south();
-						this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).north();
-						this.cellState(this.stack.peek().getX() - 1, this.stack.peek().getY()).visited();
-						this.stack.push(new NormalVec2i(this.stack.peek().getX() - 1, this.stack.peek().getY(), 2));
-						break;
-					case 3: // West
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY()).west();
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).east();
-						this.cellState(this.stack.peek().getX(), this.stack.peek().getY() - 1).visited();
-						this.stack.push(new NormalVec2i(this.stack.peek().getX(), this.stack.peek().getY() - 1, 3));
-						break;
-				}
+				this.cellState(this.stack.peek()).go(nextFace);
+				this.cellState(this.stack.peek().go(nextFace)).go(nextFace.mirror());
+				this.visit(this.stack.peek().go(nextFace));
+				this.stack.push(this.stack.peek().go(nextFace));
 
-				if (!this.solvedMaze.contains(new Vec2i(this.stack.peek().getX(), this.stack.peek().getY()))) {
-					this.solvedMaze.add(new Vec2i(this.stack.peek().getX(), this.stack.peek().getY()));
-				}
-
-				// Visit Cell
 				this.visitedCells++;
+
 			} else {
-				// Backtrack
 				this.stack.pop();
 			}
 
@@ -106,38 +66,17 @@ public class StraightDepthFirstMaze extends MazeComponent {
 
 	}
 
-	public static class NormalVec2i extends Vec2i {
+	public NbtCompound dir(Vec2i vec, Face dir) {
+		NbtCompound appendage = new NbtCompound();
+		appendage.putByte("dir", (byte) dir.ordinal());
+		cellState(vec).getExtra().put("dir", appendage);
+		return appendage;
+	}
 
-		private int dir;
-
-		public NormalVec2i(int x, int y, int dir) {
-			super(x, y);
-			this.dir = dir;
-		}
-
-		public int getDir() {
-			return dir;
-		}
-
-		public BlockPos toPos() {
-			return new BlockPos(getX(), getY(), 0);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-
-			if (obj instanceof NormalVec2i pos) {
-				return pos.getX() == this.getX() && pos.getY() == this.getY() && pos.dir == this.dir;
-			}
-
-			return super.equals(obj);
-		}
-
-		@Override
-		public String toString() {
-			return "(" + this.getX() + ", " + this.getY() + this.dir + ")";
-		}
-
+	public Face dir(Vec2i vec) {
+		return cellState(vec).getExtra().containsKey("dir")
+				? Face.values()[cellState(vec).getExtra().get("dir").getByte("dir")]
+				: null;
 	}
 
 }

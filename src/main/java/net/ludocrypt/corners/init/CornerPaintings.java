@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
 import net.ludocrypt.corners.util.DimensionalPaintingVariant;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
@@ -17,18 +18,22 @@ import net.minecraft.world.World;
 
 public class CornerPaintings {
 
-	public static final BiFunction<ServerPlayerEntity, DimensionalPaintingEntity, Vec3d> overworldPaintingTarget = (player,
+	public static final BiFunction<LivingEntity, DimensionalPaintingEntity, Vec3d> overworldPaintingTarget = (entity,
 			painting) -> {
-		BlockPos pos = player.getSpawnPointPosition();
 
-		if (pos != null) {
-			ServerWorld serverWorld = player.getServer().getOverworld();
-			return PlayerEntity
-				.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnPointSet(), true)
-				.orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
-		} else {
-			return Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos());
+		if (entity instanceof ServerPlayerEntity player) {
+			BlockPos pos = player.getSpawnPointPosition();
+
+			if (pos != null) {
+				ServerWorld serverWorld = player.getServer().getOverworld();
+				return PlayerEntity
+					.findRespawnPosition(serverWorld, pos, player.getSpawnAngle(), player.isSpawnPointSet(), true)
+					.orElse(Vec3d.ofCenter(player.getServer().getOverworld().getSpawnPos()));
+			}
+
 		}
+
+		return Vec3d.ofCenter(entity.getServer().getOverworld().getSpawnPos());
 
 	};
 	public static final PaintingVariant OVERWORLD = get("overworld",

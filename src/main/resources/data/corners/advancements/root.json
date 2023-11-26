@@ -13,7 +13,7 @@
 		"show_toast": false,
 		"announce_to_chat": false,
 		"hidden": false,
-		"background": "corners:textures/block/wooden_radio_top.png"
+		"background": "corners:textures/block/gaia_log.png"
 	},
 	"criteria": {
 		"impossible": {

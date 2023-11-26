@@ -15,6 +15,7 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerWorlds;
 import net.ludocrypt.corners.world.maze.GrandMazeGenerator;
 import net.ludocrypt.limlib.api.world.LimlibHelper;
+import net.ludocrypt.limlib.api.world.Manipulation;
 import net.ludocrypt.limlib.api.world.NbtGroup;
 import net.ludocrypt.limlib.api.world.chunk.AbstractNbtChunkGenerator;
 import net.ludocrypt.limlib.api.world.maze.CombineMaze;
@@ -24,7 +25,7 @@ import net.ludocrypt.limlib.api.world.maze.DilateMaze;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent.CellState;
 import net.ludocrypt.limlib.api.world.maze.MazeComponent.Vec2i;
-import net.ludocrypt.limlib.api.world.maze.RectangularMazePiece;
+import net.ludocrypt.limlib.api.world.maze.MazePiece;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
@@ -33,7 +34,6 @@ import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureTemplateManager;
-import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.random.RandomGenerator;
@@ -118,8 +118,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 			Chunk chunk) {
 		BlockPos startPos = chunk.getPos().getStartPos();
 		this.mazeGenerator
-			.generateMaze(startPos, region.getSeed(), this::newMaze, (pos, mazePos, maze, cellState,
-					thickness) -> decorateCell(pos, mazePos, maze, cellState, thickness, region));
+			.generateMaze(new Vec2i(startPos.getX(), startPos.getZ()), region, this::newMaze, this::decorateCell);
 		return CompletableFuture.completedFuture(chunk);
 	}
 
@@ -133,13 +132,13 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	 * @param random  generator
 	 * @return MazeComponent
 	 */
-	public MazeComponent newMaze(BlockPos mazePos, int width, int height, RandomGenerator random) {
+	public MazeComponent newMaze(ChunkRegion region, Vec2i mazePos, int width, int height, RandomGenerator random) {
 		// Find the position of the grandMaze that contains the current maze
 		BlockPos grandMazePos = new BlockPos(
 			mazePos.getX() - Math
-				.floorMod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thickness)),
-			0, mazePos.getZ() - Math
-				.floorMod(mazePos.getZ(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thickness)));
+				.floorMod(mazePos.getX(), (mazeGenerator.width * mazeGenerator.width * mazeGenerator.thicknessX)),
+			0, mazePos.getY() - Math
+				.floorMod(mazePos.getY(), (mazeGenerator.height * mazeGenerator.height * mazeGenerator.thicknessY)));
 		// Check if the grandMaze was already generated, if not generate it
 		MazeComponent grandMaze;
 
@@ -159,15 +158,15 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		CellState originCell = grandMaze
 			.cellState(
 				(((mazePos.getX() - grandMazePos
-					.getX()) / mazeGenerator.thickness) / mazeGenerator.width) / mazeGenerator.dilation,
-				(((mazePos.getZ() - grandMazePos.getZ()) / mazeGenerator.thickness) / height) / mazeGenerator.dilation);
+					.getX()) / mazeGenerator.thicknessX) / mazeGenerator.width) / mazeGenerator.dilation,
+				(((mazePos.getY() - grandMazePos.getZ()) / mazeGenerator.thicknessY) / height) / mazeGenerator.dilation);
 		Vec2i start = null;
 		List<Vec2i> endings = Lists.newArrayList();
 
 		// Check if the origin cell has an opening in the south or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set.
-		if (originCell.isSouth() || originCell.getPosition().getX() == 0) {
+		if (originCell.goesDown() || originCell.getPosition().getX() == 0) {
 
 			if (start == null) {
 				start = new Vec2i(0, (mazeGenerator.height / mazeGenerator.dilation) / 2);
@@ -178,7 +177,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Check if the origin cell has an opening in the west or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set.
-		if (originCell.isWest() || originCell.getPosition().getY() == 0) {
+		if (originCell.goesLeft() || originCell.getPosition().getY() == 0) {
 
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2, 0);
@@ -191,7 +190,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Check if the origin cell has an opening in the north or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isNorth() || originCell.getPosition().getX() == (mazeGenerator.width / mazeGenerator.dilation) - 1) {
+		if (originCell.goesUp() || originCell.getPosition().getX() == (mazeGenerator.width / mazeGenerator.dilation) - 1) {
 
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) - 1,
@@ -207,7 +206,8 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Check if the origin cell has an opening in the east or it's on the edge of
 		// the grandMaze, if so set the starting point to the middle of that side, if it
 		// has not been set. Else add an ending point to the middle of that side.
-		if (originCell.isEast() || originCell.getPosition().getY() == (mazeGenerator.height / mazeGenerator.dilation) - 1) {
+		if (originCell
+			.goesRight() || originCell.getPosition().getY() == (mazeGenerator.height / mazeGenerator.dilation) - 1) {
 
 			if (start == null) {
 				start = new Vec2i((mazeGenerator.width / mazeGenerator.dilation) / 2,
@@ -234,7 +234,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		mazeToSolve.generateMaze();
 		// Create a maze solver and solve the maze using the starting point and ending
 		// points.
-		MazeComponent solvedMaze = new DepthFirstMazeSolver(mazeToSolve, start, endings, random);
+		MazeComponent solvedMaze = new DepthFirstMazeSolver(mazeToSolve, random, start, endings.toArray(new Vec2i[0]));
 		solvedMaze.generateMaze();
 		// Create a scaled maze using the dilation.
 		MazeComponent dilatedMaze = new DilateMaze(solvedMaze, mazeGenerator.dilation);
@@ -247,7 +247,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		MazeComponent overlayMaze = new DepthFirstMaze(dilatedMaze.width / 2, dilatedMaze.height / 2, random);
 		overlayMaze.generateMaze();
 		// Find a path along two random points
-		MazeComponent solvedOverlay = new DepthFirstMazeSolver(overlayMaze, starting, List.of(ending), random);
+		MazeComponent solvedOverlay = new DepthFirstMazeSolver(overlayMaze, random, starting, ending);
 		solvedOverlay.generateMaze();
 		// Make it bigger
 		MazeComponent dilatedOverlay = new DilateMaze(solvedOverlay, 2);
@@ -255,25 +255,27 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		// Combine the two
 		CombineMaze combinedMaze = new CombineMaze(dilatedMaze, dilatedOverlay);
 		combinedMaze.generateMaze();
+
 		return combinedMaze;
 	}
 
-	public void decorateCell(BlockPos pos, BlockPos mazePos, MazeComponent maze, CellState state, int thickness,
-			ChunkRegion region) {
+	public void decorateCell(ChunkRegion region, Vec2i cellPos, Vec2i mazePos, MazeComponent maze, CellState state,
+			Vec2i thickness, RandomGenerator cellRandom) {
+		BlockPos pos = cellPos.toBlock();
 		RandomGenerator random = RandomGenerator
 			.createLegacy(LimlibHelper
-				.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getZ(), region.getSeed(), mazePos.getX()),
+				.blockSeed(pos.getX(), LimlibHelper.blockSeed(mazePos.getY(), region.getSeed(), mazePos.getX()),
 					pos.getZ()));
-		Pair<RectangularMazePiece, BlockRotation> mazeSegment = RectangularMazePiece.getFromCell(state, random);
+		Pair<MazePiece, Manipulation> mazeSegment = MazePiece.getFromCell(state, random);
 
-		if (mazeSegment.getFirst() != RectangularMazePiece.BLANK) {
+		if (mazeSegment.getFirst() != MazePiece.E) {
 			placeNbt(getPiece(mazeSegment.getFirst(), random), getPieceAsBottom(mazeSegment.getFirst(), random), region, pos,
 				mazeSegment.getSecond());
 		} else if (random.nextInt(67) == 0) {
 			BlockPos offset = pos.add(random.nextInt(7), 0, random.nextInt(7));
 			this
 				.generateNbt(region, offset.add(0, 264, 0), nbtGroup.pick("hoary_crossroads_obelisk", random),
-					BlockRotation.random(random));
+					Manipulation.random(random));
 
 			for (int i = 0; i < 264; i++) {
 				region.setBlockState(offset.add(0, i, 0), Blocks.POLISHED_DEEPSLATE.getDefaultState(), Block.FORCE_STATE);
@@ -287,21 +289,21 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	private void placeNbt(Identifier nbt, Identifier bottomNbt, ChunkRegion region, BlockPos basePos,
-			BlockRotation rotation) {
-		this.generateNbt(region, basePos.up(256), nbt, rotation);
+			Manipulation manipulation) {
+		this.generateNbt(region, basePos.up(256), nbt, manipulation);
 
 		for (int i = 0; i < 256; i++) {
-			this.generateNbt(region, basePos.up(i), bottomNbt, rotation);
+			this.generateNbt(region, basePos.up(i), bottomNbt, manipulation);
 		}
 
 	}
 
-	public Identifier getPiece(RectangularMazePiece piece, RandomGenerator random) {
+	public Identifier getPiece(MazePiece piece, RandomGenerator random) {
 		String group = switch (piece) {
-			case F_PIECE -> "hoary_crossroads_f";
-			case I_PIECE -> "hoary_crossroads_i";
-			case L_PIECE -> "hoary_crossroads_l";
-			case T_PIECE -> "hoary_crossroads_t";
+			case F -> "hoary_crossroads_f";
+			case I -> "hoary_crossroads_i";
+			case L -> "hoary_crossroads_l";
+			case T -> "hoary_crossroads_t";
 			default -> "hoary_crossroads_nub";
 		};
 
@@ -318,18 +320,18 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 		return nbtGroup.pick(group, random);
 	}
 
-	public Identifier getPieceAsBottom(RectangularMazePiece piece, RandomGenerator random) {
+	public Identifier getPieceAsBottom(MazePiece piece, RandomGenerator random) {
 
 		switch (piece) {
-			case F_PIECE:
+			case F:
 				return nbtGroup.pick("hoary_crossroads_f_bottom", random);
-			case I_PIECE:
+			case I:
 				return nbtGroup.pick("hoary_crossroads_i_bottom", random);
-			case L_PIECE:
+			case L:
 				return nbtGroup.pick("hoary_crossroads_l_bottom", random);
-			case NUB:
+			case N:
 				return nbtGroup.pick("hoary_crossroads_nub_bottom", random);
-			case T_PIECE:
+			case T:
 				return nbtGroup.pick("hoary_crossroads_t_bottom", random);
 			default:
 				return nbtGroup.pick("hoary_crossroads_nub_bottom", random);
@@ -338,7 +340,7 @@ public class HoaryCrossroadsChunkGenerator extends AbstractNbtChunkGenerator {
 	}
 
 	@Override
-	public int getChunkDistance() {
+	public int getPlacementRadius() {
 		return 1;
 	}
 

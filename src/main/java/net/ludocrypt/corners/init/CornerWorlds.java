@@ -72,6 +72,7 @@ public class CornerWorlds implements LimlibRegistrar {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void registerHooks() {
+
 		// Sound Effects
 		get(YEARNING_CANAL, new SoundEffects(Optional.of(new StaticReverbEffect.Builder().setDecayTime(20.0F).build()),
 			Optional.empty(), Optional.of(new MusicSound(CornerSoundEvents.MUSIC_YEARNING_CANAL, 3000, 8000, true))));
@@ -81,23 +82,27 @@ public class CornerWorlds implements LimlibRegistrar {
 		get(HOARY_CROSSROADS,
 			new SoundEffects(Optional.of(new StaticReverbEffect.Builder().setDecayTime(15.0F).setDensity(1.0F).build()),
 				Optional.empty(), Optional.of(new MusicSound(CornerSoundEvents.MUSIC_HOARY_CROSSROADS, 3000, 8000, true))));
+
 		// Skyboxes
 		get(YEARNING_CANAL, new TexturedSkybox(TheCorners.id("textures/sky/yearning_canal")));
 		get(COMMUNAL_CORRIDORS, new TexturedSkybox(TheCorners.id("textures/sky/snow")));
 		get(HOARY_CROSSROADS, new TexturedSkybox(TheCorners.id("textures/sky/hoary_crossroads")));
+
 		// Sky Effects
 		get(YEARNING_CANAL, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, false, 1.0F));
 		get(COMMUNAL_CORRIDORS, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, false, 1.0F));
 		get(HOARY_CROSSROADS, new StaticDimensionEffects(Optional.empty(), false, "NONE", true, false, true, 1.0F));
+
 		// Post Effects
 		get(YEARNING_CANAL, new StaticPostEffect(TheCorners.id(YEARNING_CANAL)));
 		get(COMMUNAL_CORRIDORS,
 			new StrongPostEffect(TheCorners.id(COMMUNAL_CORRIDORS), TheCorners.id(COMMUNAL_CORRIDORS + "_fallback")));
 		get(HOARY_CROSSROADS, new StaticPostEffect(TheCorners.id(HOARY_CROSSROADS)));
+
 		// Worlds
 		get(YEARNING_CANAL,
 			new LimlibWorld(
-				() -> new DimensionType(OptionalLong.of(1200), true, false, false, true, 1.0, true, false, 0, 2032, 2032,
+				() -> new DimensionType(OptionalLong.of(1200), true, false, false, true, 1.0, true, false, 0, 1024, 1024,
 					TagKey.of(RegistryKeys.BLOCK, TheCorners.id(YEARNING_CANAL)), TheCorners.id(YEARNING_CANAL), 1.0F,
 					new MonsterSettings(false, false, ConstantIntProvider.ZERO, 0)),
 				(registry) -> new DimensionOptions(
@@ -137,6 +142,7 @@ public class CornerWorlds implements LimlibRegistrar {
 						new FixedBiomeSource(
 							registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.HOARY_CROSSROADS_BIOME).get()),
 						HoaryCrossroadsChunkGenerator.createGroup(), 16, 16, 4, 0))));
+
 		// Registries
 		WORLDS.forEach((pair) -> LimlibWorld.LIMLIB_WORLD.register(pair.getFirst(), pair.getSecond(), Lifecycle.stable()));
 		LimlibRegistryHooks

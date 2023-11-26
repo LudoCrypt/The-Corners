@@ -43,7 +43,10 @@
 			},
 			"limlib",
 			"cloth-config",
-			"specialmodels"
+			{
+				"id": "specialmodels",
+				"environment": "client"
+			}
 		]
 	},
 	"mixin": "corners.mixins.json",

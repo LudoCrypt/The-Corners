@@ -19,7 +19,7 @@ public class DecoratedMazeComponent extends MazeComponent {
 	}
 
 	@Override
-	public void generateMaze() {
+	public void create() {
 	}
 
 	public static class Decoration {
