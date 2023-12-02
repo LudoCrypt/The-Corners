@@ -3,6 +3,7 @@
 		"#minecraft:wooden_stairs",
 		"#minecraft:wooden_slabs",
 		"#minecraft:wooden_doors",
-		"#minecraft:wooden_trapdoors"
+		"#minecraft:wooden_trapdoors",
+		"#minecraft:moss_replaceable"
 	]
 }

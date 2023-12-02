@@ -4,6 +4,8 @@
 		"corners:wooden_radio",
 		"corners:tuned_radio",
 		"corners:broken_radio",
-		"corners:drywall"
+		"corners:grown_radio",
+		"corners:drywall",
+		"corners:deep_bookshelf"
 	]
 }

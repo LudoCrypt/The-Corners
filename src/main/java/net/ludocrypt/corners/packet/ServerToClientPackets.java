@@ -51,14 +51,12 @@ public class ServerToClientPackets {
 
 					if (start) {
 						((MusicTrackerAccess) (client.getMusicTracker())).getRadioPositions().add(pos);
-						SoundEvent soundEvent = id.getRadioSound().value();
+						SoundEvent soundEvent = id.getStaticSound().value();
 
 						if (client.world.getBlockState(pos).isOf(CornerBlocks.WOODEN_RADIO)) {
 							soundEvent = id.getRadioSound().value();
 						} else if (client.world.getBlockState(pos).isOf(CornerBlocks.TUNED_RADIO)) {
 							soundEvent = id.getMusicSound().value();
-						} else if (client.world.getBlockState(pos).isOf(CornerBlocks.BROKEN_RADIO)) {
-							soundEvent = id.getStaticSound().value();
 						}
 
 						LoopingPositionedSoundInstance

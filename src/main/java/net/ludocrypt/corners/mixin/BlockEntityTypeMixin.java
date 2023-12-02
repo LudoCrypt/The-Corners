@@ -27,6 +27,12 @@ public class BlockEntityTypeMixin<T extends BlockEntity> {
 				ci.setReturnValue(true);
 			}
 
+		} else if (id.equals(BlockEntityType.getId(BlockEntityType.CHISELED_BOOKSHELF))) {
+
+			if (state.isOf(CornerBlocks.DEEP_BOOKSHELF)) {
+				ci.setReturnValue(true);
+			}
+
 		}
 
 	}

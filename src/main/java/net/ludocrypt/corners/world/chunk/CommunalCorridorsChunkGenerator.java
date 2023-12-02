@@ -31,6 +31,7 @@ import net.ludocrypt.limlib.api.world.maze.MazeComponent.Vec2i;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.NbtCompound;
@@ -611,66 +612,26 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 				region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
 			}
 
-		} else if (state.isOf(Blocks.CHISELED_BOOKSHELF) || state.isOf(CornerBlocks.DEEP_BOOKSHELF)) {
+		} else if (state.isOf(Blocks.CHISELED_BOOKSHELF)) {
 
 			double scale = 10.0D;
 
 			DoublePerlinNoiseSampler noise = DoublePerlinNoiseSampler
-				.method_31927(RandomGenerator.createLegacy(region.getSeed() + 2), 1, 0.2, 0.6, 0.7);
-
-//			switch (state.get(Properties.HORIZONTAL_FACING)) {
-//				case EAST:
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(0),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY() + 0.5) / (scale / 2.0),
-//									(pos.getZ() + 2.0 / 3.0) / (scale / 3.0)) > 0);
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(1),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY() + 0.5) / (scale / 2.0),
-//									(pos.getZ() + 1.0 / 3.0) / (scale / 3.0)) > 0);
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(2),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY() + 0.5) / (scale / 2.0),
-//									(pos.getZ()) / (scale / 3.0)) > 0);
-//
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(3),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY()) / (scale / 2.0),
-//									(pos.getZ() + 2.0 / 3.0) / (scale / 3.0)) > 0);
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(4),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY()) / (scale / 2.0),
-//									(pos.getZ() + 1.0 / 3.0) / (scale / 3.0)) > 0);
-//					state = state
-//						.with(ChiseledBookshelfBlock.SLOT_OCCUPATION_PROPERTIES.get(5),
-//							noise
-//								.sample((pos.getX() + 2.0 / 3.0) / (scale / 3.0), (pos.getY()) / (scale / 2.0),
-//									(pos.getZ()) / (scale / 3.0)) > 0);
-//					break;
-//				case NORTH:
-//					break;
-//				case SOUTH:
-//					break;
-//				case WEST:
-//					break;
-//				case UP:
-//				case DOWN:
-//				default:
-//					break;
-//			}
-
-			noise = DoublePerlinNoiseSampler
 				.method_31927(RandomGenerator.createLegacy(region.getSeed() + 5), 1, 0.2, 0.6, 0.7);
 
 			if (noise.sample((pos.getX()) / scale, (pos.getZ()) / scale, (pos.getY()) / scale) > 0) {
-				region.setBlockState(pos, RadioBlock.of(state, CornerBlocks.DEEP_BOOKSHELF), Block.FORCE_STATE, 0);
-			} else {
-				region.setBlockState(pos, RadioBlock.of(state, Blocks.CHISELED_BOOKSHELF), Block.FORCE_STATE, 0);
+				BlockState deepState = RadioBlock.of(state, CornerBlocks.DEEP_BOOKSHELF);
+				region.setBlockState(pos, deepState, Block.NOTIFY_ALL, 0);
+
+				if (nbt.isPresent()) {
+					BlockEntity blockEntity = region.getBlockEntity(pos);
+
+					if (blockEntity != null) {
+						blockEntity.setCachedState(deepState);
+					}
+
+				}
+
 			}
 
 		}
