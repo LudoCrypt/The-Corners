@@ -6,10 +6,11 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "The Corners",
-			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nRacoon Syndrome, for creating the amazingly chilling OST!\nShai, for creating the designs of each dimension, and supplying us with beautiful textures!\nLudoCrypt, me, for developing the whole thing, and bringing some extra life with her own OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!\nHuge thank you to ImXR24 for the Gaia woodset textures!",
+			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nShai, for helping with the designs of each dimension, and supplying us with beautiful textures!\nKraCactus, for helping with the designs of each dimensions.\nLudoCrypt, me, for developing the whole thing, and most of the OST!\nRacoon Syndrome, too, for helping with the amazingly chilling OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!\nHuge thank you to ImXR24 for the Gaia woodset textures!",
 			"contributors": {
 				"LudoCrypt": "Author, Developer, Musician",
 				"Shai": "Author, Artist, Designer",
+				"KraCactus": "Designer",
 				"Racoon Syndrome": "Musician",
 				"Basement Spider": "Artist",
 				"ImXR24": "Artist"
@@ -58,7 +59,8 @@
 			"credits.the_corners.racoon_syndrome.youtube": "https://www.youtube.com/channel/UCd8QgNRl5ODjlIvAWpmjikA",
 			"credits.the_corners.racoon_syndrome.bandcamp": "https://racsyndrome.bandcamp.com/",
 			"credits.the_corners.shai.instagram": "https://www.instagram.com/shaithelamb/",
-			"credits.the_corners.shai.twitter": "https://www.twitter.com/shaithelamb"
+			"credits.the_corners.shai.twitter": "https://www.twitter.com/shaithelamb",
+			"credits.the_corners.kra.artstation": "https://www.artstation.com/artwork/8bgPgw"
 		}
 	}
 }
