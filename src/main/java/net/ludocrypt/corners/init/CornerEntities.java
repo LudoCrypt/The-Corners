@@ -3,10 +3,8 @@ package net.ludocrypt.corners.init;
 import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 
 import net.ludocrypt.corners.TheCorners;
-import net.ludocrypt.corners.entity.CornerBoatDispensorBehavior;
 import net.ludocrypt.corners.entity.CornerBoatEntity.CornerBoat;
 import net.ludocrypt.corners.entity.DimensionalPaintingEntity;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -22,7 +20,7 @@ public class CornerEntities {
 			.create()
 			.entityFactory(DimensionalPaintingEntity::new)
 			.setDimensions(new EntityDimensions(0.5F, 0.5F, false))
-			.maxBlockTrackingRange(10)
+			.maxChunkTrackingRange(10)
 			.trackingTickInterval(Integer.MAX_VALUE)
 			.build());
 //	public static final EntityType<CorvusEntity> CORVUS_ENTITY = get("corvus", QuiltEntityTypeBuilder.createMob().entityFactory(CorvusEntity::new).spawnGroup(SpawnGroup.AMBIENT)
