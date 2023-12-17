@@ -3,7 +3,6 @@ package net.ludocrypt.corners.init;
 import org.quiltmc.qsl.block.content.registry.api.BlockContentRegistries;
 import org.quiltmc.qsl.block.content.registry.api.FlammableBlockEntry;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
-import org.quiltmc.qsl.item.content.registry.impl.ItemContentRegistriesInitializer;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
@@ -164,16 +163,6 @@ public class CornerBlocks {
 		BlockContentRegistries.FLAMMABLE.put(GAIA_FENCE, new FlammableBlockEntry(5, 20));
 		BlockContentRegistries.FLAMMABLE.put(GAIA_FENCE_GATE, new FlammableBlockEntry(5, 20));
 		BlockContentRegistries.FLAMMABLE.put(GAIA_LEAVES, new FlammableBlockEntry(30, 60));
-
-		ItemContentRegistriesInitializer.FUEL_MAP.put(NYLON_FIBER_BLOCK.asItem(), 100);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(NYLON_FIBER_STAIRS.asItem(), 100);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(NYLON_FIBER_SLAB.asItem(), 100);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(DRYWALL.asItem(), 300);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(WOODEN_RADIO.asItem(), 300);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(TUNED_RADIO.asItem(), 300);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(BROKEN_RADIO.asItem(), 300);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(GROWN_RADIO.asItem(), 300);
-		ItemContentRegistriesInitializer.FUEL_MAP.put(DEEP_BOOKSHELF.asItem(), 300);
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(new ModifyEntries() {
 

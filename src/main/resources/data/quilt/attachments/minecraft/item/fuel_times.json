@@ -2,6 +2,15 @@
 	"replace": false,
 	"values": {
 		"corners:gaia_fence": 300,
-		"corners:gaia_fence_gate": 300
+		"corners:gaia_fence_gate": 300,
+		"corners:nylon_fiber_block": 100,
+		"corners:nylon_fiber_stairs": 100,
+		"corners:nylon_fiber_slab": 100,
+		"corners:drywall": 300,
+		"corners:grown_radio": 300,
+		"corners:broken_radio": 300,
+		"corners:wooden_radio": 300,
+		"corners:tuned_radio": 300,
+		"corners:deep_bookshelf": 300
 	}
 }

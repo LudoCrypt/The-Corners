@@ -9,13 +9,13 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.mixin.GameRendererAccessor;
 import net.ludocrypt.specialmodels.api.SpecialModelRenderer;
-import net.ludocrypt.specialmodels.impl.render.MutableQuad;
 import net.ludocrypt.specialmodels.impl.render.Vec4b;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
 import net.minecraft.client.render.chunk.ChunkRenderRegion;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.state.property.Properties;
@@ -66,13 +66,8 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 
 	@Override
 	@ClientOnly
-	public MutableQuad modifyQuad(MutableQuad quad) {
-		return quad;
-	}
-
-	@Override
-	@ClientOnly
-	public Vec4b appendState(ChunkRenderRegion chunkRenderRegion, BlockPos pos, BlockState state, long modelSeed) {
+	public Vec4b appendState(ChunkRenderRegion chunkRenderRegion, BlockPos pos, BlockState state, BakedModel model,
+			long modelSeed) {
 
 		if (state.isOf(CornerBlocks.DEEP_BOOKSHELF)) {
 			byte b1 = 0;
@@ -107,7 +102,7 @@ public class DeepBookshelfRenderer extends SpecialModelRenderer {
 			return new Vec4b(b1, b2, b3, b4);
 		}
 
-		return super.appendState(chunkRenderRegion, pos, state, modelSeed);
+		return super.appendState(chunkRenderRegion, pos, state, model, modelSeed);
 	}
 
 }

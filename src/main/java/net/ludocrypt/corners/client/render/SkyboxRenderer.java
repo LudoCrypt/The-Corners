@@ -9,9 +9,13 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.mixin.GameRendererAccessor;
 import net.ludocrypt.specialmodels.api.SpecialModelRenderer;
 import net.ludocrypt.specialmodels.impl.render.MutableQuad;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.ShaderProgram;
+import net.minecraft.client.render.chunk.ChunkRenderRegion;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.BlockPos;
@@ -59,7 +63,8 @@ public class SkyboxRenderer extends SpecialModelRenderer {
 
 	@Override
 	@ClientOnly
-	public MutableQuad modifyQuad(MutableQuad quad) {
+	public MutableQuad modifyQuad(ChunkRenderRegion chunkRenderRegion, BlockPos pos, BlockState state, BakedModel model,
+			BakedQuad quadIn, long modelSeed, MutableQuad quad) {
 		quad.getV1().setUv(new Vec2f(0.0F, 0.0F));
 		quad.getV2().setUv(new Vec2f(0.0F, 1.0F));
 		quad.getV3().setUv(new Vec2f(1.0F, 1.0F));
