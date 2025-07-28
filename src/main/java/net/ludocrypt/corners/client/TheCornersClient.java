@@ -13,6 +13,8 @@ import net.ludocrypt.corners.init.CornerBlocks;
 import net.ludocrypt.corners.init.CornerEntities;
 import net.ludocrypt.corners.packet.ServerToClientPackets;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.block.entity.StructureBlockBlockEntityRenderer;
 import net.minecraft.client.render.entity.PaintingEntityRenderer;
 import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.client.render.entity.model.ChestBoatEntityModel;
@@ -41,6 +43,8 @@ public class TheCornersClient implements ClientModInitializer {
 		EntityModelLayerRegistry
 			.registerModelLayer(CornerBoatEntityRenderer.getModelLayer(CornerBoat.GAIA, true),
 				() -> ChestBoatEntityModel.getTexturedModelData());
+		BlockEntityRendererFactories
+			.register(CornerBlocks.MAZE_STRUCTURE_BLOCK_ENTITY_TYPE, StructureBlockBlockEntityRenderer::new);
 	}
 
 }

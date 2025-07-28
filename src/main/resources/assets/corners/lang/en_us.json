@@ -31,6 +31,8 @@
 	"block.corners.gaia_sapling": "Gaia Sapling",
 	"block.corners.gaia_sign": "Gaia Sign",
 	"block.corners.gaia_hanging_sign": "Gaia Hanging Sign",
+	"block.corners.structure_helper": "Structure Helper",
+	"block.corners.maze_structure_block": "Maze Structure Block",
 	"item.corners.gaia_boat": "Gaia Boat",
 	"item.corners.gaia_chest_boat": "Gaia Boat with Chest",
 	"itemGroup.corners.items": "The Corners",

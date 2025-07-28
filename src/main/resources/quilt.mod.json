@@ -6,14 +6,9 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "The Corners",
-			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nShai, for helping with the designs of each dimension, and supplying us with beautiful textures!\nKraCactus, for helping with the designs of each dimensions.\nLudoCrypt, me, for developing the whole thing, and most of the OST!\nRacoon Syndrome, too, for helping with the amazingly chilling OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!\nHuge thank you to ImXR24 for the Gaia woodset textures!",
+			"description": "Explore the corners of the universe, where no man was meant to.\n____________________________\nThe Corners adds interesting and unique dimensions based off of Liminal Space's! Explore wonderous lands all by lighting your way through paintings taking you to unique and fascinating places!\n____________________________\nCredits:\nShai, for helping with the designs of each dimension, and supplying us with beautiful textures!\nKraCactus, for helping with the designs of each dimensions, and providing a glorious amount of rooms.\nLudoCrypt for developing the mod, and composing most of the OST!\nRacoon Syndrome, for adding some extra tracks with impeccable vibes to the OST!\n(It's a joint soundtrack)\nBig thank you to Basement Spider for helping with the Radio textures!\nHuge thank you to ImXR24 for the Gaia woodset textures!\nBig thank you to Crimes-balaur for the debug maze block texture!\nHuge thank you to Diansu for creating the Mouse model and texture, while our community made the rare variant textures:\nshadowmaster435, Basement Spider, ImXR24, resailed, NovaQ, SonicFan19",
 			"contributors": {
-				"LudoCrypt": "Author, Developer, Musician",
-				"Shai": "Author, Artist, Designer",
-				"KraCactus": "Designer",
-				"Racoon Syndrome": "Musician",
-				"Basement Spider": "Artist",
-				"ImXR24": "Artist"
+				"LudoCrypt": "Project Manager"
 			},
 			"contact": {
 				"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-corners",
@@ -24,21 +19,33 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "net.ludocrypt.corners.TheCorners",
-			"client_init": "net.ludocrypt.corners.client.TheCornersClient",
+			"init": [
+				"net.ludocrypt.corners.TheCorners",
+				"net.ludocrypt.limlib.impl.Limlib"
+			],
+			"client_init": [
+				"net.ludocrypt.corners.client.TheCornersClient",
+				"net.ludocrypt.limlib.impl.LimlibClient"
+			],
 			"modmenu": "net.ludocrypt.corners.config.CornerModmenu",
-			"limlib:registrar": "net.ludocrypt.corners.init.CornerWorlds"
+			"limlib:registrar": [
+				"net.ludocrypt.corners.init.CornerWorlds",
+				"net.ludocrypt.limlib.impl.debug.DebugWorld"
+			]
 		},
 		"depends": [
 			"quilt_loader",
 			"quilted_fabric_api",
 			"minecraft",
-			"limlib",
 			"cloth-config",
 			"specialmodels"
 		]
 	},
-	"mixin": "corners.mixins.json",
+	"mixin": [
+		"corners.mixins.json",
+		"limlib.mixins.json",
+		"limlib.debug.mixins.json"
+	],
 	"access_widener": "corners.accesswidener",
 	"modmenu": {
 		"links": {

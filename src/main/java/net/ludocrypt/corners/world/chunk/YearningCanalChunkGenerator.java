@@ -13,8 +13,8 @@ import net.ludocrypt.corners.TheCorners;
 import net.ludocrypt.corners.init.CornerWorlds;
 import net.ludocrypt.limlib.api.world.LimlibHelper;
 import net.ludocrypt.limlib.api.world.Manipulation;
-import net.ludocrypt.limlib.api.world.NbtGroup;
 import net.ludocrypt.limlib.api.world.chunk.AbstractNbtChunkGenerator;
+import net.ludocrypt.limlib.api.world.nbt.NbtGroup;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -55,6 +55,10 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 			.with("yearning_canal_top")
 			.with("yearning_canal_with_hallway")
 			.build();
+	}
+
+	@Override
+	public void loadTags() {
 	}
 
 	@Override
@@ -103,20 +107,20 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 							.getZ() == 0)) {
 
 							if (yi == 0) {
-								generateNbt(region, towerPos, nbtGroup.pick("yearning_canal_bottom", pieceRandom));
+								generateNbt(region, towerPos, nbtGroup.pick(pieceRandom, "yearning_canal_bottom"));
 								continue;
 							} else if (yi == max - 1) {
-								generateNbt(region, towerPos, nbtGroup.pick("yearning_canal_top", pieceRandom));
+								generateNbt(region, towerPos, nbtGroup.pick(pieceRandom, "yearning_canal_top"));
 								continue;
 							} else {
 
 								if (hallwaySpawnsAtHeight && !tower) {
-									generateNbt(region, towerPos, nbtGroup.pick("yearning_canal_with_hallway", pieceRandom));
+									generateNbt(region, towerPos, nbtGroup.pick(pieceRandom, "yearning_canal_with_hallway"));
 									generateNbt(region, offsetPos,
-										nbtGroup.pick("yearning_canal_hallway_connected", pieceRandom),
+										nbtGroup.pick(pieceRandom, "yearning_canal_hallway_connected"),
 										Manipulation.of(rotation));
 								} else {
-									generateNbt(region, towerPos, nbtGroup.pick("yearning_canal", pieceRandom));
+									generateNbt(region, towerPos, nbtGroup.pick(pieceRandom, "yearning_canal"));
 								}
 
 							}
@@ -139,10 +143,10 @@ public class YearningCanalChunkGenerator extends AbstractNbtChunkGenerator {
 
 								if (hallRandom.nextInt(27) == 0) {
 									generateNbt(region, offsetPos.add(0, 4, 0),
-										nbtGroup.pick("yearning_canal_hallway", hallRandom), Manipulation.of(rotation));
+										nbtGroup.pick(hallRandom, "yearning_canal_hallway"), Manipulation.of(rotation));
 								} else {
 									generateNbt(region, offsetPos.add(0, 4, 0),
-										nbtGroup.pick("yearning_canal_hallway_decorated", hallRandom),
+										nbtGroup.pick(hallRandom, "yearning_canal_hallway_decorated"),
 										Manipulation.of(rotation));
 								}
 

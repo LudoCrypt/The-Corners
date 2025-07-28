@@ -6,7 +6,7 @@ import net.ludocrypt.limlib.api.world.maze.MazeComponent;
 import net.ludocrypt.limlib.api.world.maze.MazeGenerator;
 import net.minecraft.util.math.BlockPos;
 
-public class GrandMazeGenerator extends MazeGenerator<MazeComponent> {
+public class GrandMazeGenerator extends MazeGenerator {
 
 	public final HashMap<BlockPos, MazeComponent> grandMazeMap = new HashMap<BlockPos, MazeComponent>(30);
 	public final int dilation;

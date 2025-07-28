@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/cube_top",
+	"textures": {
+		"side": "minecraft:block/structure_block_save",
+		"top": "corners:block/maze_structure_block"
+	}
+}

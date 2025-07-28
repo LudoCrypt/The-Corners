@@ -1,0 +1,34 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "net.ludocrypt.limlib.impl.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"BuiltinDimensionTypesMixin",
+		"ChunkStatusMixin",
+		"DynamicRegistrySyncMixin",
+		"GeneratorTypeAccessor",
+		"RegistriesAccessor",
+		"RegistryLoaderMixin",
+		"ServerPlayerEntityMixin",
+		"ServerWorldMixin",
+		"StructureBlockBlockEntityMixin",
+		"StructureMixin",
+		"WorldDimensionsMixin",
+		"WorldSaveStorageMixin"
+	],
+	"client": [
+		"client.BackgroundRendererMixin",
+		"client.ClientWorldMixin",
+		"client.DimensionVisualEffectsMixin",
+		"client.GameRendererMixin",
+		"client.MinecraftClientMixin",
+		"client.SoundSystemMixin",
+		"client.SourceAccessor",
+		"client.WorldRendererAfterMixin",
+		"client.WorldRendererBeforeMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

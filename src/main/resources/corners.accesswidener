@@ -3,3 +3,8 @@ extendable method net/minecraft/block/FenceBlock canConnectToFence (Lnet/minecra
 extendable method net/minecraft/item/BoatItem createBoatEntity (Lnet/minecraft/world/World;Lnet/minecraft/util/hit/HitResult;)Lnet/minecraft/entity/vehicle/BoatEntity;
 accessible field net/minecraft/client/render/entity/BoatEntityRenderer texturesAndModels Ljava/util/Map;
 mutable field net/minecraft/client/render/entity/BoatEntityRenderer texturesAndModels Ljava/util/Map;
+accessible method net/minecraft/client/gui/screen/ingame/StructureBlockScreen updateWidgets (Lnet/minecraft/block/enums/StructureBlockMode;)V
+extendable method net/minecraft/client/gui/screen/ingame/StructureBlockScreen updateWidgets (Lnet/minecraft/block/enums/StructureBlockMode;)V
+
+accessible class net/minecraft/registry/Registries$RegistryBootstrap
+accessible class net/minecraft/registry/DynamicRegistrySync$SyncEntry

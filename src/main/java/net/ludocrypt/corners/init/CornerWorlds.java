@@ -127,7 +127,7 @@ public class CornerWorlds implements LimlibRegistrar {
 					new CommunalCorridorsChunkGenerator(
 						new FixedBiomeSource(
 							registry.get(RegistryKeys.BIOME).getHolder(CornerBiomes.COMMUNAL_CORRIDORS_BIOME).get()),
-						CommunalCorridorsChunkGenerator.createGroup(), 16, 16, 8, 0))));
+						CommunalCorridorsChunkGenerator.createGroup(), 24, 24, 8, 0))));
 		get(HOARY_CROSSROADS,
 			new LimlibWorld(
 				() -> new DimensionType(OptionalLong.of(1200), true, false, false, true, 1.0, true, false, 0, 512, 512,

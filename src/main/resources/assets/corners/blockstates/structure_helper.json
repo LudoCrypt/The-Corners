@@ -1,0 +1,19 @@
+{
+	"variants": {
+		"rotation=clockwise_90": {
+			"model": "corners:block/structure_helper",
+			"y": 90
+		},
+		"rotation=none": {
+			"model": "corners:block/structure_helper"
+		},
+		"rotation=180": {
+			"model": "corners:block/structure_helper",
+			"y": 180
+		},
+		"rotation=counterclockwise_90": {
+			"model": "corners:block/structure_helper",
+			"y": 270
+		}
+	}
+}

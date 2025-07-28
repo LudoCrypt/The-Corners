@@ -5,6 +5,7 @@
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
 		"AbstractDecorationEntityAccessor",
+		"BlockEntityAccessor",
 		"BlockEntityTypeMixin",
 		"BlockMixin",
 		"BoatDispenserBehaviorMixin",
@@ -19,12 +20,12 @@
 	"client": [
 		"BackgroundRendererMixin",
 		"BakedModelManagerMixin",
-		"FrustumAccessor",
+		"ClientPlayerEntityMixin",
 		"GameRendererAccessor",
-		"MinecraftClientAccessor",
 		"MinecraftClientMixin",
 		"MusicTrackerMixin",
 		"SoundManagerAccessor",
+		"StructureBlockScreenAccessor",
 		"WorldRendererAccessor"
 	],
 	"injectors": {

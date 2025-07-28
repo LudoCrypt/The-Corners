@@ -42,7 +42,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 				ModelTransform.of(0.0F, -4.1F, -0.6F, -0.8727F, 0.0F, 0.0F));
 		ModelPartData left_wing = body
 			.addChild("left_wing", ModelPartBuilder.create(), ModelTransform.pivot(3.5F, -2.9F, -4.8F));
-		ModelPartData cube_r1 = left_wing
+		left_wing
 			.addChild("cube_r1",
 				ModelPartBuilder
 					.create()
@@ -53,21 +53,21 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 				ModelTransform.of(5.2F, -2.5F, 7.2F, 1.5708F, 0.0F, 1.5708F));
 		ModelPartData left_wing_2 = left_wing
 			.addChild("left_wing_2", ModelPartBuilder.create(), ModelTransform.pivot(3.4F, -0.7F, -0.8F));
-		ModelPartData left_wing_end_r1 = left_wing_2
+		left_wing_2
 			.addChild("left_wing_end_r1",
 				ModelPartBuilder.create().uv(2, 38).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 9.0F, new Dilation(0.0F)),
 				ModelTransform.of(2.0F, 0.4F, 0.0F, 1.5708F, 0.0F, 1.5708F));
-		ModelPartData cube_r2 = left_wing_2
+		left_wing_2
 			.addChild("cube_r2",
 				ModelPartBuilder.create().uv(26, 0).cuboid(1.8F, -8.0F, -7.8F, 1.0F, 2.0F, 6.0F, new Dilation(0.0F)),
 				ModelTransform.of(7.8F, -1.8F, 8.0F, 1.5708F, 0.0F, 1.5708F));
-		ModelPartData left_wing_mid_r1 = left_wing_2
+		left_wing_2
 			.addChild("left_wing_mid_r1",
 				ModelPartBuilder.create().uv(8, 31).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 5.0F, new Dilation(0.0F)),
 				ModelTransform.of(0.0F, 0.0F, 2.0F, 1.5708F, 0.0F, 1.5708F));
 		ModelPartData right_wing = body
 			.addChild("right_wing", ModelPartBuilder.create(), ModelTransform.pivot(-3.5F, -2.9F, -4.8F));
-		ModelPartData cube_r3 = right_wing
+		right_wing
 			.addChild("cube_r3",
 				ModelPartBuilder
 					.create()
@@ -82,7 +82,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 				ModelTransform.of(-5.2F, -2.5F, 7.2F, 1.5708F, 0.0F, -1.5708F));
 		ModelPartData right_wing_2 = right_wing
 			.addChild("right_wing_2", ModelPartBuilder.create(), ModelTransform.pivot(-3.4F, -0.7F, -0.8F));
-		ModelPartData right_wing_end_r1 = right_wing_2
+		right_wing_2
 			.addChild("right_wing_end_r1",
 				ModelPartBuilder
 					.create()
@@ -91,7 +91,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 					.cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 9.0F, new Dilation(0.0F))
 					.mirrored(false),
 				ModelTransform.of(-2.0F, 0.4F, 0.0F, 1.5708F, 0.0F, -1.5708F));
-		ModelPartData cube_r4 = right_wing_2
+		right_wing_2
 			.addChild("cube_r4",
 				ModelPartBuilder
 					.create()
@@ -100,7 +100,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 					.cuboid(-2.8F, -8.0F, -7.8F, 1.0F, 2.0F, 6.0F, new Dilation(0.0F))
 					.mirrored(false),
 				ModelTransform.of(-7.8F, -1.8F, 8.0F, 1.5708F, 0.0F, -1.5708F));
-		ModelPartData right_wing_mid_r1 = right_wing_2
+		right_wing_2
 			.addChild("right_wing_mid_r1",
 				ModelPartBuilder
 					.create()
@@ -112,7 +112,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 		ModelPartData head_animation = body
 			.addChild("head_animation", ModelPartBuilder.create(),
 				ModelTransform.of(0.0F, -3.9F, -5.9F, -0.6545F, 0.0F, 0.0F));
-		ModelPartData head = head_animation
+		head_animation
 			.addChild("head",
 				ModelPartBuilder
 					.create()
@@ -122,11 +122,11 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 					.cuboid(-1.0F, 3.3F, -2.6F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)),
 				ModelTransform.pivot(0.0F, 0.9F, 0.6F));
 		ModelPartData tail = body.addChild("tail", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -4.4F, 2.0F));
-		ModelPartData right_tail = tail
+		tail
 			.addChild("right_tail",
 				ModelPartBuilder.create().uv(14, 0).cuboid(-1.0F, 0.0F, 0.0F, 3.0F, 0.0F, 6.0F, new Dilation(0.0F)),
 				ModelTransform.of(-1.0F, 0.0F, 0.0F, 0.0F, -0.4363F, 0.0F));
-		ModelPartData left_tail = tail
+		tail
 			.addChild("left_tail",
 				ModelPartBuilder.create().uv(20, 0).cuboid(-2.0F, 0.0F, 0.0F, 3.0F, 0.0F, 6.0F, new Dilation(0.0F)),
 				ModelTransform.of(1.0F, 0.0F, 0.0F, 0.0F, 0.4363F, 0.0F));
@@ -139,7 +139,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 					.uv(0, 25)
 					.cuboid(-0.5F, -0.5F, -0.4F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F)),
 				ModelTransform.of(1.7F, -2.5F, 0.2F, 0.0F, -0.2182F, 0.0F));
-		ModelPartData cube_r5 = left_leg
+		left_leg
 			.addChild("cube_r5",
 				ModelPartBuilder.create().uv(29, 27).cuboid(-1.5F, 0.5F, -1.2F, 3.0F, 2.0F, 2.0F, new Dilation(0.0F)),
 				ModelTransform.of(0.0F, 1.5F, 0.1F, -0.6981F, 0.0F, 0.0F));
@@ -156,7 +156,7 @@ public class CorvusEntityModel<T extends CorvusEntity> extends SinglePartEntityM
 					.cuboid(-0.5F, -0.5F, -0.4F, 1.0F, 3.0F, 1.0F, new Dilation(0.0F))
 					.mirrored(false),
 				ModelTransform.of(-1.7F, -2.5F, 0.2F, 0.0F, 0.2182F, 0.0F));
-		ModelPartData cube_r6 = right_leg
+		right_leg
 			.addChild("cube_r6",
 				ModelPartBuilder
 					.create()

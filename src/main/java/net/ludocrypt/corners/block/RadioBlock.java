@@ -10,7 +10,7 @@ import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import com.google.common.collect.Maps;
 
-import net.ludocrypt.corners.packet.ClientToServerPackets;
+import net.ludocrypt.corners.packet.ServerToClientPackets;
 import net.ludocrypt.corners.world.feature.GaiaSaplingGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -193,7 +193,7 @@ public class RadioBlock extends HorizontalFacingBlock {
 			buf.writeBoolean(powered);
 
 			for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
-				ServerPlayNetworking.send(serverPlayer, ClientToServerPackets.PLAY_RADIO, buf);
+				ServerPlayNetworking.send(serverPlayer, ServerToClientPackets.PLAY_RADIO, buf);
 			}
 
 		}
